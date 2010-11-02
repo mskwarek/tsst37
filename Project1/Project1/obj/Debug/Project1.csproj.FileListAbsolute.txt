@@ -1,0 +1,4 @@
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\Project1\Project1\bin\Debug\Project1.exe
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\Project1\Project1\bin\Debug\Project1.pdb
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\Project1\Project1\obj\Debug\Project1.exe
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\Project1\Project1\obj\Debug\Project1.pdb
