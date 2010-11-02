@@ -39,6 +39,16 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="Agent.cs" />
+    <Compile Include="Centrala.cs" />
     <Compile Include="CodeFile1.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="Port.cs" />
+    <Compile Include="SwitchingCenter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
 </Project>
