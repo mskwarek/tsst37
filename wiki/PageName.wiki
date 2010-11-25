@@ -78,7 +78,7 @@ SwitchingPoint.run()
 Port.run()
    while running:
       if outputBufferNotEmpty():
-         packet = getFromInputBuffer()
+         packet = getFromOutputBuffer()
          send(packet)
       sleep(portDelay)
 }}}
