@@ -71,7 +71,7 @@ SwitchingPoint.run()
       for sourcePort in ports:
          if sourcePort.inputBufferNotEmpty():
             packet = sourcePort.getFromInputBuffer()
-            destinationPort = switch(packet)
+            destinationPort = route(packet)
             destinationPort.putToOutputBuffer(packet)
          #być może także: sleep(switchingDelay)
 
