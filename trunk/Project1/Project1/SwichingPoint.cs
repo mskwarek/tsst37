@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1
 {
-    class Node
+    class SwichingPoint
     {
     }
 }
