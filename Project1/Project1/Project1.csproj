@@ -40,11 +40,15 @@
   -->
   <ItemGroup>
     <Compile Include="Agent.cs" />
-    <Compile Include="Centrala.cs" />
+    <Compile Include="Central.cs" />
     <Compile Include="CodeFile1.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="DataUnit.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="Port.cs" />
-    <Compile Include="SwitchingCenter.cs" />
+    <Compile Include="PortIn.cs" />
+    <Compile Include="PortOut.cs" />
+    <Compile Include="ProtocolUnit.cs" />
+    <Compile Include="SwichingPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
