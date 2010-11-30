@@ -6,6 +6,6 @@ using System.Text;
 namespace Project1
 {
     public class Agent
-    { //blablabla
+    { 
     }
 }
