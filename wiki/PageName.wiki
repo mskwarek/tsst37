@@ -22,11 +22,11 @@ Modyfikacja: 3.12.2010
    * *DataUnit*
  * ~~*Port*: _reprezentacja portu w węźle sieciowym, realizuje przekazanie danych do połączonego węzła_~~
  * *PortIn*: _reprezentacja portu wejściowego, realizuje otrzymywanie danych
+   * _implementacja zdalnej komunikacji z użyciem WCF_
+   * *receive*(ProtocolUnit) - _wstawienie otrzymanej jednostki protokołu do bufora danych przychodzących_
  * *PortOut*: _reprezancacja portu wyjściowego, realizuje przekazanie danych do portu po drugiej stronie łącza
    * _implementacja zdalnej komunikacji z użyciem WCF_
-   * *bufor*: _kolejka FIFO danych przychodzących (?) i wychodzących_
    * *send*(ProtocolUnit) - _realizuje wywołanie *receive*(ProtocolUnit) na zdalnym porcie, przesyłając jednostkę (pakiet) z bufora danych wychodzących_
-   * *receive*(ProtocolUnit) - _wstawienie otrzymanej jednostki protokołu do bufora danych przychodzących_
  * *Matrix*: _pole komutacyjne_
    * *RouteTable`[]`*: _tablica kierowania ruchu, z wierszami o polach zawierających:_
      * *Port, VPI, VCI* wejściowe
