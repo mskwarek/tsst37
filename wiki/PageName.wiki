@@ -2,6 +2,10 @@
 
 Na podstawie spotkania 25.11.2010
 
+Modyfikacja: 3.12.2010
+ * uwzględnienie portów jednokierunkowych zamiast dwukierunkowych
+ *
+
 = Klasy i ich zawartość=
 
  * *Data*: _blok danych reprezentowany jako długość w bajtach. Generowany przez źródła ruchu (Source) i odbierany ostatecznie w ujściach (Sink)_
@@ -15,12 +19,14 @@ Na podstawie spotkania 25.11.2010
    * *VPI*
    * *VCI*
    * *DataUnit*
- * *Port*: _reprezentacja portu w węźle sieciowym, realizuje przekazanie danych do połączonego węzła_
+ * ~~*Port*: _reprezentacja portu w węźle sieciowym, realizuje przekazanie danych do połączonego węzła_~~
+ * *PortIn*: _reprezentacja portu wejściowego, realizuje otrzymywanie danych
+ * *PortOut*: _reprezancacja portu wyjściowego, realizuje przekazanie danych do portu po drugiej stronie łącza
    * _implementacja zdalnej komunikacji z użyciem WCF_
    * *bufor*: _kolejka FIFO danych przychodzących (?) i wychodzących_
    * *send*(ProtocolUnit) - _realizuje wywołanie *receive*(ProtocolUnit) na zdalnym porcie, przesyłając jednostkę (pakiet) z bufora danych wychodzących_
    * *receive*(ProtocolUnit) - _wstawienie otrzymanej jednostki protokołu do bufora danych przychodzących_
- * *SwitchingPoint*: _pole komutacyjne_
+ * *Matrix*: _pole komutacyjne_
    * *RouteTable`[]`*: _tablica kierowania ruchu, z wierszami o polach zawierających:_
      * *Port, VPI, VCI* wejściowe
      * *Port, VPI, VCI* wyjściowe
@@ -50,56 +56,46 @@ Procesy urządzeń komunikują się za pomocą mechanizmów WCF.
 
 = Workflow =
 
-Na chwilę obecną planowana jest konstrukcja wielowątkowa. Oddzielne wątki będą realizować funkcje:
- * źródeł ruchu
- * ujść ruchu
- * pól komutacyjnych
- * portów
+~~Na chwilę obecną planowana jest konstrukcja wielowątkowa.~~
+Brak konieczności implementowania opóźnień pozwala zrezygnować z wątków. Teraz właściwie tylko źródła będą elementami "aktywnymi", pozostałe będą tylko reagować na wywoływane w nich zdalnie metody.
 
-Schematy działania niektórych wątków (pseudokod pythonopodobny):
+Przykład działania źródła (pseudokod)
+
 {{{
 Source.run():
    while running:
-      Data data = Data.random()
-      while(data > 0):
-         packet = getProtocolUnit(Data)
-         Port.putToOutputBuffer(packet)
-         sleep(sourceDelay)
-
-SwitchingPoint.run()
-   while running:
-      for sourcePort in ports:
-         if sourcePort.inputBufferNotEmpty():
-            packet = sourcePort.getFromInputBuffer()
-            destinationPort = route(packet)
-            destinationPort.putToOutputBuffer(packet)
-         #być może także: sleep(switchingDelay)
-
-Port.run()
-   while running:
-      if outputBufferNotEmpty():
-         packet = getFromOutputBuffer()
-         send(packet)
-      sleep(portDelay)
+      Data data = Data.random()         # generowanie danych o losowej długości
+      while(data > 0):                  # dzięki temu można dzielić dane na bloki długości 48
+                                        # i wysyłać je w osobnych ramkach
+         packet = getProtocolUnit(Data) # adaptacja (AAL)
+         Port.send(packet)
+         sleep(sourceDelay)             # można wciąż ograniczyć generowanie danych,
+                                        # żeby nie było pełno spamu w logach
 }}}
 
 = TODO =
 
  * Ogarnąć WCF - jak zainicjować połączenie między procesami, jak to wykorzystywać?
  * Implementacja klas
- * Ogarnięcie i implementacja wątków w C#
+ * ~~Ogarnięcie i implementacja wątków w C#~~
  * Zaprojektowanie i wprowadzenie konfiguracji
+ * Stworzenie aplikacji głównej
 
 = Pytania do prowadzącego =
 
  * Data - czy wystarczy przyjęty model (długość danych w bajtach, ewentualnie identyfikator)?
+   * Nie potrzeba niczego więcej.
  * Realizacja synchroniczności ramek:
    * Asynchroniczna wymiana obiektów (ProtocolUnit) między procesami, lub:
-   * Synchronizacja poprzez opóźnienia (sleep()) w portach
- * Czy możemy wykorzystać wielowątkowość aby uniezależnić działąnie portów?
+   * ~~Synchronizacja poprzez opóźnienia (sleep()) w portach~~
+ * Czy możemy wykorzystać wielowątkowość aby uniezależnić działanie portów?
+   * Zbędne.
  * Czy należy wprowadzać opóźnienia w działaniu pola komutacyjnego, czy powinno działać w czasie rzeczywistym w porównaniu z resztą elementów?
+   * Żadnych opóźnień
  * Czy łącza danych ATM są symetryczne (komunikacja w obie strony w jednym porcie)?
+   * Łącza są skierowane.
  * Jak realizować podział wartstowy na podsieci? Czy rozróżniać istnienie podsieci na poziomie obiektów, czy na poziomie konfiguracji przez agenta?
+   * Druga część projektu.
 
 = Pytania do przemyślenia =
 
