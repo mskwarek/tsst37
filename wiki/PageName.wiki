@@ -4,7 +4,8 @@ Na podstawie spotkania 25.11.2010
 
 Modyfikacja: 3.12.2010
  * uwzględnienie portów jednokierunkowych zamiast dwukierunkowych
- *
+ * rezygnacja z opóźnień, a tym samym wątków
+ * odpowiedzi na pytania do prowadzącego
 
 = Klasy i ich zawartość=
 
