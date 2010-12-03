@@ -34,7 +34,7 @@ Modyfikacja: 3.12.2010
  * *Node*: _pojedynczy węzeł sieci, nie generuje ruchu, tylko go kieruje_
    * *name*: _rozróżnialna nazwa urządzenia_
    * *Port`[]`*: _lista portów urządzenia_
-   * *SwitchingPoint*
+   * *Matrix*
    * *Agent*: _w dalekiej przyszłości i odległej galaktyce..._
  * *Source*: _generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości_
    * *type*: _typ generowanego ruchu (np. jednostajny lub impulsowy)_
