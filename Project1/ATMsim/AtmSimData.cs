@@ -7,6 +7,8 @@ using System.Text;
  * Pobieranie danych o elementach na żądanie od agentów, zamiast trzymania ich w tablicy.
  * Do zrealizowania przez zmianę getterów i setterów AtmSimData, możliwe, że klasa NetworkElement
  * okaże się zbędna.
+ * 
+ * Uwzględnienie struktury grafowej sieci - przechowywanie informacji o łączach
  */
 
 namespace ATMsim
