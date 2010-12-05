@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ATMsim.Utils
+namespace AtmSim.Utils
 {
-    public interface LogListener
+    // interfejs potrzebny do aktualizacji loga na biezaco
+    public interface ILogListener
     {
-        void logUpdated();
+        void LogUpdated();
     }
 
     public class Log
     {
         private List<string> log;
-        private List<LogListener> listeners = new List<LogListener>();
+        private List<ILogListener> listeners = new List<ILogListener>();
 
         public Log()
         {
@@ -32,17 +33,17 @@ namespace ATMsim.Utils
             this.log = new List<string>(origin.log);
         }
 
-        public void logMsg(string msg)
+        public void LogMsg(string msg)
         {
             this.log.Add(msg);
-            foreach (LogListener listener in this.listeners)
+            foreach (ILogListener listener in this.listeners)
             {
                 if (listener != null)
-                    listener.logUpdated();
+                    listener.LogUpdated();
             }
         }
 
-        public string getLog()
+        public string GetString()
         {
             string logString = "";
             foreach (string msg in log)
@@ -52,18 +53,18 @@ namespace ATMsim.Utils
             return logString;
         }
 
-        public void changeInit(string initString)
+        public void ChangeInit(string initString)
         {
             log[0] = initString;
         }
 
-        public void subscribe(LogListener listener)
+        public void Subscribe(ILogListener listener)
         {
             if (!listeners.Contains(listener))
                 this.listeners.Add(listener);
         }
 
-        public void unsubscribe(LogListener listener)
+        public void Unsubscribe(ILogListener listener)
         {
             if (this.listeners.Contains(listener))
                 listeners.Remove(listener);

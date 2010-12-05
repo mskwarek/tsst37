@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ATMsim
+namespace AtmSim
 {
     public partial class AtmSimGUI : Form
     {
-        private AtmSimData data = new AtmSimData();
         private string selectedName = "";
 
         public AtmSimGUI()
@@ -21,38 +20,40 @@ namespace ATMsim
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.initiateTestNetwork();
+            this.InitTestNetwork();
             this.elementListBox.Items.Clear();
-            foreach (string element in this.data.getElements())
+            foreach (string element in Manager.GetElements())
                 elementListBox.Items.Add(element);
         }
 
-        private void initiateTestNetwork()
+        private void InitTestNetwork()
         {
             // Tymczasowo jedziemy z danymi na sztywno, kiedys znajdzie sie tutaj parsowanie z xml.
-            Dictionary<string, string> config = new Dictionary<string, string>();
-            Dictionary<string, string> routing = new Dictionary<string, string>();
+            Manager.Config config = new Manager.Config();
+            Manager.Routing routing = new Manager.Routing();
             Utils.Log log = new Utils.Log("Log 1:");
-            log.logMsg("Galia est omnis divisa in partes tres");
-            log.logMsg("Quorum unam incolunt Belgae aliam Aquitani");
-            log.logMsg("Tertiam qui ipsorut Celtae nostra Gali apellantur");
+            log.LogMsg("Galia est omnis divisa in partes tres");
+            log.LogMsg("Quorum unam incolunt Belgae aliam Aquitani");
+            log.LogMsg("Tertiam qui ipsorut Celtae nostra Gali apellantur");
             /*
             string log =     + Environment.NewLine +
                             "" + Environment.NewLine +
                             ;
              */
             config.Add("ID", "X");
-            config.Add("type", "none");
+            config.Add("type", "leet");
             routing.Add("B", "1");
             routing.Add("A", "-");
-            this.data.addNetworkElement("e1", config, routing, log);
-            config = new Dictionary<string, string>(config);
-            routing = new Dictionary<string, string>();
+            Manager.AddElement("e1", config, routing, log);
+            config = new Manager.Config();
+            routing = new Manager.Routing();
+            config.Add("ID", "Y");
+            config.Add("type", "woot");
             routing.Add("A", "2");
             routing.Add("B", "-");
             log = new Utils.Log(log);
-            log.changeInit("Log 2:");
-            this.data.addNetworkElement("e2", config, routing, log);
+            log.ChangeInit("Log 2:");
+            Manager.AddElement("e2", config, routing, log);
             // Koniec kodu tymczasowego
         }
 
@@ -63,21 +64,22 @@ namespace ATMsim
 
         private void configButton_Click(object sender, EventArgs e)
         {
-            ConfigGUI configGUI = new ConfigGUI(
-                this.data.getConfig(this.selectedName),
-                this.data.getRouting(this.selectedName));
+            /*ConfigGUI configGUI = new ConfigGUI(
+                Manager.GetConfig(this.selectedName),
+                Manager.GetRouting(this.selectedName));*/
+            ConfigGUI configGUI = new ConfigGUI(this.selectedName);
             configGUI.Show();
         }
 
         private void logButton_Click(object sender, EventArgs e)
         {
-            LogGUI logGUI = new LogGUI(this.data.getLog(this.selectedName));
+            LogGUI logGUI = new LogGUI(this.selectedName);
             logGUI.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.data.getLog(this.selectedName).logMsg("Hello!");
+            Manager.GetLog(this.selectedName).LogMsg("Hello!");
         }
 
     }

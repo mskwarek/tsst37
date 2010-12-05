@@ -7,29 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ATMsim
+namespace AtmSim
 {
-    public partial class LogGUI : Form, Utils.LogListener
+    public partial class LogGUI : Form, Utils.ILogListener
     {
-        private Utils.Log log;
+        //private Utils.Log log;
+        private string elementName;
 
-        public LogGUI(Utils.Log log)
+        public LogGUI(string name)
         {
-            this.log = log;
-            log.subscribe(this);
+            this.elementName = name;
+            //this.log = Manager.GetLog(this.elementName);
+            Manager.GetLog(this.elementName).Subscribe(this);
             InitializeComponent();
-            this.logBox.Text = log.getLog();
+            this.logBox.Text = Manager.GetLog(this.elementName).GetString();
             this.logBox.Select(0, 0);
         }
 
-        public void logUpdated()
+        public void LogUpdated()
         {
-            this.logBox.Text = log.getLog();
+            this.logBox.Text = Manager.GetLog(this.elementName).GetString();
         }
 
         public void LogGUI_Closing(Object sender, EventArgs e)
         {
-            this.log.unsubscribe(this);
+            Manager.GetLog(this.elementName).Unsubscribe(this);
         }
 
     }

@@ -7,30 +7,48 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ATMsim
+namespace AtmSim
 {
     public partial class ConfigGUI : Form
     {
+        private string elementName;
         // przechowujemy dwie wersje konfiguracji i routingu:
         // globalConfig - referencja do konfiguracji globalnej
-        private Dictionary<string, string> globalConfig;
-        private Dictionary<string, string> globalRouting;
+        //private Manager.Config globalConfig;
+        //private Manager.Routing globalRouting;
         // localConfig - kopia konfiguracji globalnej, na ktorej dokonujemy zmian
-        private Dictionary<string, string> localConfig;
-        private Dictionary<string, string> localRouting;
+        private Manager.Config localConfig;
+        private Manager.Routing localRouting;
         // zmodyfikowane wpisy
-        private List<string> changedConfig;
-        private List<string> changedRouting;
+        private List<string> modifiedConfig;
+        private List<string> addedRouting;
+        private List<string> removedRouting;
+        private List<string> modifiedRouting;
 
-        public ConfigGUI(Dictionary<string, string> config, Dictionary<string, string> routing)
+        /*public ConfigGUI(Manager.Config config, Manager.Routing routing)
         {
             this.globalConfig = config;
             this.globalRouting = routing;
-            this.localConfig = new Dictionary<string,string>(globalConfig);
-            this.localRouting = new Dictionary<string, string>(globalRouting);
-            this.changedConfig = new List<string>();
-            this.changedRouting = new List<string>();
+            this.localConfig = new Manager.Config(globalConfig);
+            this.localRouting = new Manager.Routing(globalRouting);
+            this.modifiedConfig = new List<string>();
+            this.modifiedRouting = new List<string>();
             InitializeComponent();
+            this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
+            this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
+        }*/
+
+        public ConfigGUI(string name)
+        {
+            this.elementName = name;
+            this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
+            this.localRouting = new Manager.Routing(Manager.GetRouting(this.elementName));
+            this.modifiedConfig = new List<string>();
+            this.addedRouting = new List<string>();
+            this.removedRouting = new List<string>();
+            this.modifiedRouting = new List<string>();
+            InitializeComponent();
+            this.Text += " " + this.elementName;
             this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
             this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
         }
@@ -39,22 +57,19 @@ namespace ATMsim
         {
             if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
             {
-                //this.localConfig.Clear();
-                foreach (string param in this.changedConfig)
-                {
-                    this.localConfig[param] = this.globalConfig[param];
-                }
+                this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
+                this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
                 this.generalPropertyGrid.Refresh();
+                this.modifiedConfig.Clear();
             }
-            else if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
+            else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
             {
-                //this.localRouting.Clear();
-                foreach (string param in this.changedRouting)
-                {
-                    this.localRouting[param] = this.globalRouting[param];
-                }
+                this.localRouting = new Manager.Routing(Manager.GetRouting(this.elementName));
+                this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
                 this.routingPropertyGrid.Refresh();
-            
+                this.addedRouting.Clear();
+                this.removedRouting.Clear();
+                this.modifiedRouting.Clear();
             }
         }
 
@@ -68,13 +83,13 @@ namespace ATMsim
 
         private void ConfigGUI_FormClosing(object sender, EventArgs e)
         {
-            if (changedRouting.Count > 0)
+            if (addedRouting.Count > 0 || removedRouting.Count > 0)
             {
                 DialogResult dlg = MessageBox.Show("Zapisać ustawienia routingu?", "Konfiguracja", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes)
                     saveRouting();
             }
-            if (changedConfig.Count > 0)
+            if (modifiedConfig.Count > 0)
             {
                 DialogResult dlg = MessageBox.Show("Zapisać konfigurację?", "Konfiguracja", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes)
@@ -84,30 +99,72 @@ namespace ATMsim
 
         private void generalPropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {
-            changedConfig.Add((string)e.ChangedItem.Label);
+            modifiedConfig.Add((string)e.ChangedItem.Label);
         }
 
         private void routingPropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {
-            changedRouting.Add((string)e.ChangedItem.Label);
+            string modifiedEntry = (string)e.ChangedItem.Label;
+            modifiedRouting.Add(modifiedEntry);
         }
 
         private void saveConfig()
         {
-            foreach (string param in changedConfig)
+            foreach (string param in modifiedConfig)
             {
-                globalConfig[param] = localConfig[param];
+                Manager.SetConfig(this.elementName, param, this.localConfig[param]);
             }
-            changedConfig.Clear();
+            modifiedConfig.Clear();
         }
 
         private void saveRouting()
         {
-            foreach (string param in changedRouting)
+            foreach (string label in removedRouting)
+                Manager.RemoveRouting(this.elementName, label);
+            foreach (string label in addedRouting)
+                Manager.AddRouting(this.elementName, label, localRouting[label]);
+            foreach (string label in modifiedRouting)
+                Manager.ModifyRouting(this.elementName, label, label, localRouting[label]);
+            addedRouting.Clear();
+            removedRouting.Clear();
+            modifiedRouting.Clear();
+        }
+
+        private void addRoutingEntryButton_Click(object sender, EventArgs e)
+        {
+            AddEntryPrompt prompt = new AddEntryPrompt(this);
+            prompt.Show();
+            this.Hide();
+        }
+
+        public void AddRoutingEntry(string label, string value)
+        {
+            if (localRouting.ContainsKey(label))
             {
-                globalRouting[param] = localRouting[param];
+                localRouting[label] = value;
+                this.modifiedRouting.Add(label);
             }
-            changedRouting.Clear();
+            else
+            {
+                localRouting.Add(label, value);
+                this.addedRouting.Add(label);
+            }
+            routingPropertyGrid.Refresh();
+        }
+
+        private void removeRoutingEntryButton_Click(object sender, EventArgs e)
+        {
+            string selectedEntry = routingPropertyGrid.SelectedGridItem.Label;
+            if (localRouting.ContainsKey(selectedEntry))
+            {
+                localRouting.Remove(selectedEntry);
+                removedRouting.Add(selectedEntry);
+                if (modifiedRouting.Contains(selectedEntry))
+                    modifiedRouting.Remove(selectedEntry);
+                if (addedRouting.Contains(selectedEntry))
+                    addedRouting.Remove(selectedEntry);
+            }
+            routingPropertyGrid.Refresh();
         }
 
     }
