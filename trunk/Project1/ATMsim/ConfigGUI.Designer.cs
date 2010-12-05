@@ -1,4 +1,4 @@
-﻿namespace ATMsim
+﻿namespace AtmSim
 {
     partial class ConfigGUI
     {
@@ -36,6 +36,8 @@
             this.generalTab = new System.Windows.Forms.TabPage();
             this.routingTab = new System.Windows.Forms.TabPage();
             this.routingPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.removeRoutingEntryButton = new System.Windows.Forms.Button();
+            this.addRoutingEntryButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.configTabControl.SuspendLayout();
             this.generalTab.SuspendLayout();
@@ -108,6 +110,8 @@
             // routingTab
             // 
             this.routingTab.Controls.Add(this.routingPropertyGrid);
+            this.routingTab.Controls.Add(this.removeRoutingEntryButton);
+            this.routingTab.Controls.Add(this.addRoutingEntryButton);
             this.routingTab.Location = new System.Drawing.Point(4, 22);
             this.routingTab.Name = "routingTab";
             this.routingTab.Padding = new System.Windows.Forms.Padding(3);
@@ -118,17 +122,36 @@
             // 
             // routingPropertyGrid
             // 
-            this.routingPropertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.routingPropertyGrid.HelpVisible = false;
-            this.routingPropertyGrid.Location = new System.Drawing.Point(6, 8);
+            this.routingPropertyGrid.Location = new System.Drawing.Point(6, 6);
             this.routingPropertyGrid.Name = "routingPropertyGrid";
             this.routingPropertyGrid.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.routingPropertyGrid.Size = new System.Drawing.Size(240, 183);
-            this.routingPropertyGrid.TabIndex = 0;
+            this.routingPropertyGrid.Size = new System.Drawing.Size(240, 156);
+            this.routingPropertyGrid.TabIndex = 3;
             this.routingPropertyGrid.ToolbarVisible = false;
-            this.routingPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(routingPropertyGrid_PropertyValueChanged);
+            // 
+            // removeRoutingEntryButton
+            // 
+            this.removeRoutingEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.removeRoutingEntryButton.Location = new System.Drawing.Point(52, 168);
+            this.removeRoutingEntryButton.Name = "removeRoutingEntryButton";
+            this.removeRoutingEntryButton.Size = new System.Drawing.Size(40, 23);
+            this.removeRoutingEntryButton.TabIndex = 2;
+            this.removeRoutingEntryButton.Text = "-";
+            this.removeRoutingEntryButton.UseVisualStyleBackColor = true;
+            this.removeRoutingEntryButton.Click += new System.EventHandler(this.removeRoutingEntryButton_Click);
+            // 
+            // addRoutingEntryButton
+            // 
+            this.addRoutingEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addRoutingEntryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addRoutingEntryButton.Location = new System.Drawing.Point(6, 168);
+            this.addRoutingEntryButton.Name = "addRoutingEntryButton";
+            this.addRoutingEntryButton.Size = new System.Drawing.Size(40, 23);
+            this.addRoutingEntryButton.TabIndex = 1;
+            this.addRoutingEntryButton.Text = "+";
+            this.addRoutingEntryButton.UseVisualStyleBackColor = true;
+            this.addRoutingEntryButton.Click += new System.EventHandler(this.addRoutingEntryButton_Click);
             // 
             // ConfigGUI
             // 
@@ -160,6 +183,8 @@
         private System.Windows.Forms.TabControl configTabControl;
         private System.Windows.Forms.TabPage generalTab;
         private System.Windows.Forms.TabPage routingTab;
+        private System.Windows.Forms.Button removeRoutingEntryButton;
+        private System.Windows.Forms.Button addRoutingEntryButton;
         private System.Windows.Forms.PropertyGrid routingPropertyGrid;
     }
 }

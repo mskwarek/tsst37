@@ -1,4 +1,4 @@
-﻿namespace ATMsim
+﻿namespace AtmSim
 {
     partial class LogGUI
     {

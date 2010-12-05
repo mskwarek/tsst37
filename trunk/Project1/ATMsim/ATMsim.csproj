@@ -8,7 +8,7 @@
     <ProjectGuid>{EE26BEE7-D159-4DC4-8D93-BD1E8FCAFA8A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ATMsim</RootNamespace>
+    <RootNamespace>AtmSim</RootNamespace>
     <AssemblyName>ATMsim</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -46,7 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtmSimData.cs" />
+    <Compile Include="AddEntryPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddEntryPrompt.Designer.cs">
+      <DependentUpon>AddEntryPrompt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Manager.cs" />
     <Compile Include="AtmSimGUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +75,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddEntryPrompt.resx">
+      <DependentUpon>AddEntryPrompt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AtmSimGUI.resx">
       <DependentUpon>AtmSimGUI.cs</DependentUpon>
     </EmbeddedResource>
