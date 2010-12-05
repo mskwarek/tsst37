@@ -34,5 +34,21 @@ namespace AtmSim
             Manager.GetLog(this.elementName).Unsubscribe(this);
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveLogDialog.ShowDialog();
+        }
+
+        private void saveLogDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            if (saveLogDialog.FileName != "")
+            {
+                System.IO.FileStream fs = (System.IO.FileStream)saveLogDialog.OpenFile();
+                byte[] logbyte = new UTF8Encoding(true).GetBytes(logBox.Text);
+                fs.Write(logbyte, 0, logbyte.Length);
+                fs.Close();
+            }
+        }
+
     }
 }

@@ -20,7 +20,8 @@ namespace AtmSim
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.InitTestNetwork();
+            Manager.Reset();
+            this.InitTestNetwork(); // **** TODO **** w tym miejscu znajdzie się parsowanie pliku wejściowego
             this.elementListBox.Items.Clear();
             foreach (string element in Manager.GetElements())
                 elementListBox.Items.Add(element);
@@ -28,7 +29,7 @@ namespace AtmSim
 
         private void InitTestNetwork()
         {
-            // Tymczasowo jedziemy z danymi na sztywno, kiedys znajdzie sie tutaj parsowanie z xml.
+            // Tymczasowo jedziemy z danymi na sztywno...
             Manager.Config config = new Manager.Config();
             Manager.Routing routing = new Manager.Routing();
             Utils.Log log = new Utils.Log("Log 1:");
