@@ -31,6 +31,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logBox = new System.Windows.Forms.TextBox();
+            this.saveLogDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,6 +50,7 @@
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.saveToolStripMenuItem.Text = "&Zapisz";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // logBox
             // 
@@ -64,6 +66,12 @@
             this.logBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.logBox.Size = new System.Drawing.Size(260, 338);
             this.logBox.TabIndex = 1;
+            // 
+            // saveLogDialog
+            // 
+            this.saveLogDialog.DefaultExt = "txt";
+            this.saveLogDialog.Title = "Zapisz log...";
+            this.saveLogDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveLogDialog_FileOk);
             // 
             // LogGUI
             // 
@@ -88,5 +96,6 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.TextBox logBox;
+        private System.Windows.Forms.SaveFileDialog saveLogDialog;
     }
 }
