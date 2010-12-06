@@ -12,11 +12,6 @@ namespace AtmSim
     public partial class ConfigGUI : Form
     {
         private string elementName;
-        // przechowujemy dwie wersje konfiguracji i routingu:
-        // globalConfig - referencja do konfiguracji globalnej
-        //private Manager.Config globalConfig;
-        //private Manager.Routing globalRouting;
-        // localConfig - kopia konfiguracji globalnej, na ktorej dokonujemy zmian
         private Manager.Config localConfig;
         private Manager.Routing localRouting;
         // zmodyfikowane wpisy
@@ -24,19 +19,6 @@ namespace AtmSim
         private List<string> addedRouting;
         private List<string> removedRouting;
         private List<string> modifiedRouting;
-
-        /*public ConfigGUI(Manager.Config config, Manager.Routing routing)
-        {
-            this.globalConfig = config;
-            this.globalRouting = routing;
-            this.localConfig = new Manager.Config(globalConfig);
-            this.localRouting = new Manager.Routing(globalRouting);
-            this.modifiedConfig = new List<string>();
-            this.modifiedRouting = new List<string>();
-            InitializeComponent();
-            this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
-            this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
-        }*/
 
         public ConfigGUI(string name)
         {
@@ -83,7 +65,7 @@ namespace AtmSim
 
         private void ConfigGUI_FormClosing(object sender, EventArgs e)
         {
-            if (addedRouting.Count > 0 || removedRouting.Count > 0)
+            if (modifiedRouting.Count > 0 || addedRouting.Count > 0 || removedRouting.Count > 0)
             {
                 DialogResult dlg = MessageBox.Show("Zapisać ustawienia routingu?", "Konfiguracja", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes)

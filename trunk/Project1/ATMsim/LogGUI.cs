@@ -18,20 +18,25 @@ namespace AtmSim
         {
             this.elementName = name;
             //this.log = Manager.GetLog(this.elementName);
-            Manager.GetLog(this.elementName).Subscribe(this);
+            Manager.SubscribeLog(this.elementName, this);
             InitializeComponent();
-            this.logBox.Text = Manager.GetLog(this.elementName).GetString();
+            this.logBox.Text = Manager.GetLog(this.elementName);
             this.logBox.Select(0, 0);
         }
 
         public void LogUpdated()
         {
-            this.logBox.Text = Manager.GetLog(this.elementName).GetString();
+            //this.logBox.Text = Manager.GetLog(this.elementName).GetString();
+        }
+
+        public void LogUpdated(string msg)
+        {
+            this.logBox.Text = this.logBox.Text + msg + Environment.NewLine;
         }
 
         public void LogGUI_Closing(Object sender, EventArgs e)
         {
-            Manager.GetLog(this.elementName).Unsubscribe(this);
+            Manager.UnsubscribeLog(this.elementName, this);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)

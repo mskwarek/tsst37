@@ -27,6 +27,14 @@ namespace AtmSim
                 elementListBox.Items.Add(element);
         }
 
+        private void netTopologyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*TopologyGUI topologyGUI = new TopologyGUI();
+            topologyGUI.Show();*/
+            TopologyView topologyView = new TopologyView();
+            topologyView.Show();
+        }
+
         private void InitTestNetwork()
         {
             // Tymczasowo jedziemy z danymi na sztywno...
@@ -45,7 +53,7 @@ namespace AtmSim
             config.Add("type", "leet");
             routing.Add("B", "1");
             routing.Add("A", "-");
-            Manager.AddElement("e1", config, routing, log);
+            Manager.AddNode("e1", config, routing, log);
             config = new Manager.Config();
             routing = new Manager.Routing();
             config.Add("ID", "Y");
@@ -54,13 +62,15 @@ namespace AtmSim
             routing.Add("B", "-");
             log = new Utils.Log(log);
             log.ChangeInit("Log 2:");
-            Manager.AddElement("e2", config, routing, log);
+            Manager.AddNode("e2", config, routing, log);
+            Manager.AddConnection("e1", "e2");
             // Koniec kodu tymczasowego
         }
 
         private void elementListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.selectedName = (string)this.elementListBox.Items[this.elementListBox.SelectedIndex];
+            if (this.elementListBox.SelectedIndex >= 0)
+                this.selectedName = (string)this.elementListBox.Items[this.elementListBox.SelectedIndex];
         }
 
         private void configButton_Click(object sender, EventArgs e)
@@ -80,7 +90,7 @@ namespace AtmSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Manager.GetLog(this.selectedName).LogMsg("Hello!");
+            Manager.LogMsg(this.selectedName, "Hello!");
         }
 
     }
