@@ -67,7 +67,7 @@
             // netNewToolStripMenuItem
             // 
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
@@ -75,8 +75,9 @@
             // 
             this.netTopologyToolStripMenuItem.Enabled = false;
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
+            this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
             // configToolStripMenuItem
             // 

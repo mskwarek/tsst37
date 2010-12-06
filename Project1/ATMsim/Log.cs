@@ -9,6 +9,7 @@ namespace AtmSim.Utils
     public interface ILogListener
     {
         void LogUpdated();
+        void LogUpdated(string msg);
     }
 
     public class Log
@@ -39,7 +40,10 @@ namespace AtmSim.Utils
             foreach (ILogListener listener in this.listeners)
             {
                 if (listener != null)
+                {
                     listener.LogUpdated();
+                    listener.LogUpdated(msg);
+                }
             }
         }
 

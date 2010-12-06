@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuickGraph;
 
 /* **** TODO ****
  * Pobieranie danych o elementach na żądanie od agentów, zamiast trzymania ich w tablicy.
@@ -57,23 +58,30 @@ namespace AtmSim
             }
         }
 
-        private static Dictionary<string, NetworkElement> network = new Dictionary<string,NetworkElement>();
+        private static Dictionary<string, NetworkElement> nodes = new Dictionary<string,NetworkElement>();
+        private static List<Edge<string>> connections = new List<Edge<string>>();
 
-        public static void AddElement(string name, Config config, Routing routing, Utils.Log log)
+        public static void AddNode(string name, Config config, Routing routing, Utils.Log log)
         {
-            network.Add(name,new NetworkElement(name, config, routing, log));
+            nodes.Add(name,new NetworkElement(name, config, routing, log));
+        }
+
+        public static void AddConnection(string sourceName, string destinationName)
+        {
+            connections.Add(new Edge<string>(sourceName, destinationName));
         }
 
         public static void Reset()
         {
-            network.Clear();
+            nodes.Clear();
+            connections.Clear();
         }
 
         // pobranie listy dostepnych elementow
         public static List<string> GetElements()
         {
             List<string> elements = new List<string>();
-            foreach (string key in network.Keys)
+            foreach (string key in nodes.Keys)
             {
                 elements.Add(key);
             }
@@ -85,53 +93,76 @@ namespace AtmSim
          */
         public static Config GetConfig(string name)
         {
-            if (network.ContainsKey(name))
-                return network[name].Config;
+            if (nodes.ContainsKey(name))
+                return nodes[name].Config;
             else
                 return new Config();
         }
 
         public static void SetConfig(string name, string param, string value)
         {
-            if (network.ContainsKey(name))
-                network[name].Config[param] = value;
+            if (nodes.ContainsKey(name))
+                nodes[name].Config[param] = value;
         }
 
         public static Routing GetRouting(string name)
         {
-            if (network.ContainsKey(name))
-                return network[name].Routing;
+            if (nodes.ContainsKey(name))
+                return nodes[name].Routing;
             else
                 return new Routing();
         }
 
         public static void AddRouting(string name, string label, string value)
         {
-            if (network.ContainsKey(name))
-                network[name].Routing.Add(label, value);
+            if (nodes.ContainsKey(name))
+                nodes[name].Routing.Add(label, value);
         }
 
         public static void RemoveRouting(string name, string label)
         {
-            if (network.ContainsKey(name))
-                network[name].Routing.Remove(label);
+            if (nodes.ContainsKey(name))
+                nodes[name].Routing.Remove(label);
         }
 
         public static void ModifyRouting(string name, string label, string newlabel, string value)
         {
-            if (network.ContainsKey(name))
+            if (nodes.ContainsKey(name))
             {
-                network[name].Routing.Remove(label);
-                network[name].Routing.Add(newlabel, value);
+                nodes[name].Routing.Remove(label);
+                nodes[name].Routing.Add(newlabel, value);
             }
         }
 
-        public static Utils.Log GetLog(string name)
+        public static string GetLog(string name)
         {
-            if (network.ContainsKey(name))
-                return network[name].Log;
+            if (nodes.ContainsKey(name))
+                return nodes[name].Log.GetString();
             else
-                return new Utils.Log("Brak loga dla elementu "+name+"!");
+                return "Brak logów dla elementu " + name;
+        }
+
+        public static void LogMsg(string name, string msg)
+        {
+            if (nodes.ContainsKey(name))
+                nodes[name].Log.LogMsg(msg);
+        }
+
+        public static void SubscribeLog(string name, Utils.ILogListener listener)
+        {
+            if (nodes.ContainsKey(name))
+                nodes[name].Log.Subscribe(listener);
+        }
+
+        public static void UnsubscribeLog(string name, Utils.ILogListener listener)
+        {
+            if (nodes.ContainsKey(name))
+                nodes[name].Log.Unsubscribe(listener);
+        }
+
+        public static List<Edge<string>> GetConnections()
+        {
+            return connections;
         }
     }
 }
