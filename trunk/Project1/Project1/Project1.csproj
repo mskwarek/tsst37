@@ -50,10 +50,13 @@
     <Compile Include="CodeFile1.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DataUnit.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PortIn.cs" />
     <Compile Include="PortOut.cs" />
     <Compile Include="ProtocolUnit.cs" />
+    <Compile Include="Sink.cs" />
+    <Compile Include="Sorce.cs" />
     <Compile Include="SwichingPoint.cs" />
   </ItemGroup>
   <ItemGroup>
