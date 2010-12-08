@@ -13,7 +13,7 @@ namespace Project1
     {
         [XmlElementAttribute("Id")]
         public int id { get; set; }
-        [XmlArrayItem(typeof(Port))]
+        [XmlArrayItem("PortType")]
         public List<PortType> list {get; set;}
 
         public Component() {list = new List<PortType>(); }
@@ -25,6 +25,8 @@ namespace Project1
         public String type{ get; set; }
         [XmlElementAttribute("Link")]
        public int link { get; set; }
+        [XmlElementAttribute("RealPortNumber")]
+        public int portNumber{ get; set; }
     }
  
 }
