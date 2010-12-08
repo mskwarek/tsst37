@@ -73,7 +73,6 @@
             // 
             // netTopologyToolStripMenuItem
             // 
-            this.netTopologyToolStripMenuItem.Enabled = false;
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
             this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";

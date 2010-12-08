@@ -88,12 +88,6 @@
       <DependentUpon>ConfigGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Log.cs" />
-    <Compile Include="TopologyGUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TopologyGUI.Designer.cs">
-      <DependentUpon>TopologyGUI.cs</DependentUpon>
-    </Compile>
     <Compile Include="TopologyView.xaml.cs">
       <DependentUpon>TopologyView.xaml</DependentUpon>
     </Compile>
@@ -128,10 +122,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TopologyGUI.resx">
-      <DependentUpon>TopologyGUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
