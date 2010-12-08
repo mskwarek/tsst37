@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Xml.Serialization;
+using System.Xml;
 namespace Project1
 {
-    class ProtocolUnit
+    
+    public class ProtocolUnit
     {   //czyli juz dataunit z numerami vci vpi
 
         private int vpi;
@@ -16,7 +18,23 @@ namespace Project1
 
         private Random rand = new Random();  //do generowania vci vpi randomowych..pewnie bedzie nie potrzebne ale napisalem
 
+        public int Vpi{
+        set{ vpi= value;}
+        get { return vpi; }
+        }
 
+
+        public int Vci
+        {
+            set { vci = value; }
+            get { return vci; }
+        }
+
+        public DataUnit DataUnit 
+        {
+            set {datau=value;}
+            get { return datau; }
+        }
 
         public int GetVCI()
         { return vci; }
