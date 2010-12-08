@@ -11,11 +11,11 @@ using System.Xml;
  */
 namespace Project1
 {
-    public class Serial
+    public static class Serial
     {
 
 
-        public String SerializeObject(Object pObject)
+        public static String SerializeObject(Object pObject)
         {
 
             try
@@ -43,14 +43,14 @@ namespace Project1
 
         }
 
-        private String UTF8ByteArrayToString(Byte[] characters)
+        private static String UTF8ByteArrayToString(Byte[] characters)
         {
             UTF8Encoding encoding = new UTF8Encoding();
             String constructedString = encoding.GetString(characters);
             return (constructedString);
 
         }
-        private Byte[] StringToUTF8ByteArray(String pXmlString)
+        private static Byte[] StringToUTF8ByteArray(String pXmlString)
         {
             UTF8Encoding encoding = new UTF8Encoding();
             Byte[] byteArray = encoding.GetBytes(pXmlString);
@@ -58,7 +58,7 @@ namespace Project1
 
         }
 
-        public Object DeserializeObject(String pXmlizedString, Type type)
+        public static Object DeserializeObject(String pXmlizedString, Type type)
         {
 
             XmlSerializer xs = new XmlSerializer(type);
