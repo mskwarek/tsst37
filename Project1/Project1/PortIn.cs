@@ -34,11 +34,6 @@ namespace Project1
         }
 
 
-
-        public int GetNumber() { return number; }
-
-        public void SetNumber(int i) { number = i; }
-
         private void Receive(String xmlString)
         {        
          

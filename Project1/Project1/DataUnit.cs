@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1
 {
-    class DataUnit
+    public class DataUnit
     {   // reprezentuje 48B kawalek Data
 
         private string id;  // czyli litera duza symbolizujaca ta wiadomosc 48B

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1
 {
-    class Data
+    public class Data
     {
         private string id;  // czyli wlasciwie wysylana wiadomosc ,jest ona np postaci "DGWDDF" zawsze w postaci duzych liter alfabetu 
         //te litery reprezentuja 48Bajtow kazda
