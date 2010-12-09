@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace AtmSim.Utils
+namespace AtmSim.Common
 {
-    class DictionaryPropertyGridAdapter : ICustomTypeDescriptor
+    public class DictionaryPropertyGridAdapter : ICustomTypeDescriptor
     {
         IDictionary _dictionary;
 
@@ -87,7 +87,7 @@ namespace AtmSim.Utils
         }
 
 
-        class DictionaryPropertyDescriptor : PropertyDescriptor
+        public class DictionaryPropertyDescriptor : PropertyDescriptor
         {
             IDictionary _dictionary;
             object _key;

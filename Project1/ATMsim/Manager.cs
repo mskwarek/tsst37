@@ -47,9 +47,9 @@ namespace AtmSim
              * "VPI,VCI" - sciezka prowadzaca do danego hosta
              */
             public Routing Routing;
-            public Utils.Log Log;
+            public Common.Log Log;
 
-            public NetworkElement(string name, Config config, Routing routing, Utils.Log log)
+            public NetworkElement(string name, Config config, Routing routing, Common.Log log)
             {
                 this.Name = name;
                 this.Config = config;
@@ -58,12 +58,12 @@ namespace AtmSim
             }
         }
 
-        private static Dictionary<string, NetworkElement> nodes = new Dictionary<string,NetworkElement>();
+        private static Dictionary<string, AtmSim.Common.IAgent> nodes = new Dictionary<string, AtmSim.Common.IAgent>();
         private static List<Edge<string>> connections = new List<Edge<string>>();
 
-        public static void AddNode(string name, Config config, Routing routing, Utils.Log log)
+        public static void AddNode(string name, AtmSim.Common.IAgent node)
         {
-            nodes.Add(name,new NetworkElement(name, config, routing, log));
+            nodes.Add(name, node);
         }
 
         public static void AddConnection(string sourceName, string destinationName)
@@ -94,21 +94,39 @@ namespace AtmSim
         public static Config GetConfig(string name)
         {
             if (nodes.ContainsKey(name))
-                return nodes[name].Config;
-            else
-                return new Config();
+            {
+                Config config = new Config();
+                string[] paramlist = nodes[name].GetParamList();
+                foreach (string param in paramlist)
+                {
+                    config.Add(param, nodes[name].GetParam(param));
+                }
+                return config;
+            }
+            else return new Config();
         }
 
         public static void SetConfig(string name, string param, string value)
         {
             if (nodes.ContainsKey(name))
-                nodes[name].Config[param] = value;
+                nodes[name].SetParam(param, value);
         }
 
         public static Routing GetRouting(string name)
         {
             if (nodes.ContainsKey(name))
-                return nodes[name].Routing;
+            {
+                Common.RoutingTable table = nodes[name].GetRoutingTable();
+                Routing routing = new Routing();
+                foreach (var entry in table)
+                {
+                    routing.Add(
+                        entry.Key.Port.ToString() + ":" + entry.Key.Vpi.ToString() + ":" + entry.Key.Vci.ToString(),
+                        entry.Value.Port.ToString() + ":" + entry.Value.Vpi.ToString() + ":" + entry.Value.Vci.ToString()
+                    );
+                }
+                return routing;
+            }
             else
                 return new Routing();
         }
@@ -116,48 +134,48 @@ namespace AtmSim
         public static void AddRouting(string name, string label, string value)
         {
             if (nodes.ContainsKey(name))
-                nodes[name].Routing.Add(label, value);
+                nodes[name].AddRoutingEntry(new Common.RoutingEntry(1,2,3), new Common.RoutingEntry(2,3,4));
         }
 
         public static void RemoveRouting(string name, string label)
         {
-            if (nodes.ContainsKey(name))
-                nodes[name].Routing.Remove(label);
+            //if (nodes.ContainsKey(name))
+            //    nodes[name].Agent.RemoveRoutingEntry(label);
         }
 
         public static void ModifyRouting(string name, string label, string newlabel, string value)
         {
-            if (nodes.ContainsKey(name))
-            {
-                nodes[name].Routing.Remove(label);
-                nodes[name].Routing.Add(newlabel, value);
-            }
+            //if (nodes.ContainsKey(name))
+            //{
+            //    nodes[name].Agent.RemoveRoutingEntry(label);
+            //    nodes[name].Agent.AddRoutingEntry(newlabel, value);
+            //}
         }
 
         public static string GetLog(string name)
         {
             if (nodes.ContainsKey(name))
-                return nodes[name].Log.GetString();
+                return nodes[name].GetLog();
             else
                 return "Brak logów dla elementu " + name;
         }
 
         public static void LogMsg(string name, string msg)
         {
-            if (nodes.ContainsKey(name))
-                nodes[name].Log.LogMsg(msg);
+            //if (nodes.ContainsKey(name))
+            //    nodes[name].Log.LogMsg(msg);
         }
 
-        public static void SubscribeLog(string name, Utils.ILogListener listener)
+        public static void SubscribeLog(string name, Common.ILogListener listener)
         {
-            if (nodes.ContainsKey(name))
-                nodes[name].Log.Subscribe(listener);
+            //if (nodes.ContainsKey(name))
+            //    nodes[name].Log.Subscribe(listener);
         }
 
-        public static void UnsubscribeLog(string name, Utils.ILogListener listener)
+        public static void UnsubscribeLog(string name, Common.ILogListener listener)
         {
-            if (nodes.ContainsKey(name))
-                nodes[name].Log.Unsubscribe(listener);
+            //if (nodes.ContainsKey(name))
+            //    nodes[name].Log.Unsubscribe(listener);
         }
 
         public static List<Edge<string>> GetConnections()

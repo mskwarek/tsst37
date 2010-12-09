@@ -13,6 +13,23 @@ namespace Project1
 
         private int vci;
 
+        public int Port
+        {
+            get { return portnum; }
+            set { portnum = value; }
+        }
+        
+        public int Vpi
+        {
+            get { return vpi; }
+            set { vpi = value; }
+        }
+
+        public int Vci
+        {
+            get { return vci; }
+            set { vci = value; }
+        }
 
 
         public MatrixElements(int portnum, int vpi, int vci)
