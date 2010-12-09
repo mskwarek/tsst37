@@ -8,6 +8,17 @@ namespace AtmSim.Components
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
     public class Sorce// : AtmSim.Common.INetworkNode
     {
+        public string Name;
+        public Common.Log Log { get; set; }
+
+        public string Message = "";
+        public string Target = "";
+
+        private Common.RoutingTable targets = new Common.RoutingTable();
+        public Common.RoutingTable Matrix {
+            get { return targets; }
+            set { targets = value; }
+        }
 
         private AdaptacionLayer aal = new AdaptacionLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
 
@@ -69,7 +80,11 @@ namespace AtmSim.Components
             return putab;
         }
 
-
+        public void Send()
+        {
+            Common.RoutingEntry target = new Common.RoutingEntry(this.Target);
+            GenerateData(Message, target.Vpi, target.Vci);
+        }
 
     }
 }
