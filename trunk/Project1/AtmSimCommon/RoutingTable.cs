@@ -17,6 +17,10 @@ namespace AtmSim.Common
         {
             this.port = port; this.vpi = vpi; this.vci = vci;
         }
+        public RoutingEntry(string entry)
+        {
+            entry.Split(':');
+        }
     }
     public class RoutingTable : Dictionary<RoutingEntry, RoutingEntry>
     {
