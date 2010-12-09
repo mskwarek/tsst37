@@ -9,12 +9,22 @@ using System.Threading;
 namespace Project1
 {
    public class PortOut
-    {        // reprezancacja portu wyjściowego, realizuje przekazanie danych do portu po drugiej stronie łącza 
+   {
+       private static int counting = 0;
+
+       public PortOut() { number = counting; counting++; }
+
+       public int GetNumber() { return number; }
+
+       public void SetNumber(int i) { number = i; }
+
+       public int GetCounting() { return counting; }
+       // reprezancacja portu wyjściowego, realizuje przekazanie danych do portu po drugiej stronie łącza 
        public bool isOccupied;
 
        public ProtocolUnit protuni{get; set;}
 
-        private int number; //numer identyfikujacy port wyjsciowy.
+        private int number=0; //numer identyfikujacy port wyjsciowy.
 
         public int GetNumber() { return number; }
 
