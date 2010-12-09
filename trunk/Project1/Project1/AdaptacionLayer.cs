@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Project1
+namespace AtmSim.Components
 {
     class AdaptacionLayer
     {   //czyli AAL . Mapujemy strumien uzytkowy data do dataunitow

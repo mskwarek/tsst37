@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Project1
+namespace AtmSim.Components
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
     public class Sorce// : AtmSim.Common.INetworkNode

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 
-namespace Project1
+namespace AtmSim.Components
 {
     public class Agent : AtmSim.Common.IAgent
     {
@@ -142,8 +142,8 @@ namespace Project1
             foreach (MatrixElements element in x.GetMatrix().GetRouteTable())
             {
                 MatrixElements value = (MatrixElements)x.GetMatrix().GetRouteTable()[element];
-                table.Add(new AtmSim.Common.RoutingEntry(element.Port, element.Vpi, element.Vci),
-                    new AtmSim.Common.RoutingEntry(value.Port, value.Vpi, value.Vci));
+                table.Add(new Common.RoutingEntry(element.Port, element.Vpi, element.Vci),
+                    new Common.RoutingEntry(value.Port, value.Vpi, value.Vci));
             }
             return table;
         }

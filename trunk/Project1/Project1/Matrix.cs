@@ -4,7 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 
-namespace Project1
+namespace AtmSim.Components
 {
    public class Matrix : IFrameReceiver
     {

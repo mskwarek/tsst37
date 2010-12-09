@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Project1
+namespace AtmSim.Components
 {
 
     public class PortIn // : IPortIn
