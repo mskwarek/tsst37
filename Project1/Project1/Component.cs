@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 //klasa component sluzy to archiwizowania wlasciwowsci zawartych w obiekcie ppodstawowym Node
-namespace Project1
+namespace AtmSim.Components
 {
     [XmlRootAttribute("Component", Namespace = "", IsNullable = false)]
     public class Component

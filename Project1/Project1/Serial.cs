@@ -9,7 +9,7 @@ using System.Xml;
 /*Klasa służaca do serializacji obiektu Object ===> stringxml
  *                                      stringxml ====> Object
  */
-namespace Project1
+namespace AtmSim.Components
 {
     public static class Serial
     {
