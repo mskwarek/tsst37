@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Text;
 
-namespace AtmSim.Components
+namespace AtmSim.Components 
 {
+
     public class Agent : Common.IAgent
+
     {
+
 
         ArrayList informacionlist = new ArrayList();
 
@@ -113,9 +115,10 @@ namespace AtmSim.Components
 
 
 
+
         public string[] GetParamList()
         {
-            string[] param = { "name", "portsIn", "portsOut" } ;
+            string[] param = { "name", "portsIn", "portsOut" };
             return param;
         }
 
@@ -157,7 +160,5 @@ namespace AtmSim.Components
         {
             return node.Log.GetString();
         }
-
-
     }
 }
