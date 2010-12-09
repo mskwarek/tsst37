@@ -11,12 +11,20 @@ namespace Project1
 
     public class PortIn 
     {               //reprezentacja portu wejściowego, realizuje otrzymywanie danych 
-
-        private int number;      //numer identyfikujacy port wejsciowy
+        private static int counting = 0;
+        private int number=0;      //numer identyfikujacy port wejsciowy
 
         private ProtocolUnit protuni;
 
         private bool isreceived = false;    //wartosc logiczna okreslajaca czy wezel ma do obsluzenia(mapowanie w poku kom.) pakiet.Jezeli tak to "true" jezeli nie to "false".
+
+        public PortIn() { number = counting; counting++; }
+
+
+        public int GetNumber() { return number; }
+
+        public void SetNumber(int i) { number = i; }
+
 
         private Int32 realPort;
         public PortIn(Int32 realPort)
