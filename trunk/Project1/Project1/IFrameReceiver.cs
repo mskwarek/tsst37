@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Project1
 {
-    class SwichingPoint
+    public interface IFrameReceiver
     {
+        void ReceiveFrame(ProtocolUnit pu, int port);
     }
 }

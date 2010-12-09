@@ -9,7 +9,7 @@ using System.Threading;
 namespace Project1
 {
 
-    public class PortIn 
+    public class PortIn // : IPortIn
     {               //reprezentacja portu wejściowego, realizuje otrzymywanie danych 
         private static int counting = 0;
         private int number=0;      //numer identyfikujacy port wejsciowy

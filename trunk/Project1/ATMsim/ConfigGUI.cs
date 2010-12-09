@@ -31,8 +31,8 @@ namespace AtmSim
             this.modifiedRouting = new List<string>();
             InitializeComponent();
             this.Text += " " + this.elementName;
-            this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
-            this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
+            this.generalPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localConfig);
+            this.routingPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localRouting);
         }
 
         private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,14 +40,14 @@ namespace AtmSim
             if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
             {
                 this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
-                this.generalPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localConfig);
+                this.generalPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localConfig);
                 this.generalPropertyGrid.Refresh();
                 this.modifiedConfig.Clear();
             }
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
             {
                 this.localRouting = new Manager.Routing(Manager.GetRouting(this.elementName));
-                this.routingPropertyGrid.SelectedObject = new Utils.DictionaryPropertyGridAdapter(this.localRouting);
+                this.routingPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localRouting);
                 this.routingPropertyGrid.Refresh();
                 this.addedRouting.Clear();
                 this.removedRouting.Clear();

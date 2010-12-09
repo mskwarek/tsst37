@@ -32,13 +32,15 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logBox = new System.Windows.Forms.TextBox();
             this.saveLogDialog = new System.Windows.Forms.SaveFileDialog();
+            this.odświeżToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveToolStripMenuItem});
+            this.saveToolStripMenuItem,
+            this.odświeżToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(284, 24);
@@ -73,6 +75,12 @@
             this.saveLogDialog.Title = "Zapisz log...";
             this.saveLogDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveLogDialog_FileOk);
             // 
+            // odświeżToolStripMenuItem
+            // 
+            this.odświeżToolStripMenuItem.Name = "odświeżToolStripMenuItem";
+            this.odświeżToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.odświeżToolStripMenuItem.Text = "&Odśwież";
+            // 
             // LogGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -97,5 +105,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.TextBox logBox;
         private System.Windows.Forms.SaveFileDialog saveLogDialog;
+        private System.Windows.Forms.ToolStripMenuItem odświeżToolStripMenuItem;
     }
 }

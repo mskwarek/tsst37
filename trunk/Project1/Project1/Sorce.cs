@@ -6,16 +6,16 @@ using System.Text;
 namespace Project1
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
-    class Sorce
+    public class Sorce// : AtmSim.Common.INetworkNode
     {
 
         private AdaptacionLayer aal = new AdaptacionLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
 
-        private PortOut firstport; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
+        private IPortOut firstport; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
 
-        public void SetPortOut(PortOut po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym
+        public void SetPortOut(IPortOut po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym
 
-        public PortOut GetPortOut() { return firstport; } //metoda zwraca port skojarzony z Klasa Sorce
+        public IPortOut GetPortOut() { return firstport; } //metoda zwraca port skojarzony z Klasa Sorce
 
 
         /*jezeli wybierzemy w metodzie GenerateData tryb losowego generowania strumienia uzytkowego to to bedzie maxymalna mozliwa

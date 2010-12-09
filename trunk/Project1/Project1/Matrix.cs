@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Project1
 {
-   public class Matrix
+   public class Matrix : IFrameReceiver
     {
 
         private Hashtable RouteTable = new Hashtable(); //tworzymy RouteTable z HashTable
@@ -15,7 +15,12 @@ namespace Project1
          * otrzymywany string s1 to wspomniany wczesniej "numerInPort:wejscioweVPI:wejscioweVCI" s2 to "numerOutPort:wyjscioweVPI:wyjscioweVCI".
          * 
          */
+        private Node node;
 
+        public Matrix(Node node)
+        {
+            this.node = node;
+        }
 
         public void AddToMatrix(MatrixElements me1, MatrixElements me2)
         {
@@ -50,6 +55,13 @@ namespace Project1
         // GetRouteTable poprostu zwraca tablice taka jaka jest w obecnym stanie
         public Hashtable GetRouteTable() { return RouteTable; }
 
+        public void ReceiveFrame(ProtocolUnit pu, int port)
+        {
+            MatrixElements target = (MatrixElements)RouteTable[new MatrixElements(port, pu.Vci, pu.Vpi)];
+            pu.Vci = target.Vci;
+            pu.Vpi = target.Vpi;
+            node.GetPortsOut().ElementAt(target.Port).Send(pu);
+        }
 
     }
 }

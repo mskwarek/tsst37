@@ -6,30 +6,42 @@ using System.Text;
 
 namespace Project1
 {
-    public class Node
+    public class Node : AtmSim.Common.INetworkNode
     {    //pojedynczy węzeł sieci, nie generuje ruchu, tylko go kieruje
 
-        public Agent a;
+        private Agent a;
+
+        public AtmSim.Common.IAgent Agent
+        {
+            get { return a; }
+        }
+
+        private AtmSim.Common.Log log;
+
+        public AtmSim.Common.Log Log
+        {
+            get { return log; }
+        }
 
         private string name = "unknown";
 
-        private PortIn[] inportsgroup; //porty wejsciowe wezla
+        private IPortIn[] inportsgroup; //porty wejsciowe wezla
 
-        private PortOut[] outportsgroup; //porty wyjsciowe wezla
+        private IPortOut[] outportsgroup; //porty wyjsciowe wezla
 
-        private Matrix tab = new Matrix();  //Matrix wezla czyli tablica routingu
+        private Matrix tab; //= new Matrix();  //Matrix wezla czyli tablica routingu
 
         public string GetName() { return name; }   //zwraca imie wezla
 
         public void SetName(string s) { name = s; }  //ustawia imie wezla
 
-        public PortIn[] GetPortsIn() { return inportsgroup; } //metoda zwraca porty wejsciowe
+        public IPortIn[] GetPortsIn() { return inportsgroup; } //metoda zwraca porty wejsciowe
 
-        public PortOut[] GetPortsOut() { return outportsgroup; }  //metoda zwraca porty wyjsciowe
+        public IPortOut[] GetPortsOut() { return outportsgroup; }  //metoda zwraca porty wyjsciowe
 
-        public void SetPortsIn(PortIn[] pi) { inportsgroup = pi; } //metoda ustawia porty wejsciowe
+        public void SetPortsIn(IPortIn[] pi) { inportsgroup = pi; } //metoda ustawia porty wejsciowe
 
-        public void SetPortsOut(PortOut[] po) { outportsgroup = po; } //metoda ustawia porty wyjsciowe
+        public void SetPortsOut(IPortOut[] po) { outportsgroup = po; } //metoda ustawia porty wyjsciowe
 
         public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
 
@@ -41,15 +53,20 @@ namespace Project1
 
             this.name = name;
 
-            inportsgroup = new PortIn[numberofin];
-            outportsgroup = new PortOut[numberofout];
+            inportsgroup = new TestPortIn[numberofin];
+            outportsgroup = new TestPortOut[numberofout];
+            tab = new Matrix(this);
 
-            for (int i = 0; i < inportsgroup.Length; i++) { inportsgroup[i] = new PortIn(); }
-            for (int j = 0; j < outportsgroup.Length; j++) { outportsgroup[j] = new PortOut(); }
+            for (int i = 0; i < inportsgroup.Length; i++)
+            {
+                TestPortIn port = new TestPortIn(i);
+                port.SetReceiver(this.tab);
+                inportsgroup[i] = port;
+            }
+            for (int j = 0; j < outportsgroup.Length; j++) { outportsgroup[j] = new TestPortOut(j); }
 
 
-
-
+            this.log = new AtmSim.Common.Log("Log urzadzenia " + name);
 
 
             this.a = new Agent(this);
