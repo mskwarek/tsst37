@@ -11,8 +11,8 @@ namespace AtmSim.Common
         string GetParam(string name);
         void SetParam(string name, string value);
         RoutingTable GetRoutingTable();
-        void AddRoutingEntry(RoutingEntry label, RoutingEntry value);
-        void RemoveRoutingEntry(RoutingEntry entry);
+        void AddRoutingEntry(string label, string value);
+        void RemoveRoutingEntry(string entry);
         string GetLog();
     }
 }

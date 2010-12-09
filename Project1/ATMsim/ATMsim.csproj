@@ -120,6 +120,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -141,9 +142,9 @@
       <Project>{D4C26366-C88B-42DB-8A6F-1DB45880107D}</Project>
       <Name>AtmSimCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project1\Project1.csproj">
+    <ProjectReference Include="..\Project1\AtmSimComponents.csproj">
       <Project>{8451934A-7FE4-471F-B0B0-E7861AF5AFE4}</Project>
-      <Name>Project1</Name>
+      <Name>AtmSimComponents</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -29,12 +29,6 @@ namespace AtmSim
         public TopologyView()
         {
             var g = new BidirectionalGraph<object, IEdge<object>>();
-            //g.AddVertex("Ab");
-            //g.AddVertex("Ba");
-            //g.AddVertex("Ce");
-            //g.AddEdge(new Edge<object>("Ab", "Ba"));
-            //g.AddEdge(new Edge<object>("Ab", "Ce"));
-            //g.AddEdge(new Edge<object>("Ba", "Ce"));
             foreach (string node in Manager.GetElements())
             {
                 g.AddVertex(node);

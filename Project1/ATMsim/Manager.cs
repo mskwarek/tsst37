@@ -120,10 +120,7 @@ namespace AtmSim
                 Routing routing = new Routing();
                 foreach (var entry in table)
                 {
-                    routing.Add(
-                        entry.Key.Port.ToString() + ":" + entry.Key.Vpi.ToString() + ":" + entry.Key.Vci.ToString(),
-                        entry.Value.Port.ToString() + ":" + entry.Value.Vpi.ToString() + ":" + entry.Value.Vci.ToString()
-                    );
+                    routing.Add(entry.Key.ToString(), entry.Value.ToString());
                 }
                 return routing;
             }
@@ -136,14 +133,14 @@ namespace AtmSim
             if (nodes.ContainsKey(name))
             {
                 
-                nodes[name].AddRoutingEntry(new Common.RoutingEntry(1, 2, 3), new Common.RoutingEntry(2, 3, 4));
+                nodes[name].AddRoutingEntry(label, value);
             }
         }
 
         public static void RemoveRouting(string name, string label)
         {
-            //if (nodes.ContainsKey(name))
-            //    nodes[name].Agent.RemoveRoutingEntry(label);
+            if (nodes.ContainsKey(name))
+                nodes[name].RemoveRoutingEntry(label);
         }
 
         public static void ModifyRouting(string name, string label, string newlabel, string value)

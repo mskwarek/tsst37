@@ -6,12 +6,12 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class Agent : AtmSim.Common.IAgent
+    public class Agent : Common.IAgent
     {
 
         ArrayList informacionlist = new ArrayList();
 
-        Node x;
+        Node node;
 
         private string massage = "unknown";
 
@@ -38,19 +38,19 @@ namespace AtmSim.Components
             }
             count = 0;
             massage += "Current Routing Table :\n";
-            foreach (DictionaryEntry de in n.GetMatrix().GetRouteTable())
-            {
-                count++;
+            //foreach (var e in n.GetMatrix().GetRouteTable())
+            //{
+            //    count++;
+            //    var de = new Common.RoutingEntry(e);
+            //    massage += "Row" + count.ToString() + " :    " + " in port number : " + ((Common.RoutingEntry)de.Key).Port.ToString();
+            //    massage += " VPI : " + ((Common.RoutingEntry)de.Key).Vpi.ToString();
+            //    massage += " VCI : " + ((Common.RoutingEntry)de.Key).Vci.ToString();
+            //    massage += " out port number : " + ((Common.RoutingEntry)de.Value).Port.ToString();
+            //    massage += " VPI : " + ((Common.RoutingEntry)de.Value).Vpi.ToString();
+            //    massage += " VCI : " + ((Common.RoutingEntry)de.Value).Vci.ToString() + "\n";
 
-                massage += "Row" + count.ToString() + " :    " + " in port number : " + ((MatrixElements)de.Key).GetPortNumber().ToString();
-                massage += " VPI : " + ((MatrixElements)de.Key).GetVPI().ToString();
-                massage += " VCI : " + ((MatrixElements)de.Key).GetVCI().ToString();
-                massage += " out port number : " + ((MatrixElements)de.Value).GetPortNumber().ToString();
-                massage += " VPI : " + ((MatrixElements)de.Value).GetVPI().ToString();
-                massage += " VCI : " + ((MatrixElements)de.Value).GetVCI().ToString() + "\n";
 
-
-            }
+            //}
 
 
         }
@@ -65,51 +65,51 @@ namespace AtmSim.Components
 
         public Agent(Node n)
         {
-            x = n;
-            this.ResetMassage(x);
+            node = n;
+            this.ResetMassage(node);
         }
 
 
-        public void AddRowToRouteTable(MatrixElements m1, MatrixElements m2)
+        public void AddRowToRouteTable(string m1, string m2)
         {
-
+            /*
             int count = 0;
             foreach (PortOut po in x.GetPortsOut())
             {
 
-                if (m1.GetPortNumber() == po.GetNumber()) count++;
+                if (m1.Port == po.GetNumber()) count++;
 
             }
             foreach (PortIn pi in x.GetPortsIn())
             {
 
-                if (m2.GetPortNumber() == pi.GetNumber()) count++;
+                if (m2.Port == pi.GetNumber()) count++;
 
             }
-
+            
 
             if (count == 2)
             {
+            */
+                node.GetMatrix().AddToMatrix(m1, m2);
 
-                x.GetMatrix().AddToMatrix(m1, m2);
-
-                ResetMassage(x);
-            }
+                ResetMassage(node);
+            //}
 
 
         }
 
-        public void DeleteRowFromRouteTable(MatrixElements m)
+        public void DeleteRowFromRouteTable(string m)
         {
 
-            x.GetMatrix().DeleteFromMatrix(m);
-            ResetMassage(x);
+            node.GetMatrix().DeleteFromMatrix(m);
+            ResetMassage(node);
 
 
 
         }
 
-        public void SetNodeName(string s) { x.SetName(s); ResetMassage(x); }
+        public void SetNodeName(string s) { node.SetName(s); ResetMassage(node); }
 
 
 
@@ -122,43 +122,40 @@ namespace AtmSim.Components
         public string GetParam(string name)
         {
             if (name == "name")
-                return x.GetName();
+                return node.GetName();
             else if (name == "portsIn")
-                return "123";
+                return "0-" + (node.GetPortsIn().Length - 1);
             else if (name == "portsOut")
-                return "666";
+                return "0-" + (node.GetPortsOut().Length - 1);
             else return "";
         }
 
         public void SetParam(string name, string value)
         {
             if (name == "name")
-                x.SetName(value);
+                node.SetName(value);
         }
 
-        public AtmSim.Common.RoutingTable GetRoutingTable()
+        public Common.RoutingTable GetRoutingTable()
         {
-            AtmSim.Common.RoutingTable table = new AtmSim.Common.RoutingTable();
-            foreach (MatrixElements element in x.GetMatrix().GetRouteTable())
+            Common.RoutingTable table = new Common.RoutingTable();
+            foreach (var element in node.GetMatrix().GetRouteTable())
             {
-                MatrixElements value = (MatrixElements)x.GetMatrix().GetRouteTable()[element];
-                table.Add(new Common.RoutingEntry(element.Port, element.Vpi, element.Vci),
-                    new Common.RoutingEntry(value.Port, value.Vpi, value.Vci));
+                table.Add(element.Key,element.Value);
             }
             return table;
         }
-        public void AddRoutingEntry(AtmSim.Common.RoutingEntry label, AtmSim.Common.RoutingEntry value)
+        public void AddRoutingEntry(string label, string value)
         {
-            x.GetMatrix().AddToMatrix(new MatrixElements(label.Port, label.Vpi, label.Vci),
-                new MatrixElements(value.Port, value.Vpi, value.Vci));
+            node.GetMatrix().AddToMatrix(label, value);
         }
-        public void RemoveRoutingEntry(AtmSim.Common.RoutingEntry entry)
+        public void RemoveRoutingEntry(string entry)
         {
-            x.GetMatrix().DeleteFromMatrix(new MatrixElements(entry.Port, entry.Vpi, entry.Vci));
+            node.GetMatrix().DeleteFromMatrix(entry);
         }
         public string GetLog()
         {
-            return x.Log.GetString();
+            return node.Log.GetString();
         }
 
 
