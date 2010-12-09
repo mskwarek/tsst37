@@ -134,7 +134,10 @@ namespace AtmSim
         public static void AddRouting(string name, string label, string value)
         {
             if (nodes.ContainsKey(name))
-                nodes[name].AddRoutingEntry(new Common.RoutingEntry(1,2,3), new Common.RoutingEntry(2,3,4));
+            {
+                
+                nodes[name].AddRoutingEntry(new Common.RoutingEntry(1, 2, 3), new Common.RoutingEntry(2, 3, 4));
+            }
         }
 
         public static void RemoveRouting(string name, string label)
