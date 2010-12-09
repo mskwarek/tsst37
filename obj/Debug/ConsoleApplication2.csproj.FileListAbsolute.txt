@@ -1,0 +1,7 @@
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\bin\Debug\Project1.dll
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\bin\Debug\Project1.pdb
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\obj\Debug\ConsoleApplication2.exe
+C:\Documents and Settings\Administrator\Moje dokumenty\repository\tsst37\Project1\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb
