@@ -6,12 +6,12 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class SorceAgent : AtmSim.Common.IAgent
+    public class SorceAgent// : AtmSim.Common.IAgent
     {
 
         ArrayList informacionlist = new ArrayList();
 
-        Sorce x;
+        Sorce node;
 
       //  private string massage = "unknown";
 
@@ -63,67 +63,62 @@ namespace AtmSim.Components
      //   public string GetParametersOfNode() { return massage; }
 
 
-        public Agent(Sorce n)
+        public SorceAgent(Sorce n)
         {
-            x = n;
+            node = n;
             //this.ResetMassage(x);
         }
 
 
-
-
-        public void SetNodeName(string s) { x.SetName(s); ResetMassage(x); }
-
-
-
         public string[] GetParamList()
         {
-            string[] param = { "name","message" } ;
+            string[] param = { "name","message","target" } ;
             return param;
         }
 
         public string GetParam(string name)
         {
             if (name == "name")
-                return x.GetName();
-            else if (name =="message")
-                return x.GetCurrentData();
- 
+                return node.Name;
+            else if (name == "message")
+                return node.Message;
+            else
+                return "";
         }
 
         public void SetParam(string name, string value)
         {
             if (name == "name")
-                x.SetName(value);
-            else if(name=="message")
-                if(value=="random"){x.message=null; }
-                else {x.message=value;}
+                node.Name = value;
+            else if (name == "message")
+                if (value == "random") { node.Message = null; }
+                else { node.Message = value; }
+            else if (name == "send")
+                node.Send();
 
         }
 
-        public AtmSim.Common.RoutingTable GetRoutingTable()
+        public Common.RoutingTable GetRoutingTable()
         {
-            AtmSim.Common.RoutingTable table = new AtmSim.Common.RoutingTable();
-            foreach (MatrixElements element in x.GetMatrix().GetRouteTable())
+            Common.RoutingTable table = new Common.RoutingTable();
+            foreach (var element in node.Matrix)
             {
-                MatrixElements value = (MatrixElements)x.GetMatrix().GetRouteTable()[element];
-                table.Add(new Common.RoutingEntry(element.Port, element.Vpi, element.Vci),
-                    new Common.RoutingEntry(value.Port, value.Vpi, value.Vci));
+                table.Add(element.Key, element.Value);
             }
             return table;
         }
-        public void AddRoutingEntry(AtmSim.Common.RoutingEntry label, AtmSim.Common.RoutingEntry value)
+        public void AddRoutingEntry(string label, string value)
         {
-            x.GetMatrix().AddToMatrix(new MatrixElements(label.Port, label.Vpi, label.Vci),
-                new MatrixElements(value.Port, value.Vpi, value.Vci));
+            node.Matrix.Add(label, value);
         }
-        public void RemoveRoutingEntry(AtmSim.Common.RoutingEntry entry)
+        public void RemoveRoutingEntry(string entry)
         {
-            x.GetMatrix().DeleteFromMatrix(new MatrixElements(entry.Port, entry.Vpi, entry.Vci));
+            node.Matrix.Remove(entry);
         }
+  
         public string GetLog()
         {
-            return x.Log.GetString();
+            return node.Log.GetString();
         }
 
 
