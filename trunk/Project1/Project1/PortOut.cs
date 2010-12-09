@@ -26,10 +26,6 @@ namespace Project1
 
         private int number=0; //numer identyfikujacy port wyjsciowy.
 
-        public int GetNumber() { return number; }
-
-        public void SetNumber(int i) { number = i; }
-
         public void Send(ProtocolUnit pu) { }  // metoda ktora bedzie wysylala ProtocolUnit ktory jej podamy na wejscie.
         
        private Int32 realPort;
