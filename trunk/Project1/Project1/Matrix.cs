@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Project1
 {
-    class Matrix
+   public class Matrix
     {
 
         private Hashtable RouteTable = new Hashtable(); //tworzymy RouteTable z HashTable
@@ -16,25 +16,31 @@ namespace Project1
          */
 
 
-        public void AddToMatrix(PortIn pi, int vpiin, int vciin, PortOut po, int vpiout, int vciout)
+        public void AddToMatrix(MatrixElements me1, MatrixElements me2)
         {
-            string s1 = pi.GetNumber().ToString() + ":" + vpiin.ToString() + ":" + vciin.ToString();
 
-            string s2 = po.GetNumber().ToString() + ":" + vpiout.ToString() + ":" + vciout.ToString();
+            //MatrixElements me1 = new MatrixElements(pi.GetNumber(), vpiin, vciin);
 
-            if (RouteTable.ContainsKey(s1) || RouteTable.ContainsValue(s2)) return;  //Sprawdzamy czy mozemy wpisac do tablicy wiersz ktory podalismy w parametrach metody.
-            RouteTable.Add(s1, s2); //Ostatecznie tworzymy nowy wiersz w tablicy z odpowiednio kluczem s1 i wartoscia s2.
+            // MatrixElements me2 = new MatrixElements(po.GetNumber(), vpiout, vciout);
+
+
+            //  string s1 =pi.GetNumber().ToString() + ":" + vpiin.ToString() + ":" + vciin.ToString();
+
+            // string s2 = po.GetNumber().ToString() + ":" + vpiout.ToString() + ":" + vciout.ToString();
+
+            if (RouteTable.ContainsKey(me1) || RouteTable.ContainsValue(me2)) return;  //Sprawdzamy czy mozemy wpisac do tablicy wiersz ktory podalismy w parametrach metody.
+            RouteTable.Add(me1, me2); //Ostatecznie tworzymy nowy wiersz w tablicy z odpowiednio kluczem s1 i wartoscia s2.
         }
         /*W metodzie DeleteFromMatrix dajemy na wejsciu odpowiedni Klucz "numerInPort:wejscioweVPI:wejscioweVCI"
           A nastepnie metoda usowa wiersz o takim kluczu
          */
 
 
-        public void DeleteFromMatrix(string key)
+        public void DeleteFromMatrix(MatrixElements me)
         {
-            if (RouteTable.ContainsKey(key))
+            if (RouteTable.ContainsKey(me))
             {
-                RouteTable.Remove(key);
+                RouteTable.Remove(me);
             }
 
 
