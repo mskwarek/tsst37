@@ -40,6 +40,9 @@
             this.configButton = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.examplesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.net1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.net2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,13 +62,15 @@
             // 
             this.netToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.netNewToolStripMenuItem,
+            this.examplesToolStripMenuItem,
             this.netTopologyToolStripMenuItem});
             this.netToolStripMenuItem.Name = "netToolStripMenuItem";
-            this.netToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.netToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
             this.netToolStripMenuItem.Text = "&Sieć";
             // 
             // netNewToolStripMenuItem
             // 
+            this.netNewToolStripMenuItem.Enabled = false;
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
             this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
@@ -151,6 +156,29 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // examplesToolStripMenuItem
+            // 
+            this.examplesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.net1ToolStripMenuItem,
+            this.net2ToolStripMenuItem});
+            this.examplesToolStripMenuItem.Name = "examplesToolStripMenuItem";
+            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.examplesToolStripMenuItem.Text = "&Przykładowe";
+            // 
+            // net1ToolStripMenuItem
+            // 
+            this.net1ToolStripMenuItem.Name = "net1ToolStripMenuItem";
+            this.net1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.net1ToolStripMenuItem.Text = "Sieć 1";
+            this.net1ToolStripMenuItem.Click += new System.EventHandler(this.net1ToolStripMenuItem_Click);
+            // 
+            // net2ToolStripMenuItem
+            // 
+            this.net2ToolStripMenuItem.Name = "net2ToolStripMenuItem";
+            this.net2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.net2ToolStripMenuItem.Text = "Sieć 2";
+            this.net2ToolStripMenuItem.Click += new System.EventHandler(this.net2ToolStripMenuItem_Click);
+            // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +214,9 @@
         private System.Windows.Forms.Button configButton;
         private System.Windows.Forms.Button logButton;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem examplesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem net1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem net2ToolStripMenuItem;
     }
 }
 

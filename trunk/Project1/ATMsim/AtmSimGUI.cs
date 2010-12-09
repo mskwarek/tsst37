@@ -27,6 +27,25 @@ namespace AtmSim
                 elementListBox.Items.Add(element);
         }
 
+        private void net1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Manager.Reset();
+            this.InitTestNetwork1();
+            this.elementListBox.Items.Clear();
+            foreach (string element in Manager.GetElements())
+                elementListBox.Items.Add(element);
+        }
+
+        private void net2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Manager.Reset();
+            this.InitTestNetwork2();
+            this.elementListBox.Items.Clear();
+            foreach (string element in Manager.GetElements())
+                elementListBox.Items.Add(element);
+
+        }
+
         private void netTopologyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             /*TopologyGUI topologyGUI = new TopologyGUI();
@@ -67,25 +86,25 @@ namespace AtmSim
             //// Koniec kodu tymczasowego
         }
 
-        private void InitTestNetwork2()
+        private void InitTestNetwork1()
         {
-            AtmSim.Components.Node Router1 = new AtmSim.Components.Node(1, 2, "Router1");
-            AtmSim.Components.Node Router2 = new AtmSim.Components.Node(3, 1, "Router2");
-            AtmSim.Components.Node Router3 = new AtmSim.Components.Node(1, 2, "Router3");
-            
-            AtmSim.Components.TestPortIn in21 = new AtmSim.Components.TestPortIn(0);
-            AtmSim.Components.TestPortIn in12 = new AtmSim.Components.TestPortIn(0);
-            AtmSim.Components.TestPortIn in32 = new AtmSim.Components.TestPortIn(1);
-            AtmSim.Components.TestPortIn in13 = new AtmSim.Components.TestPortIn(0);
-            AtmSim.Components.TestPortIn in35 = new AtmSim.Components.TestPortIn(0);
-            AtmSim.Components.TestPortIn in42 = new AtmSim.Components.TestPortIn(2);
+            Components.Node Router1 = new Components.Node(1, 2, "Router1");
+            Components.Node Router2 = new Components.Node(3, 1, "Router2");
+            Components.Node Router3 = new Components.Node(1, 2, "Router3");
 
-            AtmSim.Components.TestPortOut out12 = new AtmSim.Components.TestPortOut(0); out12.Connect(in12);
-            AtmSim.Components.TestPortOut out13 = new AtmSim.Components.TestPortOut(1); out13.Connect(in13);
-            AtmSim.Components.TestPortOut out21 = new AtmSim.Components.TestPortOut(0); out21.Connect(in21);
-            AtmSim.Components.TestPortOut out32 = new AtmSim.Components.TestPortOut(0); out32.Connect(in32);
-            AtmSim.Components.TestPortOut out42 = new AtmSim.Components.TestPortOut(0); out42.Connect(in42);
-            AtmSim.Components.TestPortOut out35 = new AtmSim.Components.TestPortOut(1); out35.Connect(in35);
+            Components.TestPortIn in21 = new Components.TestPortIn(0);
+            Components.TestPortIn in12 = new Components.TestPortIn(0);
+            Components.TestPortIn in32 = new Components.TestPortIn(1);
+            Components.TestPortIn in13 = new Components.TestPortIn(0);
+            Components.TestPortIn in35 = new Components.TestPortIn(0);
+            Components.TestPortIn in42 = new Components.TestPortIn(2);
+
+            Components.TestPortOut out12 = new Components.TestPortOut(0); out12.Connect(in12);
+            Components.TestPortOut out13 = new Components.TestPortOut(1); out13.Connect(in13);
+            Components.TestPortOut out21 = new Components.TestPortOut(0); out21.Connect(in21);
+            Components.TestPortOut out32 = new Components.TestPortOut(0); out32.Connect(in32);
+            Components.TestPortOut out42 = new Components.TestPortOut(0); out42.Connect(in42);
+            Components.TestPortOut out35 = new Components.TestPortOut(1); out35.Connect(in35);
 
             Router1.GetPortsIn().SetValue(in21, 0);
             Router2.GetPortsIn().SetValue(in12, 0);
@@ -99,13 +118,63 @@ namespace AtmSim
             Router3.GetPortsOut().SetValue(out32, 0);
             Router3.GetPortsOut().SetValue(out35, 1);
 
-            AtmSim.Components.Sorce Source4 = new AtmSim.Components.Sorce();
+            Components.Sorce Source4 = new Components.Sorce();
             Source4.SetPortOut(out42);
-            AtmSim.Components.Sink Sink5 = new AtmSim.Components.Sink(in35);
+            Components.Sink Sink5 = new Components.Sink(in35);
 
             Manager.AddNode("Router1", Router1.Agent);
             Manager.AddNode("Router2", Router2.Agent);
             Manager.AddNode("Router3", Router3.Agent);
+            Manager.AddConnection("Router2", "Router1");
+            Manager.AddConnection("Router1", "Router2");
+            Manager.AddConnection("Router3", "Router2");
+            Manager.AddConnection("Router1", "Router3");
+        }
+
+        private void InitTestNetwork2()
+        {
+            Components.Node Router1 = new Components.Node(1, 2, "Router1");
+            Components.Node Router2 = new Components.Node(3, 1, "Router2");
+            Components.Node Router3 = new Components.Node(1, 2, "Router3");
+
+            Components.TestPortIn in21 = new Components.TestPortIn(0);
+            Components.TestPortIn in12 = new Components.TestPortIn(0);
+            Components.TestPortIn in32 = new Components.TestPortIn(1);
+            Components.TestPortIn in13 = new Components.TestPortIn(0);
+            Components.TestPortIn in35 = new Components.TestPortIn(0);
+            Components.TestPortIn in42 = new Components.TestPortIn(2);
+
+            Components.TestPortOut out12 = new Components.TestPortOut(0); out12.Connect(in12);
+            Components.TestPortOut out13 = new Components.TestPortOut(1); out13.Connect(in13);
+            Components.TestPortOut out21 = new Components.TestPortOut(0); out21.Connect(in21);
+            Components.TestPortOut out32 = new Components.TestPortOut(0); out32.Connect(in32);
+            Components.TestPortOut out42 = new Components.TestPortOut(0); out42.Connect(in42);
+            Components.TestPortOut out35 = new Components.TestPortOut(1); out35.Connect(in35);
+
+            Router1.GetPortsIn().SetValue(in21, 0);
+            Router2.GetPortsIn().SetValue(in12, 0);
+            Router2.GetPortsIn().SetValue(in32, 1);
+            Router2.GetPortsIn().SetValue(in42, 2);
+            Router3.GetPortsIn().SetValue(in13, 0);
+
+            Router1.GetPortsOut().SetValue(out12, 0);
+            Router1.GetPortsOut().SetValue(out13, 1);
+            Router2.GetPortsOut().SetValue(out21, 0);
+            Router3.GetPortsOut().SetValue(out32, 0);
+            Router3.GetPortsOut().SetValue(out35, 1);
+
+            Components.Sorce Source4 = new Components.Sorce();
+            Source4.SetPortOut(out42);
+            Components.Sink Sink5 = new Components.Sink(in35);
+
+            Manager.AddNode("Router1", Router1.Agent);
+            Manager.AddNode("Router2", Router2.Agent);
+            Manager.AddNode("Router3", Router3.Agent);
+            Manager.AddConnection("Router2", "Router1");
+            Manager.AddConnection("Router1", "Router2");
+            Manager.AddConnection("Router3", "Router2");
+            Manager.AddConnection("Router1", "Router3");
+
         }
 
         private void elementListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,6 +202,7 @@ namespace AtmSim
         {
             Manager.LogMsg(this.selectedName, "Hello!");
         }
+
 
     }
 }

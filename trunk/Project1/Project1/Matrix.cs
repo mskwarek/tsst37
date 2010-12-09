@@ -9,7 +9,7 @@ namespace AtmSim.Components
    public class Matrix : IFrameReceiver
     {
 
-        private Hashtable RouteTable = new Hashtable(); //tworzymy RouteTable z HashTable
+        private Common.RoutingTable RouteTable = new Common.RoutingTable(); //tworzymy RouteTable z HashTable
 
         /*Gdy chcemy dodac cos nowego do Tablicy Routingowej to uzywamy AddToMatrix dajac odpowiednie porty i numery vci,vpi wejsciowe/wyjsciowe
          * otrzymywany string s1 to wspomniany wczesniej "numerInPort:wejscioweVPI:wejscioweVCI" s2 to "numerOutPort:wyjscioweVPI:wyjscioweVCI".
@@ -22,7 +22,7 @@ namespace AtmSim.Components
             this.node = node;
         }
 
-        public void AddToMatrix(MatrixElements me1, MatrixElements me2)
+        public void AddToMatrix(string me1, string me2)
         {
 
             //MatrixElements me1 = new MatrixElements(pi.GetNumber(), vpiin, vciin);
@@ -42,7 +42,7 @@ namespace AtmSim.Components
          */
 
 
-        public void DeleteFromMatrix(MatrixElements me)
+        public void DeleteFromMatrix(string me)
         {
             if (RouteTable.ContainsKey(me))
             {
@@ -53,14 +53,16 @@ namespace AtmSim.Components
         }
 
         // GetRouteTable poprostu zwraca tablice taka jaka jest w obecnym stanie
-        public Hashtable GetRouteTable() { return RouteTable; }
+        public Common.RoutingTable GetRouteTable() { return RouteTable; }
 
         public void ReceiveFrame(ProtocolUnit pu, int port)
         {
-            MatrixElements target = (MatrixElements)RouteTable[new MatrixElements(port, pu.Vci, pu.Vpi)];
+            Common.RoutingEntry source = new Common.RoutingEntry(port, pu.Vpi, pu.Vci);
+            Common.RoutingEntry target = new Common.RoutingEntry(RouteTable[source.ToString()]);
             pu.Vci = target.Vci;
             pu.Vpi = target.Vpi;
             node.GetPortsOut().ElementAt(target.Port).Send(pu);
+            node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
         }
 
     }

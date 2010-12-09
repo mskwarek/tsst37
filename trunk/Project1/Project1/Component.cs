@@ -8,7 +8,7 @@ using System.Xml;
 //klasa component sluzy to archiwizowania wlasciwowsci zawartych w obiekcie ppodstawowym Node
 namespace AtmSim.Components
 {
-    [XmlRootAttribute("Component", Namespace = "", IsNullable = false)]
+    /*[XmlRootAttribute("Component", Namespace = "", IsNullable = false)]
     public class Component
     {
         [XmlElementAttribute("Id")]
@@ -91,6 +91,6 @@ namespace AtmSim.Components
        public int link { get; set; }
         [XmlElementAttribute("RealPortNumber")]
         public int portNumber{ get; set; }
-    }
+    }*/
  
 }

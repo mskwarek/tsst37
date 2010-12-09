@@ -73,7 +73,6 @@
     <Compile Include="IPortIn.cs" />
     <Compile Include="IPortOut.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="MatrixElements.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PortIn.cs" />
     <Compile Include="PortOut.cs" />
