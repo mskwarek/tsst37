@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
+    // testowa implementacja portu wyjsciowego - dziala w ramach jednego procesu
     public class TestPortOut : IPortOut
     {
         private int _portID;

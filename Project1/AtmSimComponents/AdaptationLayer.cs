@@ -23,7 +23,7 @@ namespace AtmSim.Components
             while (len > 0)  // to wpisuje do poszczegolnych DataUnitow czesci strumienia uzytkowego
             {
                 DataUnit du = new DataUnit();
-                du.SetId(dat.GetElement(len));
+                du.Id = dat.GetElement(len);
                 dataunittab[len - 1] = du;
                 len--;
             }

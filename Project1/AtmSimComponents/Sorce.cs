@@ -84,12 +84,12 @@ namespace AtmSim.Components
             foreach (DataUnit p in du)
             {
                 var pu = new ProtocolUnit();
-                pu.SetDataUnit(p);
-                pu.SetVPI(firstvpi);
-                pu.SetVCI(firstvci);
+                pu.DataUnit = p ;
+                pu.Vpi = firstvpi;
+                pu.Vci = firstvci ;
                 putab[count] = pu; //to jest tylko po to zeby metoda zwracala tablice utworzonych pakietow ze strumienia uzytkowego.
                 this.firstport.Send(pu);
-                Log.LogMsg("Wysłano " + p.GetId());
+                Log.LogMsg("Wysłano " + p.Id);
             }
 
 

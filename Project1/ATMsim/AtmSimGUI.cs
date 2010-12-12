@@ -120,7 +120,7 @@ namespace AtmSim
 
             Components.Sorce Source4 = new Components.Sorce("Source4");
             Source4.SetPortOut(out42);
-            Components.Sink Sink5 = new Components.Sink(in35);
+            Components.Sink Sink5 = new Components.Sink("Sink5");
 
             Manager.AddNode("Router1", Router1.Agent);
             Manager.AddNode("Router2", Router2.Agent);
@@ -174,7 +174,7 @@ namespace AtmSim
 
             Components.Sorce Source4 = new Components.Sorce("Source4");
             Source4.SetPortOut(out42);
-            Components.Sink Sink5 = new Components.Sink(in35);
+            Components.Sink Sink5 = new Components.Sink("Sink5");
 
             Manager.AddNode("Router1", Router1.Agent);
             Manager.AddNode("Router2", Router2.Agent);

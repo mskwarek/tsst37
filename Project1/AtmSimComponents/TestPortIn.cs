@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
+    // testowa implementacja portu wejsciowego - dziala w ramach jednego procesu
     public class TestPortIn : IPortIn
     {
         private int _portID;

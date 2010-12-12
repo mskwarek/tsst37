@@ -6,16 +6,13 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    class SinkAgent : Common.IAgent
+    class SinkAgent : IAgent
     {
-        ArrayList informacionlist = new ArrayList();
-
         Sink node;
 
-          public SinkAgent(Sink n)
+        public SinkAgent(Sink n)
         {
             node = n;
-            //this.ResetMassage(x);
         }
 
 
@@ -50,9 +47,9 @@ namespace AtmSim.Components
 
         }
 
-        public Common.RoutingTable GetRoutingTable()
+        public Routing GetRoutingTable()
         {
-            Common.RoutingTable table = new Common.RoutingTable();
+            Routing table = new Routing();
            
             return table;
         }
