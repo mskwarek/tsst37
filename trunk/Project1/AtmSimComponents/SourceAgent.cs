@@ -6,12 +6,12 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class SorceAgent : IAgent
+    public class SourceAgent : IAgent
     {
 
         ArrayList informacionlist = new ArrayList();
 
-        Sorce node;
+        Source node;
 
       //  private string massage = "unknown";
 
@@ -63,7 +63,7 @@ namespace AtmSim.Components
      //   public string GetParametersOfNode() { return massage; }
 
 
-        public SorceAgent(Sorce n)
+        public SourceAgent(Source n)
         {
             node = n;
             //this.ResetMassage(x);

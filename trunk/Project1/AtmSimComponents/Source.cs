@@ -6,13 +6,13 @@ using System.Text;
 namespace AtmSim.Components
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
-    public class Sorce : INetworkNode
+    public class Source : INetworkNode
     {
         public string Name;
         private Log log;
         public Log Log { get { return log; } set { log = value; } }
 
-        private SorceAgent agent;
+        private SourceAgent agent;
         public IAgent Agent
         {
             get { return agent; }
@@ -33,11 +33,11 @@ namespace AtmSim.Components
 
         private IPortOut firstport; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
 
-        public Sorce(string name)
+        public Source(string name)
         {
             this.Name = name;
             this.log = new Log("Log źródła " + name);
-            agent = new SorceAgent(this);
+            agent = new SourceAgent(this);
         }
 
         public void SetPortOut(IPortOut po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym

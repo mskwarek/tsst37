@@ -9,7 +9,7 @@ namespace AtmSim.Components
     public class Node : INetworkNode
     {    //pojedynczy węzeł sieci, nie generuje ruchu, tylko go kieruje
 
-        private Agent a;
+        private NodeAgent a;
         public IAgent Agent
         {
             get { return a; }
@@ -59,7 +59,7 @@ namespace AtmSim.Components
             }
 
             this.log = new Log("Log urzadzenia " + name);
-            this.a = new Agent(this);
+            this.a = new NodeAgent(this);
         }
 
     }
