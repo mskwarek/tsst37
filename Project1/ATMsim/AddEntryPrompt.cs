@@ -36,6 +36,7 @@ namespace AtmSim
                 this.parentConfig.AddRoutingEntry(label, value);
                 this.Close();
             }
+
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -47,5 +48,46 @@ namespace AtmSim
         {
             this.parentConfig.Show();
         }
+
+        private void CheckedChanged()
+        {
+            if (routerButton.Checked)
+            {
+                sourcePanel.Visible = false;
+                sinkPanel.Visible = false;
+                routingInPanel.Visible = true;
+                routingOutPanel.Visible = true;
+            }
+            else if (sourceButton.Checked)
+            {
+                sourcePanel.Visible = true;
+                sinkPanel.Visible = false;
+                routingInPanel.Visible = false;
+                routingOutPanel.Visible = true;
+            }
+            else if (sinkButton.Checked)
+            {
+                sourcePanel.Visible = false;
+                sinkPanel.Visible = true;
+                routingInPanel.Visible = true;
+                routingOutPanel.Visible = false;
+            }
+        }
+
+        private void routerButton_CheckedChanged(object sender, EventArgs e)
+        {
+            this.CheckedChanged();
+        }
+
+        private void sourceButton_CheckedChanged(object sender, EventArgs e)
+        {
+            this.CheckedChanged();
+        }
+
+        private void sinkButton_CheckedChanged(object sender, EventArgs e)
+        {
+            this.CheckedChanged();
+        }
+
     }
 }

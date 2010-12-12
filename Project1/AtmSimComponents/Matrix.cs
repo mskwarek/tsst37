@@ -9,7 +9,7 @@ namespace AtmSim.Components
    public class Matrix : IFrameReceiver
     {
 
-        private Common.RoutingTable RouteTable = new Common.RoutingTable(); //tworzymy RouteTable z HashTable
+        private RoutingTable RouteTable = new RoutingTable(); //tworzymy RouteTable z HashTable
 
         /*Gdy chcemy dodac cos nowego do Tablicy Routingowej to uzywamy AddToMatrix dajac odpowiednie porty i numery vci,vpi wejsciowe/wyjsciowe
          * otrzymywany string s1 to wspomniany wczesniej "numerInPort:wejscioweVPI:wejscioweVCI" s2 to "numerOutPort:wyjscioweVPI:wyjscioweVCI".
@@ -22,7 +22,7 @@ namespace AtmSim.Components
             this.node = node;
         }
 
-        public void AddToMatrix(string me1, string me2)
+        public void AddToMatrix(RoutingEntry me1, RoutingEntry me2)
         {
 
             //MatrixElements me1 = new MatrixElements(pi.GetNumber(), vpiin, vciin);
@@ -42,7 +42,7 @@ namespace AtmSim.Components
          */
 
 
-        public void DeleteFromMatrix(string me)
+        public void DeleteFromMatrix(RoutingEntry me)
         {
             if (RouteTable.ContainsKey(me))
             {
@@ -53,19 +53,22 @@ namespace AtmSim.Components
         }
 
         // GetRouteTable poprostu zwraca tablice taka jaka jest w obecnym stanie
-        public Common.RoutingTable GetRouteTable() { return RouteTable; }
+        public RoutingTable GetRouteTable() { return RouteTable; }
 
         public void ReceiveFrame(ProtocolUnit pu, int port)
         {
-            Common.RoutingEntry source = new Common.RoutingEntry(port, pu.Vpi, pu.Vci);
-            if (RouteTable.ContainsKey(source.ToString()))
+            RoutingEntry source = new RoutingEntry(port, pu.Vpi, pu.Vci);
+            if (RouteTable.ContainsKey(source))
             {
-                Common.RoutingEntry target = new Common.RoutingEntry(RouteTable[source.ToString()]);
-                pu.Vci = target.Vci;
+                RoutingEntry target = RouteTable[source];
                 pu.Vpi = target.Vpi;
+                if (!target.NoVci)
+                    pu.Vci = target.Vci;
                 node.GetPortsOut().ElementAt(target.Port).Send(pu);
                 node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
             }
+            else
+                node.Log.LogMsg("Ramka: " + source.ToString() + " odrzucona.");
         }
 
     }

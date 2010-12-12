@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace AtmSim
 {
-    public partial class LogGUI : Form, Common.ILogListener
+    public partial class LogGUI : Form, ILogListener
     {
         //private Utils.Log log;
         private string elementName;

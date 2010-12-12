@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AtmSim.Common
+namespace AtmSim
 {
     // interfejs potrzebny do aktualizacji loga na biezaco
     public interface ILogListener

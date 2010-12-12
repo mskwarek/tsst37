@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace AtmSim.Common
+namespace AtmSim
 {
     public class DictionaryPropertyGridAdapter : ICustomTypeDescriptor
     {

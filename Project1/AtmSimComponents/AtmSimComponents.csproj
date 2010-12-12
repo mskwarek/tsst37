@@ -63,7 +63,7 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="AdaptacionLayer.cs" />
+    <Compile Include="AdaptationLayer.cs" />
     <Compile Include="Agent.cs" />
     <Compile Include="Central.cs" />
     <Compile Include="Component.cs" />

@@ -6,19 +6,19 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class Node : AtmSim.Common.INetworkNode
+    public class Node : INetworkNode
     {    //pojedynczy węzeł sieci, nie generuje ruchu, tylko go kieruje
 
         private Agent a;
 
-        public AtmSim.Common.IAgent Agent
+        public IAgent Agent
         {
             get { return a; }
         }
 
-        private AtmSim.Common.Log log;
+        private Log log;
 
-        public AtmSim.Common.Log Log
+        public Log Log
         {
             get { return log; }
         }
@@ -66,7 +66,7 @@ namespace AtmSim.Components
             for (int j = 0; j < outportsgroup.Length; j++) { outportsgroup[j] = new TestPortOut(j); }
 
 
-            this.log = new AtmSim.Common.Log("Log urzadzenia " + name);
+            this.log = new Log("Log urzadzenia " + name);
 
 
             this.a = new Agent(this);
