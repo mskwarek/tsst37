@@ -7,13 +7,13 @@ using System.Text;
 namespace AtmSim.Components 
 {
 
-    public class Agent : IAgent
+    public class NodeAgent : IAgent
 
     {
         // Referencja wezwa zarzadzanego przez agenta
         Node node;
 
-        public Agent(Node n)
+        public NodeAgent(Node n)
         {
             node = n;
         }

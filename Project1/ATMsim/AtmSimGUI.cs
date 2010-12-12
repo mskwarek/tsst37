@@ -118,7 +118,7 @@ namespace AtmSim
             Router3.GetPortsOut().SetValue(out32, 0);
             Router3.GetPortsOut().SetValue(out35, 1);
 
-            Components.Sorce Source4 = new Components.Sorce("Source4");
+            Components.Source Source4 = new Components.Source("Source4");
             Source4.SetPortOut(out42);
             Components.Sink Sink5 = new Components.Sink("Sink5");
 
@@ -172,7 +172,7 @@ namespace AtmSim
             Router3.GetPortsOut().SetValue(out32, 0);
             Router3.GetPortsOut().SetValue(out35, 1);
 
-            Components.Sorce Source4 = new Components.Sorce("Source4");
+            Components.Source Source4 = new Components.Source("Source4");
             Source4.SetPortOut(out42);
             Components.Sink Sink5 = new Components.Sink("Sink5");
 

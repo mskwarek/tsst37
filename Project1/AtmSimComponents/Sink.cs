@@ -22,13 +22,13 @@ namespace AtmSim.Components
         {
             get { return agent; }
         }
-
+        
         private IPortIn firstport;
         private string message = "";
         private string target = "";
         public string Message { get { return message; } set { message = value; } }
         public string Target { get { return target; } set { target = value; } }
-       public  class SinkReceiver : IFrameReceiver
+        public  class SinkReceiver : IFrameReceiver
         {   private Sink sink;
             private RoutingTable RouteTable = new RoutingTable();
             public RoutingTable GetRouteTable() { return RouteTable; }
