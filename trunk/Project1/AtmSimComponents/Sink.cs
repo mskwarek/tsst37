@@ -6,20 +6,19 @@ using System.Text;
 namespace AtmSim.Components
 {
 
-    /*Urządzenie odbierające ze swojego portu ruch sieciowy 
- * 
- * 
- */
-    public class Sink : AtmSim.Common.INetworkNode
+    /**
+     * Urządzenie odbierające ze swojego portu ruch sieciowy. 
+     **/
+    public class Sink : INetworkNode
     {
         
 
         public string Name;
-        private Common.Log log;
-        public Common.Log Log { get { return log; } set { log = value; } }
+        private Log log;
+        public Log Log { get { return log; } set { log = value; } }
 
         private SinkAgent agent;
-        public Common.IAgent Agent
+        public IAgent Agent
         {
             get { return agent; }
         }
@@ -31,16 +30,16 @@ namespace AtmSim.Components
         public string Target { get { return target; } set { target = value; } }
        public  class SinkReceiver : IFrameReceiver
         {   private Sink sink;
-            private Common.RoutingTable RouteTable = new Common.RoutingTable();
-            public Common.RoutingTable GetRouteTable() { return RouteTable; }
+            private RoutingTable RouteTable = new RoutingTable();
+            public RoutingTable GetRouteTable() { return RouteTable; }
             public SinkReceiver(Sink sink)
                  {
                  this.sink = sink;
                  }
             public void ReceiveFrame(ProtocolUnit pu, int port)
             {   
-                Common.RoutingEntry source = new Common.RoutingEntry(port, pu.Vpi, pu.Vci);
-                if (RouteTable.ContainsKey(source.ToString()))
+                RoutingEntry source = new RoutingEntry(port, pu.Vpi, pu.Vci);
+                if (RouteTable.ContainsKey(source))
                 {
                    
                    sink.Log.LogMsg("Ramka: " + source.ToString());
@@ -60,7 +59,7 @@ namespace AtmSim.Components
         public Sink(String name)
         {
             this.Name = name;
-            this.log = new Common.Log("Log źródła " + name);
+            this.log = new Log("Log źródła " + name);
             agent = new SinkAgent(this);
         
         }

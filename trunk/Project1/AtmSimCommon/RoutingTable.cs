@@ -79,8 +79,7 @@ namespace AtmSim
             }
         }
     }
-
-
+    
 
     public class RoutingTable : Dictionary<RoutingEntry, RoutingEntry>
     {

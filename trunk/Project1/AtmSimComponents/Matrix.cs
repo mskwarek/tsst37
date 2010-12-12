@@ -24,46 +24,42 @@ namespace AtmSim.Components
 
         public void AddToMatrix(RoutingEntry me1, RoutingEntry me2)
         {
-
-            //MatrixElements me1 = new MatrixElements(pi.GetNumber(), vpiin, vciin);
-
-            // MatrixElements me2 = new MatrixElements(po.GetNumber(), vpiout, vciout);
-
-
-            //  string s1 =pi.GetNumber().ToString() + ":" + vpiin.ToString() + ":" + vciin.ToString();
-
-            // string s2 = po.GetNumber().ToString() + ":" + vpiout.ToString() + ":" + vciout.ToString();
-
             if (RouteTable.ContainsKey(me1) || RouteTable.ContainsValue(me2)) return;  //Sprawdzamy czy mozemy wpisac do tablicy wiersz ktory podalismy w parametrach metody.
             RouteTable.Add(me1, me2); //Ostatecznie tworzymy nowy wiersz w tablicy z odpowiednio kluczem s1 i wartoscia s2.
         }
+
         /*W metodzie DeleteFromMatrix dajemy na wejsciu odpowiedni Klucz "numerInPort:wejscioweVPI:wejscioweVCI"
-          A nastepnie metoda usowa wiersz o takim kluczu
+          A nastepnie metoda usuwa wiersz o takim kluczu
          */
-
-
         public void DeleteFromMatrix(RoutingEntry me)
         {
             if (RouteTable.ContainsKey(me))
             {
                 RouteTable.Remove(me);
             }
-
-
         }
 
         // GetRouteTable poprostu zwraca tablice taka jaka jest w obecnym stanie
-        public RoutingTable GetRouteTable() { return RouteTable; }
-
+        public RoutingTable GetRouteTable() 
+        { 
+            return RouteTable;
+        }
+        
+        // Tutaj odbywa sie wlasciwa komutacja - przychodzaca ramka jest modyfikowana 
+        // i przekazywana na odpowiedni port wyjsciowy
         public void ReceiveFrame(ProtocolUnit pu, int port)
         {
+            // Wczytanie portu, VPI i VCI z ramki
             RoutingEntry source = new RoutingEntry(port, pu.Vpi, pu.Vci);
             if (RouteTable.ContainsKey(source))
             {
+                // Znalezienie odpowiadajacego wczytanym danym wpisu w tabeli routingu
                 RoutingEntry target = RouteTable[source];
+                // Modyfikacja ramki - VCI nie jest modyfikowane w przypadku agregacji sciezek
                 pu.Vpi = target.Vpi;
                 if (!target.NoVci)
                     pu.Vci = target.Vci;
+                // Wyslanie ramki na odpowiedni port wyjsciowy
                 node.GetPortsOut().ElementAt(target.Port).Send(pu);
                 node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
             }

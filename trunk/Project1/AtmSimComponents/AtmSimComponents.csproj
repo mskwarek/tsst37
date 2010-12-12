@@ -79,6 +79,7 @@
     <Compile Include="ProtocolUnit.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="Sink.cs" />
+    <Compile Include="SinkAgent.cs" />
     <Compile Include="Sorce.cs" />
     <Compile Include="SourceAgent.cs" />
     <Compile Include="TestPortIn.cs" />

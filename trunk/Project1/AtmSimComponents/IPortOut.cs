@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
+    // Interfejs portu wyjsciowego
     public interface IPortOut
     {
         int portID
