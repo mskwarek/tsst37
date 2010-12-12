@@ -6,13 +6,22 @@ using System.Text;
 namespace AtmSim.Components
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
-    public class Sorce// : AtmSim.Common.INetworkNode
+    public class Sorce : Common.INetworkNode
     {
         public string Name;
-        public Common.Log Log { get; set; }
+        private Common.Log log;
+        public Common.Log Log { get { return log; } set { log = value; } }
 
-        public string Message = "";
-        public string Target = "";
+        private SorceAgent agent;
+        public Common.IAgent Agent
+        {
+            get { return agent; }
+        }
+
+        private string message = "";
+        private string target = "";
+        public string Message { get { return message; } set { message = value; } }
+        public string Target { get { return target; } set { target = value; } }
 
         private Common.RoutingTable targets = new Common.RoutingTable();
         public Common.RoutingTable Matrix {
@@ -20,9 +29,16 @@ namespace AtmSim.Components
             set { targets = value; }
         }
 
-        private AdaptacionLayer aal = new AdaptacionLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
+        private AdaptationLayer aal = new AdaptationLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
 
         private IPortOut firstport; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
+
+        public Sorce(string name)
+        {
+            this.Name = name;
+            this.log = new Common.Log("Log źródła " + name);
+            agent = new SorceAgent(this);
+        }
 
         public void SetPortOut(IPortOut po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym
 
@@ -49,7 +65,7 @@ namespace AtmSim.Components
 
             Data dat = new Data();    //tworzymy obiekt data....
 
-            ProtocolUnit pu = new ProtocolUnit();    //....i ProtocolUnit.
+            //ProtocolUnit pu = new ProtocolUnit();    //....i ProtocolUnit.
 
             if (dataid == null) { dat.SetRandomData(maximumlength); }       //sprawdzamy czy mamy wygenerowac losowo strumien uzytkowy ....
             else { dat.SetId(dataid); }         //....czy tez tworzymy go z wprowadzonego w metodzie stringa.
@@ -67,12 +83,13 @@ namespace AtmSim.Components
 
             foreach (DataUnit p in du)
             {
+                var pu = new ProtocolUnit();
                 pu.SetDataUnit(p);
                 pu.SetVPI(firstvpi);
                 pu.SetVCI(firstvci);
                 putab[count] = pu; //to jest tylko po to zeby metoda zwracala tablice utworzonych pakietow ze strumienia uzytkowego.
                 this.firstport.Send(pu);
-
+                Log.LogMsg("Wysłano " + p.GetId());
             }
 
 
@@ -82,7 +99,8 @@ namespace AtmSim.Components
 
         public void Send()
         {
-            Common.RoutingEntry target = new Common.RoutingEntry(this.Target);
+            Common.RoutingEntry target = new Common.RoutingEntry(Matrix[this.Target]);
+            
             GenerateData(Message, target.Vpi, target.Vci);
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    class AdaptacionLayer
+    class AdaptationLayer
     {   //czyli AAL . Mapujemy strumien uzytkowy data do dataunitow
 
         private Data dat;                   //nasze data

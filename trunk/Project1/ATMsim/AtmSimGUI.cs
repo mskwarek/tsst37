@@ -92,12 +92,12 @@ namespace AtmSim
             Components.Node Router2 = new Components.Node(3, 1, "Router2");
             Components.Node Router3 = new Components.Node(1, 2, "Router3");
 
-            Components.TestPortIn in21 = new Components.TestPortIn(0);
-            Components.TestPortIn in12 = new Components.TestPortIn(0);
-            Components.TestPortIn in32 = new Components.TestPortIn(1);
-            Components.TestPortIn in13 = new Components.TestPortIn(0);
+            Components.TestPortIn in21 = new Components.TestPortIn(0); in21.SetReceiver(Router1.GetMatrix());
+            Components.TestPortIn in12 = new Components.TestPortIn(0); in12.SetReceiver(Router2.GetMatrix());
+            Components.TestPortIn in32 = new Components.TestPortIn(1); in32.SetReceiver(Router2.GetMatrix());
+            Components.TestPortIn in13 = new Components.TestPortIn(0); in13.SetReceiver(Router3.GetMatrix());
             Components.TestPortIn in35 = new Components.TestPortIn(0);
-            Components.TestPortIn in42 = new Components.TestPortIn(2);
+            Components.TestPortIn in42 = new Components.TestPortIn(2); in42.SetReceiver(Router2.GetMatrix());
 
             Components.TestPortOut out12 = new Components.TestPortOut(0); out12.Connect(in12);
             Components.TestPortOut out13 = new Components.TestPortOut(1); out13.Connect(in13);
@@ -118,17 +118,26 @@ namespace AtmSim
             Router3.GetPortsOut().SetValue(out32, 0);
             Router3.GetPortsOut().SetValue(out35, 1);
 
-            Components.Sorce Source4 = new Components.Sorce();
+            Components.Sorce Source4 = new Components.Sorce("Source4");
             Source4.SetPortOut(out42);
             Components.Sink Sink5 = new Components.Sink(in35);
 
             Manager.AddNode("Router1", Router1.Agent);
             Manager.AddNode("Router2", Router2.Agent);
             Manager.AddNode("Router3", Router3.Agent);
+            Manager.AddNode("Source4", Source4.Agent);
             Manager.AddConnection("Router2", "Router1");
             Manager.AddConnection("Router1", "Router2");
             Manager.AddConnection("Router3", "Router2");
             Manager.AddConnection("Router1", "Router3");
+            Manager.AddConnection("Source4", "Router2");
+
+            Manager.AddRouting("Source4", "A", "0:1;2");
+            Manager.AddRouting("Router2", "2;1;2", "0;3;3");
+            Manager.AddRouting("Router1", "0;3;3", "1;2;8");
+
+            Manager.SetConfig("Source4", "message", "s");
+            Manager.SetConfig("Source4", "target", "A");
         }
 
         private void InitTestNetwork2()
@@ -163,7 +172,7 @@ namespace AtmSim
             Router3.GetPortsOut().SetValue(out32, 0);
             Router3.GetPortsOut().SetValue(out35, 1);
 
-            Components.Sorce Source4 = new Components.Sorce();
+            Components.Sorce Source4 = new Components.Sorce("Source4");
             Source4.SetPortOut(out42);
             Components.Sink Sink5 = new Components.Sink(in35);
 
@@ -200,7 +209,7 @@ namespace AtmSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Manager.LogMsg(this.selectedName, "Hello!");
+            Manager.SetConfig(selectedName, "send", "");
         }
 
 

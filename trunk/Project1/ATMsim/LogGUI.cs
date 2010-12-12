@@ -55,5 +55,11 @@ namespace AtmSim
             }
         }
 
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.logBox.Text = Manager.GetLog(this.elementName);
+            this.logBox.Select(0, 0);
+        }
+
     }
 }

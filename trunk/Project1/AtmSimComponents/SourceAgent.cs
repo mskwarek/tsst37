@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class SorceAgent// : AtmSim.Common.IAgent
+    public class SorceAgent : Common.IAgent
     {
 
         ArrayList informacionlist = new ArrayList();
@@ -82,6 +82,8 @@ namespace AtmSim.Components
                 return node.Name;
             else if (name == "message")
                 return node.Message;
+            else if (name == "target")
+                return node.Target;
             else
                 return "";
         }
@@ -95,6 +97,8 @@ namespace AtmSim.Components
                 else { node.Message = value; }
             else if (name == "send")
                 node.Send();
+            else if (name == "target")
+                node.Target = value;
 
         }
 
