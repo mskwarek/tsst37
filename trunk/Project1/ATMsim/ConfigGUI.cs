@@ -13,7 +13,7 @@ namespace AtmSim
     {
         private string elementName;
         private Manager.Config localConfig;
-        private Manager.Routing localRouting;
+        private Routing localRouting;
         // zmodyfikowane wpisy
         private List<string> modifiedConfig;
         private List<string> addedRouting;
@@ -24,15 +24,15 @@ namespace AtmSim
         {
             this.elementName = name;
             this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
-            this.localRouting = new Manager.Routing(Manager.GetRouting(this.elementName));
+            this.localRouting = new Routing(Manager.GetRouting(this.elementName));
             this.modifiedConfig = new List<string>();
             this.addedRouting = new List<string>();
             this.removedRouting = new List<string>();
             this.modifiedRouting = new List<string>();
             InitializeComponent();
             this.Text += " " + this.elementName;
-            this.generalPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localConfig);
-            this.routingPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localRouting);
+            this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
+            this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
         }
 
         private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
@@ -40,14 +40,14 @@ namespace AtmSim
             if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
             {
                 this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
-                this.generalPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localConfig);
+                this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
                 this.generalPropertyGrid.Refresh();
                 this.modifiedConfig.Clear();
             }
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
             {
-                this.localRouting = new Manager.Routing(Manager.GetRouting(this.elementName));
-                this.routingPropertyGrid.SelectedObject = new Common.DictionaryPropertyGridAdapter(this.localRouting);
+                this.localRouting = new Routing(Manager.GetRouting(this.elementName));
+                this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
                 this.routingPropertyGrid.Refresh();
                 this.addedRouting.Clear();
                 this.removedRouting.Clear();

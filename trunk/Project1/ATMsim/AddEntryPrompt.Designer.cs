@@ -43,11 +43,24 @@
             this.outVpiLabel = new System.Windows.Forms.Label();
             this.outVciLabel = new System.Windows.Forms.Label();
             this.okButton = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.routingInPanel = new System.Windows.Forms.Panel();
+            this.routingOutPanel = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.sourcePanel = new System.Windows.Forms.Panel();
+            this.outConnectionTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.sinkPanel = new System.Windows.Forms.Panel();
+            this.inConnectionTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.routerButton = new System.Windows.Forms.RadioButton();
+            this.sourceButton = new System.Windows.Forms.RadioButton();
+            this.sinkButton = new System.Windows.Forms.RadioButton();
+            this.radioPanel = new System.Windows.Forms.Panel();
+            this.routingInPanel.SuspendLayout();
+            this.routingOutPanel.SuspendLayout();
+            this.sourcePanel.SuspendLayout();
+            this.sinkPanel.SuspendLayout();
+            this.radioPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -166,76 +179,182 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(174, 134);
+            this.okButton.Location = new System.Drawing.Point(224, 134);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.Size = new System.Drawing.Size(50, 23);
             this.okButton.TabIndex = 14;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // panel1
+            // routingInPanel
             // 
-            this.panel1.Controls.Add(this.inPortTextBox);
-            this.panel1.Controls.Add(this.inVpiTextBox);
-            this.panel1.Controls.Add(this.inVciTextBox);
-            this.panel1.Controls.Add(this.inPortLabel);
-            this.panel1.Controls.Add(this.inVpiLabel);
-            this.panel1.Controls.Add(this.inVciLabel);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(12, 12);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(318, 55);
-            this.panel1.TabIndex = 15;
+            this.routingInPanel.Controls.Add(this.inPortTextBox);
+            this.routingInPanel.Controls.Add(this.inVpiTextBox);
+            this.routingInPanel.Controls.Add(this.inVciTextBox);
+            this.routingInPanel.Controls.Add(this.inPortLabel);
+            this.routingInPanel.Controls.Add(this.inVpiLabel);
+            this.routingInPanel.Controls.Add(this.inVciLabel);
+            this.routingInPanel.Controls.Add(this.label1);
+            this.routingInPanel.Location = new System.Drawing.Point(12, 12);
+            this.routingInPanel.Name = "routingInPanel";
+            this.routingInPanel.Size = new System.Drawing.Size(318, 55);
+            this.routingInPanel.TabIndex = 15;
             // 
-            // panel2
+            // routingOutPanel
             // 
-            this.panel2.Controls.Add(this.outVpiTextBox);
-            this.panel2.Controls.Add(this.outPortTextBox);
-            this.panel2.Controls.Add(this.outVciTextBox);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.outVciLabel);
-            this.panel2.Controls.Add(this.outPortLabel);
-            this.panel2.Controls.Add(this.outVpiLabel);
-            this.panel2.Location = new System.Drawing.Point(12, 73);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(318, 55);
-            this.panel2.TabIndex = 16;
+            this.routingOutPanel.Controls.Add(this.outVpiTextBox);
+            this.routingOutPanel.Controls.Add(this.outPortTextBox);
+            this.routingOutPanel.Controls.Add(this.outVciTextBox);
+            this.routingOutPanel.Controls.Add(this.label2);
+            this.routingOutPanel.Controls.Add(this.outVciLabel);
+            this.routingOutPanel.Controls.Add(this.outPortLabel);
+            this.routingOutPanel.Controls.Add(this.outVpiLabel);
+            this.routingOutPanel.Location = new System.Drawing.Point(12, 73);
+            this.routingOutPanel.Name = "routingOutPanel";
+            this.routingOutPanel.Size = new System.Drawing.Size(318, 55);
+            this.routingOutPanel.TabIndex = 16;
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(255, 134);
+            this.cancelButton.Location = new System.Drawing.Point(280, 134);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.Size = new System.Drawing.Size(50, 23);
             this.cancelButton.TabIndex = 17;
             this.cancelButton.Text = "Anuluj";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // sourcePanel
+            // 
+            this.sourcePanel.Controls.Add(this.outConnectionTextBox);
+            this.sourcePanel.Controls.Add(this.label3);
+            this.sourcePanel.Location = new System.Drawing.Point(12, 12);
+            this.sourcePanel.Name = "sourcePanel";
+            this.sourcePanel.Size = new System.Drawing.Size(318, 39);
+            this.sourcePanel.TabIndex = 16;
+            this.sourcePanel.Visible = false;
+            // 
+            // outConnectionTextBox
+            // 
+            this.outConnectionTextBox.Location = new System.Drawing.Point(3, 16);
+            this.outConnectionTextBox.Name = "outConnectionTextBox";
+            this.outConnectionTextBox.Size = new System.Drawing.Size(312, 20);
+            this.outConnectionTextBox.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(174, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Nazwa połączenia wychodzącego:";
+            // 
+            // sinkPanel
+            // 
+            this.sinkPanel.Controls.Add(this.inConnectionTextBox);
+            this.sinkPanel.Controls.Add(this.label4);
+            this.sinkPanel.Location = new System.Drawing.Point(12, 73);
+            this.sinkPanel.Name = "sinkPanel";
+            this.sinkPanel.Size = new System.Drawing.Size(318, 39);
+            this.sinkPanel.TabIndex = 17;
+            this.sinkPanel.Visible = false;
+            // 
+            // inConnectionTextBox
+            // 
+            this.inConnectionTextBox.Location = new System.Drawing.Point(3, 16);
+            this.inConnectionTextBox.Name = "inConnectionTextBox";
+            this.inConnectionTextBox.Size = new System.Drawing.Size(312, 20);
+            this.inConnectionTextBox.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(0, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(177, 13);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Nazwa połączenia przychodzącego";
+            // 
+            // routerButton
+            // 
+            this.routerButton.AutoSize = true;
+            this.routerButton.Checked = true;
+            this.routerButton.Location = new System.Drawing.Point(3, 3);
+            this.routerButton.Name = "routerButton";
+            this.routerButton.Size = new System.Drawing.Size(52, 17);
+            this.routerButton.TabIndex = 18;
+            this.routerButton.TabStop = true;
+            this.routerButton.Text = "router";
+            this.routerButton.UseVisualStyleBackColor = true;
+            this.routerButton.CheckedChanged += new System.EventHandler(this.routerButton_CheckedChanged);
+            // 
+            // sourceButton
+            // 
+            this.sourceButton.AutoSize = true;
+            this.sourceButton.Location = new System.Drawing.Point(61, 3);
+            this.sourceButton.Name = "sourceButton";
+            this.sourceButton.Size = new System.Drawing.Size(57, 17);
+            this.sourceButton.TabIndex = 19;
+            this.sourceButton.Text = "source";
+            this.sourceButton.UseVisualStyleBackColor = true;
+            this.sourceButton.CheckedChanged += new System.EventHandler(this.sourceButton_CheckedChanged);
+            // 
+            // sinkButton
+            // 
+            this.sinkButton.AutoSize = true;
+            this.sinkButton.Location = new System.Drawing.Point(124, 3);
+            this.sinkButton.Name = "sinkButton";
+            this.sinkButton.Size = new System.Drawing.Size(44, 17);
+            this.sinkButton.TabIndex = 20;
+            this.sinkButton.Text = "sink";
+            this.sinkButton.UseVisualStyleBackColor = true;
+            this.sinkButton.CheckedChanged += new System.EventHandler(this.sinkButton_CheckedChanged);
+            // 
+            // radioPanel
+            // 
+            this.radioPanel.Controls.Add(this.routerButton);
+            this.radioPanel.Controls.Add(this.sinkButton);
+            this.radioPanel.Controls.Add(this.sourceButton);
+            this.radioPanel.Location = new System.Drawing.Point(12, 131);
+            this.radioPanel.Name = "radioPanel";
+            this.radioPanel.Size = new System.Drawing.Size(173, 26);
+            this.radioPanel.TabIndex = 21;
+            // 
             // AddEntryPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 169);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(342, 164);
+            this.Controls.Add(this.radioPanel);
+            this.Controls.Add(this.sinkPanel);
+            this.Controls.Add(this.sourcePanel);
+            this.Controls.Add(this.routingOutPanel);
+            this.Controls.Add(this.routingInPanel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Name = "AddEntryPrompt";
             this.Text = "Dodaj wpis";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(AddEntryPrompt_FormClosing);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddEntryPrompt_FormClosing);
+            this.routingInPanel.ResumeLayout(false);
+            this.routingInPanel.PerformLayout();
+            this.routingOutPanel.ResumeLayout(false);
+            this.routingOutPanel.PerformLayout();
+            this.sourcePanel.ResumeLayout(false);
+            this.sourcePanel.PerformLayout();
+            this.sinkPanel.ResumeLayout(false);
+            this.sinkPanel.PerformLayout();
+            this.radioPanel.ResumeLayout(false);
+            this.radioPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel routingInPanel;
+        private System.Windows.Forms.Panel routingOutPanel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox inPortTextBox;
@@ -252,5 +371,15 @@
         private System.Windows.Forms.Label outVciLabel;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Panel sourcePanel;
+        private System.Windows.Forms.TextBox outConnectionTextBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel sinkPanel;
+        private System.Windows.Forms.TextBox inConnectionTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RadioButton routerButton;
+        private System.Windows.Forms.RadioButton sourceButton;
+        private System.Windows.Forms.RadioButton sinkButton;
+        private System.Windows.Forms.Panel radioPanel;
     }
 }

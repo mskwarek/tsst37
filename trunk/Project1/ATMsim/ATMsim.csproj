@@ -142,6 +142,10 @@
       <Project>{D4C26366-C88B-42DB-8A6F-1DB45880107D}</Project>
       <Name>AtmSimCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AtmSimComponents\AtmSimComponents.csproj">
+      <Project>{8451934A-7FE4-471F-B0B0-E7861AF5AFE4}</Project>
+      <Name>AtmSimComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

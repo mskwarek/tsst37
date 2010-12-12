@@ -7,7 +7,7 @@ using System.Text;
 namespace AtmSim.Components 
 {
 
-    public class Agent : Common.IAgent
+    public class Agent : IAgent
 
     {
 
@@ -94,7 +94,7 @@ namespace AtmSim.Components
             if (count == 2)
             {
             */
-                node.GetMatrix().AddToMatrix(m1, m2);
+                node.GetMatrix().AddToMatrix(new RoutingEntry(m1), new RoutingEntry(m2));
 
                 ResetMassage(node);
             //}
@@ -105,7 +105,7 @@ namespace AtmSim.Components
         public void DeleteRowFromRouteTable(string m)
         {
 
-            node.GetMatrix().DeleteFromMatrix(m);
+            node.GetMatrix().DeleteFromMatrix(new RoutingEntry(m));
             ResetMassage(node);
 
 
@@ -140,22 +140,22 @@ namespace AtmSim.Components
                 node.SetName(value);
         }
 
-        public Common.RoutingTable GetRoutingTable()
+        public Routing GetRoutingTable()
         {
-            Common.RoutingTable table = new Common.RoutingTable();
+            Routing table = new Routing();
             foreach (var element in node.GetMatrix().GetRouteTable())
             {
-                table.Add(element.Key,element.Value);
+                table.Add(element.Key.ToString(),element.Value.ToString());
             }
             return table;
         }
         public void AddRoutingEntry(string label, string value)
         {
-            node.GetMatrix().AddToMatrix(label, value);
+            node.GetMatrix().AddToMatrix(new RoutingEntry(label), new RoutingEntry(value));
         }
         public void RemoveRoutingEntry(string entry)
         {
-            node.GetMatrix().DeleteFromMatrix(entry);
+            node.GetMatrix().DeleteFromMatrix(new RoutingEntry(entry));
         }
         public string GetLog()
         {

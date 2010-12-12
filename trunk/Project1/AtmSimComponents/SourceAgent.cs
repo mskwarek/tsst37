@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AtmSim.Components
 {
-    public class SorceAgent : Common.IAgent
+    public class SorceAgent : IAgent
     {
 
         ArrayList informacionlist = new ArrayList();
@@ -102,18 +102,18 @@ namespace AtmSim.Components
 
         }
 
-        public Common.RoutingTable GetRoutingTable()
+        public Routing GetRoutingTable()
         {
-            Common.RoutingTable table = new Common.RoutingTable();
+            Routing table = new Routing();
             foreach (var element in node.Matrix)
             {
-                table.Add(element.Key, element.Value);
+                table.Add(element.Key, element.Value.ToString());
             }
             return table;
         }
         public void AddRoutingEntry(string label, string value)
         {
-            node.Matrix.Add(label, value);
+            node.Matrix.Add(label, new RoutingEntry(value));
         }
         public void RemoveRoutingEntry(string entry)
         {

@@ -6,14 +6,14 @@ using System.Text;
 namespace AtmSim.Components
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
-    public class Sorce : Common.INetworkNode
+    public class Sorce : INetworkNode
     {
         public string Name;
-        private Common.Log log;
-        public Common.Log Log { get { return log; } set { log = value; } }
+        private Log log;
+        public Log Log { get { return log; } set { log = value; } }
 
         private SorceAgent agent;
-        public Common.IAgent Agent
+        public IAgent Agent
         {
             get { return agent; }
         }
@@ -23,8 +23,8 @@ namespace AtmSim.Components
         public string Message { get { return message; } set { message = value; } }
         public string Target { get { return target; } set { target = value; } }
 
-        private Common.RoutingTable targets = new Common.RoutingTable();
-        public Common.RoutingTable Matrix {
+        private Dictionary<string, RoutingEntry> targets = new Dictionary<string, RoutingEntry>();
+        public Dictionary<string, RoutingEntry> Matrix {
             get { return targets; }
             set { targets = value; }
         }
@@ -36,7 +36,7 @@ namespace AtmSim.Components
         public Sorce(string name)
         {
             this.Name = name;
-            this.log = new Common.Log("Log źródła " + name);
+            this.log = new Log("Log źródła " + name);
             agent = new SorceAgent(this);
         }
 
@@ -99,7 +99,7 @@ namespace AtmSim.Components
 
         public void Send()
         {
-            Common.RoutingEntry target = new Common.RoutingEntry(Matrix[this.Target]);
+            RoutingEntry target = Matrix[this.Target];
             
             GenerateData(Message, target.Vpi, target.Vci);
         }

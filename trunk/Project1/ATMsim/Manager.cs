@@ -24,13 +24,6 @@ namespace AtmSim
             public Config(Config config) : base((Dictionary<string, string>)config) { }
         }
 
-        // j.w.
-        public class Routing : Dictionary<string, string>
-        {
-            public Routing() : base() { }
-            public Routing(Routing routing) : base((Dictionary<string, string>)routing) { }
-        }
-
         // pojedynczy element sieci i jego dane
         private class NetworkElement
         {
@@ -47,9 +40,9 @@ namespace AtmSim
              * "VPI,VCI" - sciezka prowadzaca do danego hosta
              */
             public Routing Routing;
-            public Common.Log Log;
+            public Log Log;
 
-            public NetworkElement(string name, Config config, Routing routing, Common.Log log)
+            public NetworkElement(string name, Config config, Routing routing, Log log)
             {
                 this.Name = name;
                 this.Config = config;
@@ -58,10 +51,10 @@ namespace AtmSim
             }
         }
 
-        private static Dictionary<string, AtmSim.Common.IAgent> nodes = new Dictionary<string, AtmSim.Common.IAgent>();
+        private static Dictionary<string, IAgent> nodes = new Dictionary<string, IAgent>();
         private static List<Edge<string>> connections = new List<Edge<string>>();
 
-        public static void AddNode(string name, AtmSim.Common.IAgent node)
+        public static void AddNode(string name, IAgent node)
         {
             nodes.Add(name, node);
         }
@@ -116,13 +109,13 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(name))
             {
-                Common.RoutingTable table = nodes[name].GetRoutingTable();
+                /*Common.RoutingTable table = nodes[name].GetRoutingTable();
                 Routing routing = new Routing();
                 foreach (var entry in table)
                 {
                     routing.Add(entry.Key.ToString(), entry.Value.ToString());
-                }
-                return routing;
+                }*/
+                return nodes[name].GetRoutingTable();
             }
             else
                 return new Routing();
@@ -166,13 +159,13 @@ namespace AtmSim
             //    nodes[name].Log.LogMsg(msg);
         }
 
-        public static void SubscribeLog(string name, Common.ILogListener listener)
+        public static void SubscribeLog(string name, ILogListener listener)
         {
             //if (nodes.ContainsKey(name))
             //    nodes[name].Log.Subscribe(listener);
         }
 
-        public static void UnsubscribeLog(string name, Common.ILogListener listener)
+        public static void UnsubscribeLog(string name, ILogListener listener)
         {
             //if (nodes.ContainsKey(name))
             //    nodes[name].Log.Unsubscribe(listener);
