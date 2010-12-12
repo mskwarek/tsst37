@@ -32,7 +32,7 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logBox = new System.Windows.Forms.TextBox();
             this.saveLogDialog = new System.Windows.Forms.SaveFileDialog();
-            this.odświeżToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,7 +40,7 @@
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToolStripMenuItem,
-            this.odświeżToolStripMenuItem});
+            this.refreshToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(284, 24);
@@ -75,11 +75,12 @@
             this.saveLogDialog.Title = "Zapisz log...";
             this.saveLogDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveLogDialog_FileOk);
             // 
-            // odświeżToolStripMenuItem
+            // refreshToolStripMenuItem
             // 
-            this.odświeżToolStripMenuItem.Name = "odświeżToolStripMenuItem";
-            this.odświeżToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
-            this.odświeżToolStripMenuItem.Text = "&Odśwież";
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.refreshToolStripMenuItem.Text = "&Odśwież";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // LogGUI
             // 
@@ -105,6 +106,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.TextBox logBox;
         private System.Windows.Forms.SaveFileDialog saveLogDialog;
-        private System.Windows.Forms.ToolStripMenuItem odświeżToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
     }
 }

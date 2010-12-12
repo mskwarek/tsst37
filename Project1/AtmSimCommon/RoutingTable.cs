@@ -28,7 +28,7 @@ namespace AtmSim.Common
 
         public RoutingEntry(string entry)
         {
-            string[] pvv = entry.Split(';');
+            string[] pvv = entry.Split(';', ':' );
             try
             {
                 this.port = int.Parse(pvv[0]);

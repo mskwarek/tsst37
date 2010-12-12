@@ -58,11 +58,14 @@ namespace AtmSim.Components
         public void ReceiveFrame(ProtocolUnit pu, int port)
         {
             Common.RoutingEntry source = new Common.RoutingEntry(port, pu.Vpi, pu.Vci);
-            Common.RoutingEntry target = new Common.RoutingEntry(RouteTable[source.ToString()]);
-            pu.Vci = target.Vci;
-            pu.Vpi = target.Vpi;
-            node.GetPortsOut().ElementAt(target.Port).Send(pu);
-            node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
+            if (RouteTable.ContainsKey(source.ToString()))
+            {
+                Common.RoutingEntry target = new Common.RoutingEntry(RouteTable[source.ToString()]);
+                pu.Vci = target.Vci;
+                pu.Vpi = target.Vpi;
+                node.GetPortsOut().ElementAt(target.Port).Send(pu);
+                node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
+            }
         }
 
     }
