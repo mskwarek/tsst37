@@ -42,19 +42,19 @@ namespace AtmSim.Components
         {
             this.name = name;
 
-            inportsgroup = new TestPortIn[numberofin];
-            outportsgroup = new TestPortOut[numberofout];
+            inportsgroup = new PortIn[numberofin];
+            outportsgroup = new PortOut[numberofout];
             tab = new Matrix(this);
 
             for (int i = 0; i < inportsgroup.Length; i++)
             {
-                TestPortIn port = new TestPortIn(i);
+                PortIn port = new PortIn(i);
                 port.SetReceiver(this.tab);
                 inportsgroup[i] = port;
             }
             for (int j = 0; j < outportsgroup.Length; j++) 
             {
-                outportsgroup[j] = new TestPortOut(j);
+                outportsgroup[j] = new PortOut(j);
             }
 
             this.log = new Log("Log urzadzenia " + name);

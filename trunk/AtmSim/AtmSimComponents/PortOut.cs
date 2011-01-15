@@ -24,10 +24,15 @@ namespace AtmSim.Components
             get { return tcpPort; }
             set { tcpPort = value; }
         }
-        private bool open = false;
+        private bool open = true;
         public bool Open { get { return open; } }
         private bool connected = false;
         public bool Connected { get { return connected; } }
+
+        public PortOut(int id)
+        {
+            portID = id;
+        }
 
         public void Send(string pu)
         {
@@ -36,7 +41,10 @@ namespace AtmSim.Components
 
         public void Send(ProtocolUnit pu)
         {
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(Serial.SerializeObject(pu));
+            string str = Serial.SerializeObject(pu);
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(str);
+            string str2 = System.Text.Encoding.ASCII.GetString(data);
+            int i = str.Length; int j = str2.Length;
             if (clientSocket != null && connected)
                 clientSocket.Send(data);
         }

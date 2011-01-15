@@ -13,36 +13,25 @@ namespace AtmSim.Components
 {
     public static class Serial
     {
-
-
         public static String SerializeObject(Object pObject)
         {
-
             try
             {
-
                 String XmlizedString = null;
-                MemoryStream memoryStream = new MemoryStream();
                 XmlSerializer xs = new XmlSerializer(pObject.GetType());
-                XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-                xs.Serialize(xmlTextWriter, pObject);
-                memoryStream = (MemoryStream)xmlTextWriter.BaseStream;
-                XmlizedString = UTF8ByteArrayToString(memoryStream.ToArray());
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                System.IO.StringWriter writer = new System.IO.StringWriter(sb);
+                xs.Serialize(writer, pObject);
+                XmlizedString = sb.ToString();
                 return XmlizedString;
-
             }
-
             catch (Exception e)
             {
-
                 System.Console.WriteLine(e);
-
                 return null;
-
             }
-
         }
-
+        /*
         private static String UTF8ByteArrayToString(Byte[] characters)
         {
             UTF8Encoding encoding = new UTF8Encoding();
@@ -50,6 +39,7 @@ namespace AtmSim.Components
             return (constructedString);
 
         }
+
         private static Byte[] StringToUTF8ByteArray(String pXmlString)
         {
             UTF8Encoding encoding = new UTF8Encoding();
@@ -57,20 +47,14 @@ namespace AtmSim.Components
             return byteArray;
 
         }
-
+        */
         public static Object DeserializeObject(String pXmlizedString, Type type)
         {
-
             XmlSerializer xs = new XmlSerializer(type);
-            MemoryStream memoryStream = new MemoryStream(StringToUTF8ByteArray(pXmlizedString));
-            XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
-            return xs.Deserialize(memoryStream);
-
+            StringReader reader = new StringReader(pXmlizedString);
+            XmlTextReader xmlTextReader = new XmlTextReader(reader);
+            return xs.Deserialize(xmlTextReader);
         } 
-
-        }   
-
-
-    
+    }   
 
 }
