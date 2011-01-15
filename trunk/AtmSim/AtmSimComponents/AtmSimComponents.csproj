@@ -77,7 +77,6 @@
     <Compile Include="PortIn.cs" />
     <Compile Include="PortOut.cs" />
     <Compile Include="ProtocolUnit.cs" />
-    <Compile Include="Serial.cs" />
     <Compile Include="Sink.cs" />
     <Compile Include="SinkAgent.cs" />
     <Compile Include="Source.cs" />

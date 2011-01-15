@@ -70,6 +70,11 @@ namespace AtmSim
             connections.Clear();
         }
 
+        public static void Init()
+        {
+
+        }
+
         // pobranie listy dostepnych elementow
         public static List<string> GetElements()
         {
