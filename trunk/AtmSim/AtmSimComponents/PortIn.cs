@@ -8,116 +8,73 @@ using System.Threading;
 
 namespace AtmSim.Components
 {
-    public class PortIn // : IPortIn
-    {               //reprezentacja portu wejściowego, realizuje otrzymywanie danych 
-        private static int counting = 0;
-        private int number=0;      //numer identyfikujacy port wejsciowy
-
-        private ProtocolUnit protuni;
-
-        private bool isreceived = false;    //wartosc logiczna okreslajaca czy wezel ma do obsluzenia(mapowanie w poku kom.) pakiet.Jezeli tak to "true" jezeli nie to "false".
-
-        public PortIn() { number = counting; counting++; }
-
-
-        public int GetNumber() { return number; }
-
-        public void SetNumber(int i) { number = i; }
-
-
-        private Int32 realPort;
-        public PortIn(Int32 realPort)
+    public class PortIn : IPortIn
+    {
+        private int _portID;
+        public int portID
         {
-            this.realPort = realPort;
+            get { return _portID; }
+            set { _portID = value; }
+        }
+        private Socket thisSocket;
+        private Socket remoteSocket;
+        private byte[] buffer = new byte[1024];
+        private int _tcpPort;
+        int tcpPort
+        {
+            get { return _tcpPort; }
+        }
+        private bool _open = false;
+        bool isOpen { get { return _open; } }
+        private bool _connected = false;
+        bool isConnected { get { return _connected; } }
+        IFrameReceiver receiver;
         
+        PortIn()
+        {
+            thisSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint ipLocal = new IPEndPoint(IPAddress.Any, 0); // tworzenie end-pointu na dowolnym wolnym porcie
+            thisSocket.Bind(ipLocal); /* TODO: petla, jesli bedzie potrzebna */
+            _tcpPort = ipLocal.Port;
+            thisSocket.Listen(1);
+            thisSocket.BeginAccept(OnClientConnect, thisSocket);
+            _open = true;
         }
 
-
-        private void Receive(String xmlString)
-        {        
-            protuni = (ProtocolUnit)Serial.DeserializeObject(xmlString.Substring(1,xmlString.Length-1),typeof(ProtocolUnit));
-            isreceived = true; 
-        } //otrzymanie pakietu przez port wejsciowy i zamiana wartosci logicznej na "true".
-
-        public bool GetIsReceived() { return isreceived; }  //tu poprostu pobieramy wartosc  logiczna isreceived.
-        public void SetIsReceived(bool b) { isreceived = b; }// metoda dla wezla. Po obsluzeniu pakietu musi ustawic z powrotem wartosc logicza false.
-        public ProtocolUnit GetProtocolUnit() { return protuni; } //zwaca protocol unit
-
-        public void listener()
+        public void OnClientConnect(IAsyncResult asyn)
         {
-
-            TcpListener server = null;
-            try
+            if (_connected)
             {
-                // Set the TcpListener on port 13000.
-                
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
-
-                // TcpListener server = new TcpListener(port);
-                server = new TcpListener(localAddr, realPort);
-
-                // Start listening for client requests.
-                server.Start();
-
-                // Buffer for reading data
-                Byte[] bytes = new Byte[256];
-                String data = null;
-
-                // Enter the listening loop.
-                while (true)
-                {
-                    Console.Write("PortIn is waiting for a connection... \n");
-
-                    // Perform a blocking call to accept requests.
-                    // You could also user server.AcceptSocket() here.
-                    TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected! \n");
-
-                    data = null;
-
-                    // Get a stream object for reading and writing
-                    NetworkStream stream = client.GetStream();
-
-                    int i;
-
-                    // Loop to receive all the data sent by the client.
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("PortIn recieved: {0}\n", data);
-                        lock (this)
-                        {
-                            this.Receive(data);
-                        }
-                        // Process the data sent by the client.
-                       
-
-                        byte[] msg = System.Text.Encoding.ASCII.GetBytes("Data was recived by PortIn...");
-
-                        // Send back a response.
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Send confirmation...\n");
-                    }
-
-                    // Shutdown and end connection
-                    client.Close();
-                }
+                remoteSocket.Close(); // przychodzace polaczenie spowoduje zamkniecie istniejacego
             }
-            catch (SocketException e)
+            remoteSocket = thisSocket.EndAccept(asyn);
+            _connected = true;
+            remoteSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, remoteSocket);
+            thisSocket.BeginAccept(OnClientConnect, thisSocket);
+        }
+
+        public void OnDataReceived(IAsyncResult asyn)
+        {
+            int recv = remoteSocket.EndReceive(asyn);
+            if (recv == 0)
             {
-                Console.WriteLine("SocketException: {0}", e);
+                remoteSocket.Close();
+                _connected = false;
+                return;
             }
-            finally
-            {
-                // Stop listening for new clients.
-                server.Stop();
-            }
+            string receivedData = Encoding.ASCII.GetString (buffer, 0, recv);
+            Receive( (ProtocolUnit) Serial.DeserializeObject( receivedData, typeof(ProtocolUnit)) );
+            remoteSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, remoteSocket);
+        }
 
+        public void Receive(string pu)
+        {
+            
+        }
 
-            Console.WriteLine("\nHit enter to continue...");
-            Console.Read();
-
+        public void Receive(ProtocolUnit pu)
+        {
+            receiver.ReceiveFrame(pu, _portID);
         }
     }
 }
