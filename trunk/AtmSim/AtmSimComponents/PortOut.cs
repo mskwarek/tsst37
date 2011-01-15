@@ -10,24 +10,24 @@ namespace AtmSim.Components
 {
     public class PortOut : IPortOut
     {
-        int _portID;
-        public int portID
+        int portID;
+        public int PortID
         {
-            get { return _portID; }
-            set { _portID = value; }
+            get { return portID; }
+            set { portID = value; }
         }
-        private Socket remoteSocket;
+        private Socket clientSocket;
         //private byte[] buffer = new byte[1024];
-        private int _tcpPort;
-        public int tcpPort
+        private int tcpPort;
+        public int TcpPort
         {
-            get { return _tcpPort; }
-            set { _tcpPort = value; }
+            get { return tcpPort; }
+            set { tcpPort = value; }
         }
-        private bool _open = false;
-        public bool isOpen { get { return _open; } }
-        private bool _connected = false;
-        public bool isConnected { get { return _connected; } }
+        private bool open = false;
+        public bool Open { get { return open; } }
+        private bool connected = false;
+        public bool Connected { get { return connected; } }
 
         public void Send(string pu)
         {
@@ -36,7 +36,18 @@ namespace AtmSim.Components
 
         public void Send(ProtocolUnit pu)
         {
-            throw new NotImplementedException();
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(Serial.SerializeObject(pu));
+            if (clientSocket != null && connected)
+                clientSocket.Send(data);
+        }
+
+        public void Connect()
+        {
+            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint server = new IPEndPoint(IPAddress.Loopback, tcpPort);
+            clientSocket.Connect(server);
+            if (clientSocket.Connected)
+                connected = true;
         }
     }   
 }

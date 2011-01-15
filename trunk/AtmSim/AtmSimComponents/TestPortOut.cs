@@ -8,16 +8,16 @@ namespace AtmSim.Components
     // testowa implementacja portu wyjsciowego - dziala w ramach jednego procesu
     public class TestPortOut : IPortOut
     {
-        private int _portID;
-        public int portID
+        private int portID;
+        public int PortID
         {
-            get { return _portID; }
-            set { _portID = value; }
+            get { return portID; }
+            set { portID = value; }
         }
         private IPortIn remotePort;
         public TestPortOut(int id)
         {
-            portID = id;
+            PortID = id;
         }
         public void Send(string pu)
         {

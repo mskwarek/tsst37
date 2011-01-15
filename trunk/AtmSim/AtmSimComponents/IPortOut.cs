@@ -8,7 +8,7 @@ namespace AtmSim.Components
     // Interfejs portu wyjsciowego
     public interface IPortOut
     {
-        int portID
+        int PortID
         {
             get;
             set;

@@ -10,11 +10,11 @@ namespace AtmSim.Components
 {
     public class PortIn : IPortIn
     {
-        private int _portID;
-        public int portID
+        private int portID;
+        public int PortID
         {
-            get { return _portID; }
-            set { _portID = value; }
+            get { return portID; }
+            set { portID = value; }
         }
         private Socket thisSocket;
         private Socket remoteSocket;
@@ -24,10 +24,10 @@ namespace AtmSim.Components
         {
             get { return _tcpPort; }
         }
-        private bool _open = false;
-        bool isOpen { get { return _open; } }
-        private bool _connected = false;
-        bool isConnected { get { return _connected; } }
+        private bool open = false;
+        bool Open { get { return open; } }
+        private bool connected = false;
+        bool Connected { get { return connected; } }
         IFrameReceiver receiver;
         
         PortIn()
@@ -38,17 +38,17 @@ namespace AtmSim.Components
             _tcpPort = ipLocal.Port;
             thisSocket.Listen(1);
             thisSocket.BeginAccept(OnClientConnect, thisSocket);
-            _open = true;
+            open = true;
         }
 
         public void OnClientConnect(IAsyncResult asyn)
         {
-            if (_connected)
+            if (connected)
             {
                 remoteSocket.Close(); // przychodzace polaczenie spowoduje zamkniecie istniejacego
             }
             remoteSocket = thisSocket.EndAccept(asyn);
-            _connected = true;
+            connected = true;
             remoteSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, remoteSocket);
             thisSocket.BeginAccept(OnClientConnect, thisSocket);
         }
@@ -59,7 +59,7 @@ namespace AtmSim.Components
             if (recv == 0)
             {
                 remoteSocket.Close();
-                _connected = false;
+                connected = false;
                 return;
             }
             string receivedData = Encoding.ASCII.GetString (buffer, 0, recv);
@@ -74,7 +74,12 @@ namespace AtmSim.Components
 
         public void Receive(ProtocolUnit pu)
         {
-            receiver.ReceiveFrame(pu, _portID);
+            receiver.ReceiveFrame(pu, portID);
+        }
+
+        public void SetReceiver(IFrameReceiver fr)
+        {
+            receiver = fr;
         }
     }
 }

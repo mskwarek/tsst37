@@ -8,7 +8,7 @@ namespace AtmSim.Components
     // Interfejs portu wejsciowego
     public interface IPortIn
     {
-        int portID
+        int PortID
         {
             get;
             set;
