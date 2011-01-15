@@ -19,23 +19,28 @@ namespace AtmSim.Components
         private Socket thisSocket;
         private Socket remoteSocket;
         private byte[] buffer = new byte[1024];
-        private int _tcpPort;
-        int tcpPort
+        private int tcpPort;
+        public int TcpPort
         {
-            get { return _tcpPort; }
+            get { return tcpPort; }
         }
         private bool open = false;
-        bool Open { get { return open; } }
+        public bool Open { get { return open; } }
         private bool connected = false;
-        bool Connected { get { return connected; } }
-        IFrameReceiver receiver;
-        
-        PortIn()
+        public bool Connected { get { return connected; } }
+        private IFrameReceiver receiver;
+
+        public PortIn(int id) : this()
+        {
+            portID = id;
+        }
+
+        public PortIn()
         {
             thisSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ipLocal = new IPEndPoint(IPAddress.Any, 0); // tworzenie end-pointu na dowolnym wolnym porcie
             thisSocket.Bind(ipLocal); /* TODO: petla, jesli bedzie potrzebna */
-            _tcpPort = ipLocal.Port;
+            tcpPort = ((IPEndPoint)thisSocket.LocalEndPoint).Port;
             thisSocket.Listen(1);
             thisSocket.BeginAccept(OnClientConnect, thisSocket);
             open = true;

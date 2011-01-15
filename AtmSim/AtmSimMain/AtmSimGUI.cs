@@ -61,19 +61,19 @@ namespace AtmSim
             Components.Source Source4 = new Components.Source("Source4");
             Components.Sink Sink5 = new Components.Sink("Sink5");
 
-            Components.TestPortIn in21 = new Components.TestPortIn(0); in21.SetReceiver(Router1.GetMatrix());
-            Components.TestPortIn in12 = new Components.TestPortIn(0); in12.SetReceiver(Router2.GetMatrix());
-            Components.TestPortIn in32 = new Components.TestPortIn(1); in32.SetReceiver(Router2.GetMatrix());
-            Components.TestPortIn in13 = new Components.TestPortIn(0); in13.SetReceiver(Router3.GetMatrix());
-            Components.TestPortIn in35 = new Components.TestPortIn(0); in35.SetReceiver(Sink5.Receiver);
-            Components.TestPortIn in42 = new Components.TestPortIn(2); in42.SetReceiver(Router2.GetMatrix());
+            Components.PortIn in21 = new Components.PortIn(0); in21.SetReceiver(Router1.GetMatrix());
+            Components.PortIn in12 = new Components.PortIn(0); in12.SetReceiver(Router2.GetMatrix());
+            Components.PortIn in32 = new Components.PortIn(1); in32.SetReceiver(Router2.GetMatrix());
+            Components.PortIn in13 = new Components.PortIn(0); in13.SetReceiver(Router3.GetMatrix());
+            Components.PortIn in35 = new Components.PortIn(0); in35.SetReceiver(Sink5.Receiver);
+            Components.PortIn in42 = new Components.PortIn(2); in42.SetReceiver(Router2.GetMatrix());
 
-            Components.TestPortOut out12 = new Components.TestPortOut(0); out12.Connect(in12);
-            Components.TestPortOut out13 = new Components.TestPortOut(1); out13.Connect(in13);
-            Components.TestPortOut out21 = new Components.TestPortOut(0); out21.Connect(in21);
-            Components.TestPortOut out32 = new Components.TestPortOut(0); out32.Connect(in32);
-            Components.TestPortOut out42 = new Components.TestPortOut(0); out42.Connect(in42);
-            Components.TestPortOut out35 = new Components.TestPortOut(1); out35.Connect(in35);
+            Components.PortOut out12 = new Components.PortOut(0); out12.TcpPort = in12.TcpPort; out12.Connect();
+            Components.PortOut out13 = new Components.PortOut(1); out13.TcpPort = in13.TcpPort; out13.Connect();
+            Components.PortOut out21 = new Components.PortOut(0); out21.TcpPort = in21.TcpPort; out21.Connect();
+            Components.PortOut out32 = new Components.PortOut(0); out32.TcpPort = in32.TcpPort; out32.Connect();
+            Components.PortOut out42 = new Components.PortOut(0); out42.TcpPort = in42.TcpPort; out42.Connect();
+            Components.PortOut out35 = new Components.PortOut(1); out35.TcpPort = in35.TcpPort; out35.Connect();
 
             Router1.GetPortsIn().SetValue(in21, 0);
             Router2.GetPortsIn().SetValue(in12, 0);
