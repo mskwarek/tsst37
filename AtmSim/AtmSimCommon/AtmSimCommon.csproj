@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="IAgent.cs" />
     <Compile Include="INetworkNode.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="NodeComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing.cs" />
     <Compile Include="RoutingTable.cs" />
