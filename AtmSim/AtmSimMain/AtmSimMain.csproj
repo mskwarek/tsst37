@@ -75,6 +75,12 @@
     <Compile Include="AddEntryPrompt.Designer.cs">
       <DependentUpon>AddEntryPrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Loading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Loading.Designer.cs">
+      <DependentUpon>Loading.cs</DependentUpon>
+    </Compile>
     <Compile Include="Manager.cs" />
     <Compile Include="AtmSimGUI.cs">
       <SubType>Form</SubType>
@@ -107,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigGUI.resx">
       <DependentUpon>ConfigGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Loading.resx">
+      <DependentUpon>Loading.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogGUI.resx">
       <DependentUpon>LogGUI.cs</DependentUpon>

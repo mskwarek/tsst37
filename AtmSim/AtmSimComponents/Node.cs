@@ -40,7 +40,7 @@ namespace AtmSim.Components
  //       public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
  //       public void SetMatrix(Matrix m) { tab = m; } //Ustawienie pola kom. dla węzla
 
-        public Node(int numberofin, int numberofout, string name)
+        public Node(int numberofin, int numberofout, string name, int managerPort)
         {
             this.name = name;
 
@@ -60,7 +60,7 @@ namespace AtmSim.Components
             }
 
             this.log = new Log("Log urzadzenia " + name);
-            this.a = new NodeAgent(this);
+            this.a = new NodeAgent(this, managerPort);
         }
     }
 }

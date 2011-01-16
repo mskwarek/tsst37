@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
 
 namespace AtmSim.Components 
 {
@@ -12,8 +14,9 @@ namespace AtmSim.Components
         Node node;
         // Zawartosc konfiguracji wezla
         Configuration config;
+        Socket managerSocket;
 
-        public NodeAgent(Node n)
+        public NodeAgent(Node n, int port)
         {
             node = n;
             config = new Configuration(n.Name);
@@ -34,6 +37,11 @@ namespace AtmSim.Components
             config.Add("Name");
             config.Add(pIn);
             config.Add(pOut);
+
+            managerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint server = new IPEndPoint(IPAddress.Loopback, port);
+            managerSocket.Connect(server);
+
         }
 
         public string[] GetParamList()
