@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Component xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>menager</Name>
+  <ManagerPort>0</ManagerPort>
+  <nodeComponent>
+    <NodeComponent>
+		<Type>node</Type>
+		<Name>Router1</Name>
+		<ID>0</ID>
+      <portInComponet>
+        <PortInComponent><ID>0</ID></PortInComponent>
+      </portInComponet>
+      <portOutComponet>
+		<PortOutComponent><ID>0</ID></PortOutComponent>
+      </portOutComponet>
+    </NodeComponent>
+    <NodeComponent>
+	  <Type>node</Type>
+      <Name>router2</Name>
+      <ID>1</ID>
+      <portInComponet>
+        <PortInComponent><ID>0</ID></PortInComponent>
+		<PortInComponent><ID>1</ID></PortInComponent>
+      </portInComponet>
+      <portOutComponet>
+        <PortOutComponent><ID>0</ID></PortOutComponent>
+		<PortOutComponent><ID>1</ID></PortOutComponent>
+      </portOutComponet>
+    </NodeComponent>
+    <NodeComponent>
+      <Type>node</Type>
+      <Name>Router3</Name>
+      <ID>2</ID>
+      <portInComponet>
+        <PortInComponent><ID>0</ID></PortInComponent>
+      </portInComponet>
+      <portOutComponet>
+        <PortOutComponent><ID>0</ID></PortOutComponent>
+      </portOutComponet>
+    </NodeComponent>
+    <NodeComponent>
+	  <Type>source</Type>
+      <Name>Source1</Name>
+      <ID>3</ID>
+      <portInComponet>
+        <PortInComponent><ID>0</ID></PortInComponent>
+      </portInComponet>
+      <portOutComponet>
+		<PortOutComponent><ID>0</ID></PortOutComponent>
+      </portOutComponet>
+    </NodeComponent>
+	<NodeComponent>
+	  <Type>sink</Type>
+      <Name>Sink1</Name>
+      <ID>4</ID>
+      <portInComponet>
+		<PortInComponent><ID>0</ID></PortInComponent>
+      </portInComponet>
+      <portOutComponet>
+        <PortOutComponent><ID>0</ID></PortOutComponent>
+      </portOutComponet>
+    </NodeComponent>
+	</nodeComponent>
+  <link>
+  <Link> <LinkStart>Router1</LinkStart> <LinkEnd>Router2</LinkEnd> </Link>
+  <Link> <LinkStart>Router1</LinkStart> <LinkEnd>Router1</LinkEnd> </Link>
+  <Link> <LinkStart>Source1</LinkStart> <LinkEnd>Router2</LinkEnd> </Link>
+  <Link> <LinkStart>Router2</LinkStart> <LinkEnd>Router3</LinkEnd> </Link>
+  <Link> <LinkStart>Router3</LinkStart> <LinkEnd>Sink1</LinkEnd> </Link>
+  <Link> <LinkStart>Router3</LinkStart> <LinkEnd>Router1</LinkEnd> </Link>
+  </link>
+</Component>
