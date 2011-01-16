@@ -139,6 +139,8 @@ namespace AtmSim
             byte[] buffer = new byte[4096];
             sock.Receive(buffer);
             string response = Encoding.ASCII.GetString(buffer);
+            if (param == "config")
+                return response;
             string[] tokens = response.Split(' ');
             if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
                 return tokens[2];
@@ -157,11 +159,18 @@ namespace AtmSim
         public List<string> GetElements()
         {
             List<string> elements = new List<string>();
-            foreach (string key in nodes1.Keys)
+            foreach (int key in nodes.Keys)
             {
-                elements.Add(key);
+                string element = "[" + key + "] " + nodes[key].name;
+                elements.Add(element);
             }
             return elements;
+        }
+
+        public Configuration GetConfig(int id)
+        {
+            string conf = Get(id, "config");
+            return (Configuration)Serial.DeserializeObject(conf, typeof(Configuration));
         }
 
         /* **** TODO ****

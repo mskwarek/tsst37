@@ -42,6 +42,7 @@
             this.configButton = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.refreshButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,7 +72,7 @@
             // 
             this.netNewToolStripMenuItem.Enabled = false;
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
@@ -80,20 +81,20 @@
             this.examplesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.net1ToolStripMenuItem});
             this.examplesToolStripMenuItem.Name = "examplesToolStripMenuItem";
-            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.examplesToolStripMenuItem.Text = "&Przykładowe";
             // 
             // net1ToolStripMenuItem
             // 
             this.net1ToolStripMenuItem.Name = "net1ToolStripMenuItem";
-            this.net1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.net1ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.net1ToolStripMenuItem.Text = "Sieć 1";
             this.net1ToolStripMenuItem.Click += new System.EventHandler(this.net1ToolStripMenuItem_Click);
             // 
             // netTopologyToolStripMenuItem
             // 
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
@@ -162,6 +163,7 @@
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.Location = new System.Drawing.Point(174, 277);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -170,11 +172,23 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // refreshButton
+            // 
+            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.refreshButton.Location = new System.Drawing.Point(255, 277);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(17, 23);
+            this.refreshButton.TabIndex = 6;
+            this.refreshButton.Text = "r";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 312);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.configButton);
@@ -207,6 +221,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem examplesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem net1ToolStripMenuItem;
+        private System.Windows.Forms.Button refreshButton;
     }
 }
 

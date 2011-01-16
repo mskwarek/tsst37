@@ -21,23 +21,27 @@ namespace AtmSim.Components
         {
             node = n;
             config = new Configuration(n.Name);
-            Configuration pIn = new Configuration("PortsIn");
+            Configuration psIn = new Configuration("PortsIn");
             for (int i = 0; i<node.PortsIn.Length; i++ ) {
+                Configuration pIn = new Configuration(i.ToString());
                 pIn.Add("Open");
                 pIn.Add("Connected");
                 pIn.Add("_port");
+                psIn.Add(pIn);
             }
-            Configuration pOut = new Configuration("PortsIn");
-            for (int i = 0; i < node.PortsIn.Length; i++)
+            Configuration psOut = new Configuration("PortsIn");
+            for (int i = 0; i < node.PortsOut.Length; i++)
             {
+                Configuration pOut = new Configuration(i.ToString());
                 pOut.Add("Open");
                 pOut.Add("Connected");
                 pOut.Add("_port");
+                psOut.Add(pOut);
             }
             config.Add("ID");
             config.Add("Name");
-            config.Add(pIn);
-            config.Add(pOut);
+            config.Add(psIn);
+            config.Add(psOut);
 
             managerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint server = new IPEndPoint(IPAddress.Loopback, port);
