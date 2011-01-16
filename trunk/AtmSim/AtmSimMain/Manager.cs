@@ -19,47 +19,6 @@ namespace AtmSim
     // Ta klasa jest przeznaczona do przechowywania danych o elementach sieci na potrzeby zarzadzania.
     public class Manager
     {
-        // z tęsknoty za typedef z C++ :<
-        public class Config : Dictionary<string, string>
-        {
-            public Config() : base() { }
-            public Config(Config config) : base((Dictionary<string, string>)config) { }
-        }
-        
-        // pojedynczy element sieci i jego dane
-        //private class NetworkElement
-        //{
-        //    public string Name;     // nazwa elementu
-        //    public Config Config;   // konfiguracja: pary parametr-wartosc
-        //    /*
-        //     * Tablica routingu bedzie miala postac zalezna od tego, czy element jest hostem, czy
-        //     * routerem:
-        //     * Dla routera beda to pary:
-        //     * "portID;VPI;VCI" - wejsciowe
-        //     * "portID;VPI;VCI" - wyjsciowe
-        //     * Dla hosta beda to pary:
-        //     * "HostID" - nazwa hosta docelowego
-        //     * "VPI,VCI" - sciezka prowadzaca do danego hosta
-        //     */
-        //    public Routing Routing;
-        //    public Log Log;
-
-        //    public NetworkElement(string name, Config config, Routing routing, Log log)
-        //    {
-        //        this.Name = name;
-        //        this.Config = config;
-        //        this.Routing = routing;
-        //        this.Log = log;
-        //    }
-        //}
-
-        private class ConnectionData
-        {
-            public Socket socket;
-            public byte[] buffer = new byte[4096];
-            public ConnectionData(Socket sock) { this.socket = sock; }
-        }
-
         private class Node
         {
             public int id;
@@ -67,7 +26,7 @@ namespace AtmSim
             public Socket socket;
         }
 
-        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>();
+        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
         private Dictionary<int, Node> nodes = new Dictionary<int, Node>();
         private List<Edge<string>> links1 = new List<Edge<string>>();
         private List<Edge<int>> links = new List<Edge<int>>();
@@ -120,43 +79,21 @@ namespace AtmSim
             this.socket.BeginAccept(OnClientConnect, socket);
         }
 
-        private void OnDataReceived(IAsyncResult asyn)
+        private string Query(Socket sock, string query)
         {
-            ConnectionData c = (ConnectionData)asyn;
-            int recv = c.socket.EndReceive(asyn);
-            if (recv == 0)
-            {
-                c.socket.Close();
-                return;
-            }
-            //string receivedData = Encoding
-        }
-
-        private string Get(Socket sock, string param)
-        {
-            string query = "get " + param;
             sock.Send(Encoding.ASCII.GetBytes(query));
             byte[] buffer = new byte[4096];
             sock.Receive(buffer);
-            string response = Encoding.ASCII.GetString(buffer);
-            if (param == "config" || param == "routing")
+            return Encoding.ASCII.GetString(buffer);
+        }
+
+        public string Get(Socket sock, string param)
+        {
+            string response = Query(sock, "get " + param);
+            if (param == "config" || param == "routing" || param == "log")
                 return response;
             string[] tokens = response.Split(' ');
             if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
-                return tokens[2];
-            return "";
-        }
-
-        private string Set(Socket sock, string param, string value)
-        {
-            string query = "set " + param + " " + value;
-            sock.Send(Encoding.ASCII.GetBytes(query));
-            byte[] buffer = new byte[4096];
-            sock.Receive(buffer);
-            string response = Encoding.ASCII.GetString(buffer);
-
-            string[] tokens = response.Split(' ');
-            if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
                 return tokens[2];
             return "";
         }
@@ -165,16 +102,19 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
                 return Get(nodes[id].socket, param);
-            else
-                return "";
+            return "";
         }
 
         public string Set(int id, string param, string value)
         {
             if (nodes.ContainsKey(id))
-                return Set(nodes[id].socket, param, value);
-            else
-                return "";
+            {
+                string response = Query(nodes[id].socket, "set " + param + " " + value);
+                string[] tokens = response.Split(' ');
+                if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
+                    return tokens[2];
+            }
+            return "";
         }
 
         // pobranie listy dostepnych elementow
@@ -189,106 +129,58 @@ namespace AtmSim
             return elements;
         }
 
+        public Log GetLog(int id)
+        {
+            if (nodes.ContainsKey(id))
+            {
+                string response = Query(nodes[id].socket, "get log");
+                return (Log)Serial.DeserializeObject(response, typeof(Log));
+            }
+            return null;
+        }
+
         public Configuration GetConfig(int id)
         {
-            string conf = Get(id, "config");
-            return (Configuration)Serial.DeserializeObject(conf, typeof(Configuration));
+            if (nodes.ContainsKey(id))
+            {
+                string response = Query(nodes[id].socket, "get config");
+                return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
+            }
+            return null;
         }
 
         public Routing GetRouting(int id)
         {
-            string rout = Get(id, "routing");
-            return (Routing)Serial.DeserializeObject(rout, typeof(Routing));
-        }
-
-        /* **** TODO ****
-         * Szalone miotanie wyjątkami, zamiast generowania pustaków. Niech żyją wyjątki!
-         */
-        public Config GetConfig(string name)
-        {
-            if (nodes1.ContainsKey(name))
+            if (nodes.ContainsKey(id))
             {
-                Config config = new Config();
-                string[] paramlist = nodes1[name].GetParamList();
-                foreach (string param in paramlist)
-                {
-                    config.Add(param, nodes1[name].GetParam(param));
-                }
-                return config;
+                string response = Query(nodes[id].socket, "get routing");
+                return (Routing)Serial.DeserializeObject(response, typeof(Routing));
             }
-            else return new Config();
+            return null;
         }
 
-        public void SetConfig(string name, string param, string value)
+        public bool AddRouting(int id, string label, string value)
         {
-            if (nodes1.ContainsKey(name))
-                nodes1[name].SetParam(param, value);
-        }
-
-        public Routing GetRouting(string name)
-        {
-            if (nodes1.ContainsKey(name))
+            if (nodes.ContainsKey(id))
             {
-                /*Common.RoutingTable table = nodes[name].GetRoutingTable();
-                Routing routing = new Routing();
-                foreach (var entry in table)
-                {
-                    routing.Add(entry.Key.ToString(), entry.Value.ToString());
-                }*/
-                return nodes1[name].GetRoutingTable();
+                string response = Query(nodes[id].socket, "rtadd " + label + " " + value);
+                string[] tokens = response.Split(' ');
+                if (tokens.Length == 4 && tokens[3] == "ok")
+                    return true;
             }
-            else
-                return new Routing();
+            return false;
         }
 
-        public void AddRouting(string name, string label, string value)
+        public bool RemoveRouting(int id, string label)
         {
-            if (nodes1.ContainsKey(name))
+            if (nodes.ContainsKey(id))
             {
-                
-                nodes1[name].AddRoutingEntry(label, value);
+                string response = Query(nodes[id].socket, "rtdel " + label);
+                string[] tokens = response.Split(' ');
+                if (tokens.Length == 3 && tokens[2] == "ok")
+                    return true;
             }
-        }
-
-        public void RemoveRouting(string name, string label)
-        {
-            if (nodes1.ContainsKey(name))
-                nodes1[name].RemoveRoutingEntry(label);
-        }
-
-        public void ModifyRouting(string name, string label, string newlabel, string value)
-        {
-            //if (nodes.ContainsKey(name))
-            //{
-            //    nodes[name].Agent.RemoveRoutingEntry(label);
-            //    nodes[name].Agent.AddRoutingEntry(newlabel, value);
-            //}
-        }
-
-        public string GetLog(string name)
-        {
-            if (nodes1.ContainsKey(name))
-                return nodes1[name].GetLog();
-            else
-                return "Brak logów dla elementu " + name;
-        }
-
-        public void LogMsg(string name, string msg)
-        {
-            //if (nodes.ContainsKey(name))
-            //    nodes[name].Log.LogMsg(msg);
-        }
-
-        public void SubscribeLog(string name, ILogListener listener)
-        {
-            //if (nodes.ContainsKey(name))
-            //    nodes[name].Log.Subscribe(listener);
-        }
-
-        public void UnsubscribeLog(string name, ILogListener listener)
-        {
-            //if (nodes.ContainsKey(name))
-            //    nodes[name].Log.Unsubscribe(listener);
+            return false;
         }
 
         public List<Edge<string>> GetLinks()

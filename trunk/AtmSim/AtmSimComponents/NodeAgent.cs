@@ -6,7 +6,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace AtmSim.Components 
+namespace AtmSim.Components
 {
     public class NodeAgent : IAgent
     {
@@ -22,7 +22,8 @@ namespace AtmSim.Components
             node = n;
             config = new Configuration(n.Name);
             Configuration psIn = new Configuration("PortsIn");
-            for (int i = 0; i<node.PortsIn.Length; i++ ) {
+            for (int i = 0; i < node.PortsIn.Length; i++)
+            {
                 Configuration pIn = new Configuration(i.ToString());
                 pIn.Add("Open");
                 pIn.Add("Connected");
@@ -76,6 +77,8 @@ namespace AtmSim.Components
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
                     return Serial.SerializeObject(GetRoutingTable());
+                if (command[1] == "log")
+                    return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")
@@ -126,7 +129,7 @@ namespace AtmSim.Components
                 if (param[0] == "ID")
                     response += " X"; // parametr niezmienny
                 else if (param[0] == "Name")
-                {   
+                {
                     node.Name = command[2];
                     response += " " + node.Name;
                 }
@@ -141,7 +144,7 @@ namespace AtmSim.Components
                         return response;
                     if (param[2] == "Open")
                         response += " " + node.PortsIn[n].Open; // póki co niezmienne
-                    else if (param[2] == "Connected")                        
+                    else if (param[2] == "Connected")
                         response += " " + node.PortsIn[n].Connected; // niezmienne
                     else if (param[2] == "_port")
                         response += " " + node.PortsIn[n].TcpPort; // niezmienne
@@ -166,7 +169,8 @@ namespace AtmSim.Components
                     }
                     else if (param[2] == "_port")
                     {
-                        try {
+                        try
+                        {
                             node.PortsOut[n].TcpPort = Int32.Parse(command[2]);
                         }
                         catch (ArgumentNullException) { return ""; }
@@ -174,6 +178,33 @@ namespace AtmSim.Components
                     }
                     else return response;
                 }
+            }
+            else if (command[0] == "rtadd")
+            {
+                if (command.Length != 3)
+                    return response;
+                response += "rtaddresp " + command[1] + " " + command[2];
+                try
+                {
+                    node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]));
+                }
+                catch (ArgumentException)
+                {
+                    response += " fail";
+                    return response;
+                }
+                response += " ok";
+
+            }
+            else if (command[0] == "rtdel")
+            {
+                if (command.Length != 2)
+                    return response;
+                response += "rtdelresp " + command[1];
+                if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
+                    response += " ok";
+                else
+                    response += " fail";
             }
             return response;
         }
@@ -206,7 +237,7 @@ namespace AtmSim.Components
             Routing table = new Routing();
             foreach (var element in node.Matrix.RoutingTable)
             {
-                table.Add(element.Key.ToString(),element.Value.ToString());
+                table.Add(element.Key.ToString(), element.Value.ToString());
             }
             return table;
         }
@@ -223,7 +254,7 @@ namespace AtmSim.Components
 
         public string GetLog()
         {
-            return node.Log.GetString();
+            return node.Log.ToString();
         }
     }
 }

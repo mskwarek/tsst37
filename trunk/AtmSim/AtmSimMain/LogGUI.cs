@@ -12,17 +12,19 @@ namespace AtmSim
     public partial class LogGUI : Form, ILogListener
     {
         //private Utils.Log log;
-        private string elementName;
+        private int id;
+        //private string elementName;
         private Manager manager;
 
-        public LogGUI(Manager manager, string name)
+        public LogGUI(Manager manager, int id)
         {
-            this.elementName = name;
+            this.id = id;
+            //this.elementName = name;
             this.manager = manager;
             //this.log = Manager.GetLog(this.elementName);
-            manager.SubscribeLog(this.elementName, this);
+            //manager.SubscribeLog(this.id, this);
             InitializeComponent();
-            this.logBox.Text = manager.GetLog(this.elementName);
+            this.logBox.Text = manager.GetLog(this.id).ToString();
             this.logBox.Select(0, 0);
         }
 
@@ -38,7 +40,7 @@ namespace AtmSim
 
         public void LogGUI_Closing(Object sender, EventArgs e)
         {
-            manager.UnsubscribeLog(this.elementName, this);
+            //manager.UnsubscribeLog(this.elementName, this);
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,7 +61,7 @@ namespace AtmSim
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.logBox.Text = manager.GetLog(this.elementName);
+            this.logBox.Text = manager.GetLog(this.id).ToString();
             this.logBox.Select(0, 0);
         }
 

@@ -36,7 +36,7 @@ namespace AtmSim
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             manager.Reset();
-            Loading loader = new Loading(manager);
+            Loader loader = new Loader(manager);
             loader.Show();
             loader.LoadNetwork();
             refreshButton_Click(sender, e);
@@ -45,7 +45,7 @@ namespace AtmSim
         private void net1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             manager.Reset();
-            Loading loader = new Loading(manager);
+            Loader loader = new Loader(manager);
             loader.Show();
             loader.LoadNetwork();
             this.elementListBox.Items.Clear();
@@ -55,7 +55,7 @@ namespace AtmSim
         private void net2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             manager.Reset();
-            Loading loader = new Loading(manager);
+            Loader loader = new Loader(manager);
             loader.Show();
             loader.LoadNetwork();
             this.elementListBox.Items.Clear();
@@ -87,13 +87,13 @@ namespace AtmSim
 
         private void logButton_Click(object sender, EventArgs e)
         {
-            LogGUI logGUI = new LogGUI(this.manager, this.selectedName);
+            LogGUI logGUI = new LogGUI(this.manager, this.SelectedId);
             logGUI.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            manager.SetConfig(selectedName, "send", "");
+            manager.Set(SelectedId, "send", "");
         }
 
         private void refreshButton_Click(object sender, EventArgs e)

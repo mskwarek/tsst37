@@ -15,6 +15,11 @@ namespace AtmSim
     public class Log
     {
         private List<string> log;
+        public List<string> Entries
+        {
+            get { return log; }
+            set { log = value; }
+        }
         private List<ILogListener> listeners = new List<ILogListener>();
 
         public Log()
@@ -47,7 +52,7 @@ namespace AtmSim
             }
         }
 
-        public string GetString()
+        public override string ToString()
         {
             string logString = "";
             foreach (string msg in log)

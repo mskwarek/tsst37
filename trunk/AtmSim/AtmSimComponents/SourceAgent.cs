@@ -73,7 +73,7 @@ namespace AtmSim.Components
   
         public string GetLog()
         {
-            return node.Log.GetString();
+            return node.Log.ToString();
         }
     }
 }
