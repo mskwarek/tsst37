@@ -139,7 +139,7 @@ namespace AtmSim
             byte[] buffer = new byte[4096];
             sock.Receive(buffer);
             string response = Encoding.ASCII.GetString(buffer);
-            if (param == "config")
+            if (param == "config" || param == "routing")
                 return response;
             string[] tokens = response.Split(' ');
             if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
@@ -171,6 +171,12 @@ namespace AtmSim
         {
             string conf = Get(id, "config");
             return (Configuration)Serial.DeserializeObject(conf, typeof(Configuration));
+        }
+
+        public Routing GetRouting(int id)
+        {
+            string rout = Get(id, "routing");
+            return (Routing)Serial.DeserializeObject(rout, typeof(Routing));
         }
 
         /* **** TODO ****

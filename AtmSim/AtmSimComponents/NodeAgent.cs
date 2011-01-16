@@ -74,6 +74,8 @@ namespace AtmSim.Components
                     return "";
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
+                if (command[1] == "routing")
+                    return Serial.SerializeObject(GetRoutingTable());
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")

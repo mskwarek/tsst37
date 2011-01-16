@@ -11,6 +11,7 @@ namespace AtmSim
 {
     public partial class ConfigGUI : Form
     {
+        private int id;
         private string elementName;
         private Manager manager;
         private Manager.Config localConfig;
@@ -41,10 +42,11 @@ namespace AtmSim
         public ConfigGUI(Manager manager, int id)
         {
             this.manager = manager;
-            this.elementName = manager.Get(id, "Name");
-            this.configuration = getTree(manager.GetConfig(id));
+            this.id = id;
+            this.elementName = manager.Get(this.id, "Name");
+            this.configuration = getTree(manager.GetConfig(this.id));
             this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
-            this.localRouting = new Routing(manager.GetRouting(this.elementName));
+            this.localRouting = new Routing(manager.GetRouting(this.id));
             this.modifiedConfig = new List<string>();
             this.addedRouting = new List<string>();
             this.removedRouting = new List<string>();
