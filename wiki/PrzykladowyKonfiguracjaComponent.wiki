@@ -5,9 +5,9 @@
   <ManagerPort>0</ManagerPort>
   <nodeComponent>
     <NodeComponent>
-		<Type>node</Type>
-		<Name>Router1</Name>
-		<ID>0</ID>
+	<Type>node</Type>
+	<Name>Router1</Name>
+	<ID>0</ID>
       <portInComponet>
         <PortInComponent><ID>0</ID></PortInComponent>
       </portInComponet>
