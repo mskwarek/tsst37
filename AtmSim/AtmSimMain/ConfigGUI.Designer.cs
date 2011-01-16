@@ -39,13 +39,10 @@
             this.okButton = new System.Windows.Forms.Button();
             this.configTextBox = new System.Windows.Forms.TextBox();
             this.configTree = new System.Windows.Forms.TreeView();
-            this.generalGridTab = new System.Windows.Forms.TabPage();
-            this.generalPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.configTabControl = new System.Windows.Forms.TabControl();
             this.menuStrip.SuspendLayout();
             this.routingTab.SuspendLayout();
             this.generalTab.SuspendLayout();
-            this.generalGridTab.SuspendLayout();
             this.configTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,6 +138,7 @@
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // configTextBox
             // 
@@ -160,31 +158,6 @@
             this.configTree.TabIndex = 0;
             this.configTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.configTree_AfterSelect);
             // 
-            // generalGridTab
-            // 
-            this.generalGridTab.Controls.Add(this.generalPropertyGrid);
-            this.generalGridTab.Location = new System.Drawing.Point(4, 22);
-            this.generalGridTab.Name = "generalGridTab";
-            this.generalGridTab.Padding = new System.Windows.Forms.Padding(3);
-            this.generalGridTab.Size = new System.Drawing.Size(252, 197);
-            this.generalGridTab.TabIndex = 0;
-            this.generalGridTab.Text = "Ogólne";
-            this.generalGridTab.UseVisualStyleBackColor = true;
-            // 
-            // generalPropertyGrid
-            // 
-            this.generalPropertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.generalPropertyGrid.HelpVisible = false;
-            this.generalPropertyGrid.Location = new System.Drawing.Point(6, 6);
-            this.generalPropertyGrid.Name = "generalPropertyGrid";
-            this.generalPropertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-            this.generalPropertyGrid.Size = new System.Drawing.Size(240, 185);
-            this.generalPropertyGrid.TabIndex = 1;
-            this.generalPropertyGrid.ToolbarVisible = false;
-            this.generalPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.generalPropertyGrid_PropertyValueChanged);
-            // 
             // configTabControl
             // 
             this.configTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -192,7 +165,6 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.configTabControl.Controls.Add(this.generalTab);
             this.configTabControl.Controls.Add(this.routingTab);
-            this.configTabControl.Controls.Add(this.generalGridTab);
             this.configTabControl.Location = new System.Drawing.Point(12, 27);
             this.configTabControl.Name = "configTabControl";
             this.configTabControl.SelectedIndex = 0;
@@ -215,7 +187,6 @@
             this.routingTab.ResumeLayout(false);
             this.generalTab.ResumeLayout(false);
             this.generalTab.PerformLayout();
-            this.generalGridTab.ResumeLayout(false);
             this.configTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -235,8 +206,6 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.TextBox configTextBox;
         private System.Windows.Forms.TreeView configTree;
-        private System.Windows.Forms.TabPage generalGridTab;
-        private System.Windows.Forms.PropertyGrid generalPropertyGrid;
         private System.Windows.Forms.TabControl configTabControl;
     }
 }
