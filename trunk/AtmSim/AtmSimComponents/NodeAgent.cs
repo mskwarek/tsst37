@@ -73,7 +73,7 @@ namespace AtmSim.Components
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")
-                    response += " X";
+                    response += " " + node.Id;
                 else if (param[0] == "Name")
                     response += " " + node.Name;
                 else if (param[0] == "PortsIn")

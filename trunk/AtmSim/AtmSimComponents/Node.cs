@@ -21,6 +21,7 @@ namespace AtmSim.Components
         }
 
         private string name = "unknown";
+        private int id;
 
         private PortIn[] inportsgroup; //porty wejsciowe wezla
         public PortIn[] PortsIn { get { return inportsgroup; } }
@@ -29,7 +30,9 @@ namespace AtmSim.Components
         private Matrix tab; //= new Matrix();  //Matrix wezla czyli tablica routingu
         public Matrix Matrix { get { return tab; } }
 
-        public string Name { get { return name; } set { name = value; } }   //zwraca imie wezla
+        
+        public string Name { get { return name; } set { name = value; } }
+        public int Id { get { return id; } set { id = value; } }
  
  //       public IPortIn[] GetPortsIn() { return inportsgroup; } //metoda zwraca porty wejsciowe
  //       public IPortOut[] GetPortsOut() { return outportsgroup; }  //metoda zwraca porty wyjsciowe
@@ -40,8 +43,9 @@ namespace AtmSim.Components
  //       public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
  //       public void SetMatrix(Matrix m) { tab = m; } //Ustawienie pola kom. dla węzla
 
-        public Node(int numberofin, int numberofout, string name, int managerPort)
+        public Node(int numberofin, int numberofout, int id, string name, int managerPort)
         {
+            this.id = id;
             this.name = name;
 
             inportsgroup = new PortIn[numberofin];
