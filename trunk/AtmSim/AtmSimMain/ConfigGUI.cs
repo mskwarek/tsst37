@@ -12,6 +12,7 @@ namespace AtmSim
     public partial class ConfigGUI : Form
     {
         private string elementName;
+        private Manager manager;
         private Manager.Config localConfig;
         private Routing localRouting;
         // zmodyfikowane wpisy
@@ -20,11 +21,12 @@ namespace AtmSim
         private List<string> removedRouting;
         private List<string> modifiedRouting;
 
-        public ConfigGUI(string name)
+        public ConfigGUI(Manager manager, string name)
         {
+            this.manager = manager;
             this.elementName = name;
-            this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
-            this.localRouting = new Routing(Manager.GetRouting(this.elementName));
+            this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
+            this.localRouting = new Routing(manager.GetRouting(this.elementName));
             this.modifiedConfig = new List<string>();
             this.addedRouting = new List<string>();
             this.removedRouting = new List<string>();
@@ -39,14 +41,14 @@ namespace AtmSim
         {
             if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
             {
-                this.localConfig = new Manager.Config(Manager.GetConfig(this.elementName));
+                this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
                 this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
                 this.generalPropertyGrid.Refresh();
                 this.modifiedConfig.Clear();
             }
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
             {
-                this.localRouting = new Routing(Manager.GetRouting(this.elementName));
+                this.localRouting = new Routing(manager.GetRouting(this.elementName));
                 this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
                 this.routingPropertyGrid.Refresh();
                 this.addedRouting.Clear();
@@ -94,7 +96,7 @@ namespace AtmSim
         {
             foreach (string param in modifiedConfig)
             {
-                Manager.SetConfig(this.elementName, param, this.localConfig[param]);
+                manager.SetConfig(this.elementName, param, this.localConfig[param]);
             }
             modifiedConfig.Clear();
         }
@@ -102,11 +104,11 @@ namespace AtmSim
         private void saveRouting()
         {
             foreach (string label in removedRouting)
-                Manager.RemoveRouting(this.elementName, label);
+                manager.RemoveRouting(this.elementName, label);
             foreach (string label in addedRouting)
-                Manager.AddRouting(this.elementName, label, localRouting[label]);
+                manager.AddRouting(this.elementName, label, localRouting[label]);
             foreach (string label in modifiedRouting)
-                Manager.ModifyRouting(this.elementName, label, label, localRouting[label]);
+                manager.ModifyRouting(this.elementName, label, label, localRouting[label]);
             addedRouting.Clear();
             removedRouting.Clear();
             modifiedRouting.Clear();

@@ -12,6 +12,7 @@ namespace AtmSim
     public partial class AtmSimGUI : Form
     {
         private string selectedName = "";
+        private Manager manager = new Manager();
 
         public AtmSimGUI()
         {
@@ -20,28 +21,28 @@ namespace AtmSim
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Manager.Reset();
+            manager.Reset();
             this.InitTestNetwork2(); // **** TODO **** w tym miejscu znajdzie się parsowanie pliku wejściowego
             this.elementListBox.Items.Clear();
-            foreach (string element in Manager.GetElements())
+            foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
         }
 
         private void net1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Manager.Reset();
+            manager.Reset();
             this.InitTestNetwork1();
             this.elementListBox.Items.Clear();
-            foreach (string element in Manager.GetElements())
+            foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
         }
 
         private void net2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Manager.Reset();
+            manager.Reset();
             this.InitTestNetwork2();
             this.elementListBox.Items.Clear();
-            foreach (string element in Manager.GetElements())
+            foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
         }
 
@@ -49,7 +50,7 @@ namespace AtmSim
         {
             /*TopologyGUI topologyGUI = new TopologyGUI();
             topologyGUI.Show();*/
-            TopologyView topologyView = new TopologyView();
+            TopologyView topologyView = new TopologyView(manager);
             topologyView.Show();
         }
 
@@ -61,12 +62,12 @@ namespace AtmSim
             Components.Source Source4 = new Components.Source("Source4");
             Components.Sink Sink5 = new Components.Sink("Sink5");
 
-            Components.PortIn in21 = new Components.PortIn(0); in21.SetReceiver(Router1.GetMatrix());
-            Components.PortIn in12 = new Components.PortIn(0); in12.SetReceiver(Router2.GetMatrix());
-            Components.PortIn in32 = new Components.PortIn(1); in32.SetReceiver(Router2.GetMatrix());
-            Components.PortIn in13 = new Components.PortIn(0); in13.SetReceiver(Router3.GetMatrix());
+            Components.PortIn in21 = new Components.PortIn(0); in21.SetReceiver(Router1.Matrix);
+            Components.PortIn in12 = new Components.PortIn(0); in12.SetReceiver(Router2.Matrix);
+            Components.PortIn in32 = new Components.PortIn(1); in32.SetReceiver(Router2.Matrix);
+            Components.PortIn in13 = new Components.PortIn(0); in13.SetReceiver(Router3.Matrix);
             Components.PortIn in35 = new Components.PortIn(0); in35.SetReceiver(Sink5.Receiver);
-            Components.PortIn in42 = new Components.PortIn(2); in42.SetReceiver(Router2.GetMatrix());
+            Components.PortIn in42 = new Components.PortIn(2); in42.SetReceiver(Router2.Matrix);
 
             Components.PortOut out12 = new Components.PortOut(0); out12.TcpPort = in12.TcpPort; out12.Connect();
             Components.PortOut out13 = new Components.PortOut(1); out13.TcpPort = in13.TcpPort; out13.Connect();
@@ -75,49 +76,49 @@ namespace AtmSim
             Components.PortOut out42 = new Components.PortOut(0); out42.TcpPort = in42.TcpPort; out42.Connect();
             Components.PortOut out35 = new Components.PortOut(1); out35.TcpPort = in35.TcpPort; out35.Connect();
 
-            Router1.GetPortsIn().SetValue(in21, 0);
-            Router2.GetPortsIn().SetValue(in12, 0);
-            Router2.GetPortsIn().SetValue(in32, 1);
-            Router2.GetPortsIn().SetValue(in42, 2);
-            Router3.GetPortsIn().SetValue(in13, 0);
+            Router1.PortsIn.SetValue(in21, 0);
+            Router2.PortsIn.SetValue(in12, 0);
+            Router2.PortsIn.SetValue(in32, 1);
+            Router2.PortsIn.SetValue(in42, 2);
+            Router3.PortsIn.SetValue(in13, 0);
 
-            Router1.GetPortsOut().SetValue(out12, 0);
-            Router1.GetPortsOut().SetValue(out13, 1);
-            Router2.GetPortsOut().SetValue(out21, 0);
-            Router3.GetPortsOut().SetValue(out32, 0);
-            Router3.GetPortsOut().SetValue(out35, 1);
+            Router1.PortsOut.SetValue(out12, 0);
+            Router1.PortsOut.SetValue(out13, 1);
+            Router2.PortsOut.SetValue(out21, 0);
+            Router3.PortsOut.SetValue(out32, 0);
+            Router3.PortsOut.SetValue(out35, 1);
 
             Source4.SetPortOut(out42);
             Sink5.SetPortIn(in35);
 
-            Manager.AddNode("Router1", Router1.Agent);
-            Manager.AddNode("Router2", Router2.Agent);
-            Manager.AddNode("Router3", Router3.Agent);
-            Manager.AddNode("Source4", Source4.Agent);
-            Manager.AddNode("Sink5", Sink5.Agent);
+            manager.AddNode("Router1", Router1.Agent);
+            manager.AddNode("Router2", Router2.Agent);
+            manager.AddNode("Router3", Router3.Agent);
+            manager.AddNode("Source4", Source4.Agent);
+            manager.AddNode("Sink5", Sink5.Agent);
 
-            Manager.AddConnection("Router2", "Router1");
-            Manager.AddConnection("Router1", "Router2");
-            Manager.AddConnection("Router3", "Router2");
-            Manager.AddConnection("Router1", "Router3");
-            Manager.AddConnection("Source4", "Router2");
-            Manager.AddConnection("Router3", "Sink5");
+            manager.AddLink("Router2", "Router1");
+            manager.AddLink("Router1", "Router2");
+            manager.AddLink("Router3", "Router2");
+            manager.AddLink("Router1", "Router3");
+            manager.AddLink("Source4", "Router2");
+            manager.AddLink("Router3", "Sink5");
 
-            Manager.AddRouting("Router1", "0:3:-", "1:2:-");
-            Manager.AddRouting("Router2", "2:1:2", "0:3:2");
-            Manager.AddRouting("Router2", "2:2:1", "0:3:1");
-            Manager.AddRouting("Router2", "1:1:3", "0:3:3");
-            Manager.AddRouting("Router3", "0:2:1", "0:1:3");
-            Manager.AddRouting("Router3", "0:2:2", "1:1:2");
-            Manager.AddRouting("Router3", "0:2:3", "1:1:1");
-            Manager.AddRouting("Source4", "A", "0:1;2");
-            Manager.AddRouting("Source4", "B", "0:2:1");
-            Manager.AddRouting("Sink5", "0:1:1", "B");
-            Manager.AddRouting("Sink5", "0:1:2", "A");
+            manager.AddRouting("Router1", "0:3:-", "1:2:-");
+            manager.AddRouting("Router2", "2:1:2", "0:3:2");
+            manager.AddRouting("Router2", "2:2:1", "0:3:1");
+            manager.AddRouting("Router2", "1:1:3", "0:3:3");
+            manager.AddRouting("Router3", "0:2:1", "0:1:3");
+            manager.AddRouting("Router3", "0:2:2", "1:1:2");
+            manager.AddRouting("Router3", "0:2:3", "1:1:1");
+            manager.AddRouting("Source4", "A", "0:1;2");
+            manager.AddRouting("Source4", "B", "0:2:1");
+            manager.AddRouting("Sink5", "0:1:1", "B");
+            manager.AddRouting("Sink5", "0:1:2", "A");
             //Manager.AddRouting("Router3",
 
-            Manager.SetConfig("Source4", "message", "s");
-            Manager.SetConfig("Source4", "target", "A");
+            manager.SetConfig("Source4", "message", "s");
+            manager.SetConfig("Source4", "target", "A");
         }
 
         private void InitTestNetwork2()
@@ -140,29 +141,29 @@ namespace AtmSim
             Components.TestPortOut out42 = new Components.TestPortOut(0); out42.Connect(in42);
             Components.TestPortOut out35 = new Components.TestPortOut(1); out35.Connect(in35);
 
-            Router1.GetPortsIn().SetValue(in21, 0);
-            Router2.GetPortsIn().SetValue(in12, 0);
-            Router2.GetPortsIn().SetValue(in32, 1);
-            Router2.GetPortsIn().SetValue(in42, 2);
-            Router3.GetPortsIn().SetValue(in13, 0);
+            Router1.PortsIn.SetValue(in21, 0);
+            Router2.PortsIn.SetValue(in12, 0);
+            Router2.PortsIn.SetValue(in32, 1);
+            Router2.PortsIn.SetValue(in42, 2);
+            Router3.PortsIn.SetValue(in13, 0);
 
-            Router1.GetPortsOut().SetValue(out12, 0);
-            Router1.GetPortsOut().SetValue(out13, 1);
-            Router2.GetPortsOut().SetValue(out21, 0);
-            Router3.GetPortsOut().SetValue(out32, 0);
-            Router3.GetPortsOut().SetValue(out35, 1);
+            Router1.PortsOut.SetValue(out12, 0);
+            Router1.PortsOut.SetValue(out13, 1);
+            Router2.PortsOut.SetValue(out21, 0);
+            Router3.PortsOut.SetValue(out32, 0);
+            Router3.PortsOut.SetValue(out35, 1);
 
             Components.Source Source4 = new Components.Source("Source4");
             Source4.SetPortOut(out42);
             Components.Sink Sink5 = new Components.Sink("Sink5");
 
-            Manager.AddNode("Router1", Router1.Agent);
-            Manager.AddNode("Router2", Router2.Agent);
-            Manager.AddNode("Router3", Router3.Agent);
-            Manager.AddConnection("Router2", "Router1");
-            Manager.AddConnection("Router1", "Router2");
-            Manager.AddConnection("Router3", "Router2");
-            Manager.AddConnection("Router1", "Router3");
+            manager.AddNode("Router1", Router1.Agent);
+            manager.AddNode("Router2", Router2.Agent);
+            manager.AddNode("Router3", Router3.Agent);
+            manager.AddLink("Router2", "Router1");
+            manager.AddLink("Router1", "Router2");
+            manager.AddLink("Router3", "Router2");
+            manager.AddLink("Router1", "Router3");
 
         }
 
@@ -177,19 +178,19 @@ namespace AtmSim
             /*ConfigGUI configGUI = new ConfigGUI(
                 Manager.GetConfig(this.selectedName),
                 Manager.GetRouting(this.selectedName));*/
-            ConfigGUI configGUI = new ConfigGUI(this.selectedName);
+            ConfigGUI configGUI = new ConfigGUI(this.manager, this.selectedName);
             configGUI.Show();
         }
 
         private void logButton_Click(object sender, EventArgs e)
         {
-            LogGUI logGUI = new LogGUI(this.selectedName);
+            LogGUI logGUI = new LogGUI(this.manager, this.selectedName);
             logGUI.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Manager.SetConfig(selectedName, "send", "");
+            manager.SetConfig(selectedName, "send", "");
         }
 
 

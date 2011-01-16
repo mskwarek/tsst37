@@ -10,10 +10,30 @@ namespace AtmSim.Components
     {
         // Referencja wezla zarzadzanego przez agenta
         Node node;
+        // Zawartosc konfiguracji wezla
+        Configuration config;
 
         public NodeAgent(Node n)
         {
             node = n;
+            config = new Configuration(n.Name);
+            Configuration pIn = new Configuration("PortsIn");
+            for (int i = 0; i<node.PortsIn.Length; i++ ) {
+                pIn.Add("Open");
+                pIn.Add("Connected");
+                pIn.Add("_port");
+            }
+            Configuration pOut = new Configuration("PortsIn");
+            for (int i = 0; i < node.PortsIn.Length; i++)
+            {
+                pOut.Add("Open");
+                pOut.Add("Connected");
+                pOut.Add("_port");
+            }
+            config.Add("ID");
+            config.Add("Name");
+            config.Add(pIn);
+            config.Add(pOut);
         }
 
         public string[] GetParamList()
@@ -25,24 +45,24 @@ namespace AtmSim.Components
         public string GetParam(string name)
         {
             if (name == "name")
-                return node.GetName();
+                return node.Name;
             else if (name == "portsIn")
-                return "0-" + (node.GetPortsIn().Length - 1);
+                return "0-" + (node.PortsIn.Length - 1);
             else if (name == "portsOut")
-                return "0-" + (node.GetPortsOut().Length - 1);
+                return "0-" + (node.PortsOut.Length - 1);
             else return "";
         }
 
         public void SetParam(string name, string value)
         {
             if (name == "name")
-                node.SetName(value);
+                node.Name = value;
         }
 
         public Routing GetRoutingTable()
         {
             Routing table = new Routing();
-            foreach (var element in node.GetMatrix().GetRouteTable())
+            foreach (var element in node.Matrix.RoutingTable)
             {
                 table.Add(element.Key.ToString(),element.Value.ToString());
             }
@@ -51,12 +71,12 @@ namespace AtmSim.Components
 
         public void AddRoutingEntry(string label, string value)
         {
-            node.GetMatrix().AddToMatrix(new RoutingEntry(label), new RoutingEntry(value));
+            node.Matrix.AddToMatrix(new RoutingEntry(label), new RoutingEntry(value));
         }
 
         public void RemoveRoutingEntry(string entry)
         {
-            node.GetMatrix().DeleteFromMatrix(new RoutingEntry(entry));
+            node.Matrix.DeleteFromMatrix(new RoutingEntry(entry));
         }
 
         public string GetLog()
