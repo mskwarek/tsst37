@@ -147,10 +147,32 @@ namespace AtmSim
             return "";
         }
 
+        private string Set(Socket sock, string param, string value)
+        {
+            string query = "set " + param + " " + value;
+            sock.Send(Encoding.ASCII.GetBytes(query));
+            byte[] buffer = new byte[4096];
+            sock.Receive(buffer);
+            string response = Encoding.ASCII.GetString(buffer);
+
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
+                return tokens[2];
+            return "";
+        }
+
         public string Get(int id, string param)
         {
             if (nodes.ContainsKey(id))
                 return Get(nodes[id].socket, param);
+            else
+                return "";
+        }
+
+        public string Set(int id, string param, string value)
+        {
+            if (nodes.ContainsKey(id))
+                return Set(nodes[id].socket, param, value);
             else
                 return "";
         }

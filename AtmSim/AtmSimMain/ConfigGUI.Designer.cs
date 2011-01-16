@@ -32,13 +32,13 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.routingTab = new System.Windows.Forms.TabPage();
-            this.addRoutingEntryButton = new System.Windows.Forms.Button();
-            this.removeRoutingEntryButton = new System.Windows.Forms.Button();
             this.routingPropertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.removeRoutingEntryButton = new System.Windows.Forms.Button();
+            this.addRoutingEntryButton = new System.Windows.Forms.Button();
             this.generalTab = new System.Windows.Forms.TabPage();
-            this.configTree = new System.Windows.Forms.TreeView();
-            this.configTextBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
+            this.configTextBox = new System.Windows.Forms.TextBox();
+            this.configTree = new System.Windows.Forms.TreeView();
             this.generalGridTab = new System.Windows.Forms.TabPage();
             this.generalPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.configTabControl = new System.Windows.Forms.TabControl();
@@ -87,17 +87,15 @@
             this.routingTab.Text = "Routing";
             this.routingTab.UseVisualStyleBackColor = true;
             // 
-            // addRoutingEntryButton
+            // routingPropertyGrid
             // 
-            this.addRoutingEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addRoutingEntryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.addRoutingEntryButton.Location = new System.Drawing.Point(6, 168);
-            this.addRoutingEntryButton.Name = "addRoutingEntryButton";
-            this.addRoutingEntryButton.Size = new System.Drawing.Size(40, 23);
-            this.addRoutingEntryButton.TabIndex = 1;
-            this.addRoutingEntryButton.Text = "+";
-            this.addRoutingEntryButton.UseVisualStyleBackColor = true;
-            this.addRoutingEntryButton.Click += new System.EventHandler(this.addRoutingEntryButton_Click);
+            this.routingPropertyGrid.HelpVisible = false;
+            this.routingPropertyGrid.Location = new System.Drawing.Point(6, 6);
+            this.routingPropertyGrid.Name = "routingPropertyGrid";
+            this.routingPropertyGrid.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.routingPropertyGrid.Size = new System.Drawing.Size(240, 156);
+            this.routingPropertyGrid.TabIndex = 3;
+            this.routingPropertyGrid.ToolbarVisible = false;
             // 
             // removeRoutingEntryButton
             // 
@@ -110,15 +108,17 @@
             this.removeRoutingEntryButton.UseVisualStyleBackColor = true;
             this.removeRoutingEntryButton.Click += new System.EventHandler(this.removeRoutingEntryButton_Click);
             // 
-            // routingPropertyGrid
+            // addRoutingEntryButton
             // 
-            this.routingPropertyGrid.HelpVisible = false;
-            this.routingPropertyGrid.Location = new System.Drawing.Point(6, 6);
-            this.routingPropertyGrid.Name = "routingPropertyGrid";
-            this.routingPropertyGrid.PropertySort = System.Windows.Forms.PropertySort.NoSort;
-            this.routingPropertyGrid.Size = new System.Drawing.Size(240, 156);
-            this.routingPropertyGrid.TabIndex = 3;
-            this.routingPropertyGrid.ToolbarVisible = false;
+            this.addRoutingEntryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addRoutingEntryButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.addRoutingEntryButton.Location = new System.Drawing.Point(6, 168);
+            this.addRoutingEntryButton.Name = "addRoutingEntryButton";
+            this.addRoutingEntryButton.Size = new System.Drawing.Size(40, 23);
+            this.addRoutingEntryButton.TabIndex = 1;
+            this.addRoutingEntryButton.Text = "+";
+            this.addRoutingEntryButton.UseVisualStyleBackColor = true;
+            this.addRoutingEntryButton.Click += new System.EventHandler(this.addRoutingEntryButton_Click);
             // 
             // generalTab
             // 
@@ -133,6 +133,22 @@
             this.generalTab.Text = "Ogólne";
             this.generalTab.UseVisualStyleBackColor = true;
             // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(195, 171);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(51, 20);
+            this.okButton.TabIndex = 2;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // configTextBox
+            // 
+            this.configTextBox.Location = new System.Drawing.Point(6, 171);
+            this.configTextBox.Name = "configTextBox";
+            this.configTextBox.Size = new System.Drawing.Size(183, 20);
+            this.configTextBox.TabIndex = 1;
+            // 
             // configTree
             // 
             this.configTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -142,22 +158,7 @@
             this.configTree.Name = "configTree";
             this.configTree.Size = new System.Drawing.Size(240, 159);
             this.configTree.TabIndex = 0;
-            // 
-            // configTextBox
-            // 
-            this.configTextBox.Location = new System.Drawing.Point(6, 171);
-            this.configTextBox.Name = "configTextBox";
-            this.configTextBox.Size = new System.Drawing.Size(183, 20);
-            this.configTextBox.TabIndex = 1;
-            // 
-            // okButton
-            // 
-            this.okButton.Location = new System.Drawing.Point(195, 171);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(51, 20);
-            this.okButton.TabIndex = 2;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
+            this.configTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.configTree_AfterSelect);
             // 
             // generalGridTab
             // 

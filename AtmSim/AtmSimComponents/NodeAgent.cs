@@ -71,7 +71,7 @@ namespace AtmSim.Components
             if (command[0] == "get")
             {
                 if (command.Length != 2)
-                    return "";
+                    return response;
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
@@ -84,39 +84,43 @@ namespace AtmSim.Components
                     response += " " + node.Name;
                 else if (param[0] == "PortsIn")
                 {
+                    if (param.Length != 3)
+                        return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return ""; }
+                    catch (ArgumentNullException) { return response; }
                     if (n >= node.PortsIn.Length)
-                        return "";
+                        return response;
                     if (param[2] == "Open")
                         response += " " + node.PortsIn[n].Open;
                     else if (param[2] == "Connected")
                         response += " " + node.PortsIn[n].Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortsIn[n].TcpPort;
-                    else return "";
+                    else return response;
                 }
                 else if (param[0] == "PortsOut")
                 {
+                    if (param.Length != 3)
+                        return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return ""; }
+                    catch (ArgumentNullException) { return response; }
                     if (n >= node.PortsOut.Length)
-                        return "";
+                        return response;
                     if (param[2] == "Open")
                         response += " " + node.PortsOut[n].Open;
                     else if (param[2] == "Connected")
                         response += " " + node.PortsOut[n].Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortsOut[n].TcpPort;
-                    else return "";
+                    else return response;
                 }
             }
             else if (command[0] == "set")
             {
                 if (command.Length != 3)
-                    return "";
+                    return response;
                 response += "setresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")
@@ -128,26 +132,30 @@ namespace AtmSim.Components
                 }
                 else if (param[0] == "PortsIn")
                 {
+                    if (param.Length != 3)
+                        return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return ""; }
+                    catch (ArgumentNullException) { return response; }
                     if (n >= node.PortsIn.Length)
-                        return "";
+                        return response;
                     if (param[2] == "Open")
                         response += " " + node.PortsIn[n].Open; // póki co niezmienne
                     else if (param[2] == "Connected")                        
                         response += " " + node.PortsIn[n].Connected; // niezmienne
                     else if (param[2] == "_port")
                         response += " " + node.PortsIn[n].TcpPort; // niezmienne
-                    else return "";
+                    else return response;
                 }
                 else if (param[0] == "PortsOut")
                 {
+                    if (param.Length != 3)
+                        return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return ""; }
+                    catch (ArgumentNullException) { return response; }
                     if (n >= node.PortsOut.Length)
-                        return "";
+                        return response;
                     if (param[2] == "Open")
                         response += " " + node.PortsOut[n].Open; // póki co niezmienne
                     else if (param[2] == "Connected")
@@ -164,7 +172,7 @@ namespace AtmSim.Components
                         catch (ArgumentNullException) { return ""; }
                         response += " " + node.PortsOut[n].TcpPort;
                     }
-                    else return "";
+                    else return response;
                 }
             }
             return response;

@@ -55,6 +55,7 @@ namespace AtmSim
             this.Text += " " + this.elementName;
             foreach (TreeNode node in configuration.Nodes)
                 this.configTree.Nodes.Add(node);
+            this.configTree.PathSeparator = ".";
             this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
             this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
         }
@@ -110,6 +111,21 @@ namespace AtmSim
                 DialogResult dlg = MessageBox.Show("Zapisać konfigurację?", "Konfiguracja", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes)
                     saveConfig();
+            }
+        }
+
+        private void configTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            configTextBox.Text = manager.Get(id, configTree.SelectedNode.FullPath);
+            if (configTextBox.Text == "")
+            {
+                configTextBox.Enabled = false;
+                okButton.Enabled = false;
+            }
+            else
+            {
+                configTextBox.Enabled = true;
+                okButton.Enabled = true;
             }
         }
 
@@ -182,6 +198,7 @@ namespace AtmSim
             }
             routingPropertyGrid.Refresh();
         }
+
 
     }
 }
