@@ -22,10 +22,10 @@ namespace AtmSim.Components
 
         private string name = "unknown";
 
-        private IPortIn[] inportsgroup; //porty wejsciowe wezla
-        public IPortIn[] PortsIn { get { return inportsgroup; } }
-        private IPortOut[] outportsgroup; //porty wyjsciowe wezla
-        public IPortOut[] PortsOut { get { return outportsgroup; } }
+        private PortIn[] inportsgroup; //porty wejsciowe wezla
+        public PortIn[] PortsIn { get { return inportsgroup; } }
+        private PortOut[] outportsgroup; //porty wyjsciowe wezla
+        public PortOut[] PortsOut { get { return outportsgroup; } }
         private Matrix tab; //= new Matrix();  //Matrix wezla czyli tablica routingu
         public Matrix Matrix { get { return tab; } }
 
