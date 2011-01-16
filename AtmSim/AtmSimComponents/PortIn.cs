@@ -39,7 +39,7 @@ namespace AtmSim.Components
         {
             thisSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ipLocal = new IPEndPoint(IPAddress.Any, 0); // tworzenie end-pointu na dowolnym wolnym porcie
-            thisSocket.Bind(ipLocal); /* TODO: petla, jesli bedzie potrzebna */
+            thisSocket.Bind(ipLocal);
             tcpPort = ((IPEndPoint)thisSocket.LocalEndPoint).Port;
             thisSocket.Listen(1);
             thisSocket.BeginAccept(OnClientConnect, thisSocket);

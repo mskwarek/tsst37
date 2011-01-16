@@ -26,14 +26,14 @@ namespace AtmSim
             get { return _Graph; }
         }
 
-        public TopologyView()
+        public TopologyView(Manager manager)
         {
             var g = new BidirectionalGraph<object, IEdge<object>>();
-            foreach (string node in Manager.GetElements())
+            foreach (string node in manager.GetElements())
             {
                 g.AddVertex(node);
             }
-            foreach (Edge<string> connection in Manager.GetConnections())
+            foreach (Edge<string> connection in manager.GetLinks())
             {
                 g.AddEdge(new Edge<object>(connection.Source, connection.Target));
             }

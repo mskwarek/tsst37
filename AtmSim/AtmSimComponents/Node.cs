@@ -23,20 +23,22 @@ namespace AtmSim.Components
         private string name = "unknown";
 
         private IPortIn[] inportsgroup; //porty wejsciowe wezla
+        public IPortIn[] PortsIn { get { return inportsgroup; } }
         private IPortOut[] outportsgroup; //porty wyjsciowe wezla
+        public IPortOut[] PortsOut { get { return outportsgroup; } }
         private Matrix tab; //= new Matrix();  //Matrix wezla czyli tablica routingu
+        public Matrix Matrix { get { return tab; } }
 
-        public string GetName() { return name; }   //zwraca imie wezla
-        public void SetName(string s) { name = s; }  //ustawia imie wezla
+        public string Name { get { return name; } set { name = value; } }   //zwraca imie wezla
+ 
+ //       public IPortIn[] GetPortsIn() { return inportsgroup; } //metoda zwraca porty wejsciowe
+ //       public IPortOut[] GetPortsOut() { return outportsgroup; }  //metoda zwraca porty wyjsciowe
 
-        public IPortIn[] GetPortsIn() { return inportsgroup; } //metoda zwraca porty wejsciowe
-        public IPortOut[] GetPortsOut() { return outportsgroup; }  //metoda zwraca porty wyjsciowe
+ //       public void SetPortsIn(IPortIn[] pi) { inportsgroup = pi; } //metoda ustawia porty wejsciowe
+ //       public void SetPortsOut(IPortOut[] po) { outportsgroup = po; } //metoda ustawia porty wyjsciowe
 
-        public void SetPortsIn(IPortIn[] pi) { inportsgroup = pi; } //metoda ustawia porty wejsciowe
-        public void SetPortsOut(IPortOut[] po) { outportsgroup = po; } //metoda ustawia porty wyjsciowe
-
-        public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
-        public void SetMatrix(Matrix m) { tab = m; } //Ustawienie pola kom. dla węzla
+ //       public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
+ //       public void SetMatrix(Matrix m) { tab = m; } //Ustawienie pola kom. dla węzla
 
         public Node(int numberofin, int numberofout, string name)
         {

@@ -25,5 +25,13 @@ namespace AtmSim
         {
             name = n;
         }
+        public void Add(Configuration c)
+        {
+            this.Nodes.Add(c);
+        }
+        public void Add(string n)
+        {
+            this.Nodes.Add(new Configuration(n));
+        }
     }
 }
