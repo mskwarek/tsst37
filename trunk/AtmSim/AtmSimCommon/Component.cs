@@ -26,6 +26,7 @@ namespace AtmSim.Components
 
        public Component() { nodeComponent = new List<NodeComponent>();
                             link = new List<Link>();
+                            name = "";
                           }
 
       //ta wartosc bedziemy wysylac do procesu wezla podczas inicjalizacji
@@ -80,7 +81,7 @@ namespace AtmSim.Components
          public String linkEnd { get; set; }
 
 
-         public Link(){}
+          public Link() { linkStart = ""; linkEnd = ""; }
          public Link(String linkStart, String linkEnd) { this.linkStart = linkStart; this.linkEnd = linkEnd; }
      }
 }

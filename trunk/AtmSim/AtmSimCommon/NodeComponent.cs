@@ -19,16 +19,34 @@ namespace AtmSim
         [XmlElementAttribute("ID")]
         public int id { get; set; }  //identyfikator routera
 
-        [XmlElementAttribute("NumberOfPortIn")]
-        public int numberOfPortIn {get; set;} //ilosc portow wejsciowych wezla
+        [XmlArrayItem("PortInComponent")]
+        public List<PortInComponent>  portInComponet {get; set;} //ilosc portow wejsciowych wezla
 
-        [XmlElementAttribute("NumberOfPortOut")]
-        public int numberOfPortOut { get; set; } //ilos portow wyjsciowych routera
-        public NodeComponent() { }
-
-
-   
+        [XmlArrayItem("PortOutComponent")]
+        public List<PortOutComponent> portOutComponet { get; set; } //ilos portow wyjsciowych routera
+        public NodeComponent() { portInComponet = new List<PortInComponent>();
+                                  portOutComponet = new List<PortOutComponent>();
+                                  name = "";
+                                  type = "";
         }
+
+        }
+
+
+    [XmlRootAttribute("In", Namespace = "", IsNullable = false)]
+    public class PortInComponent
+    {
+        [XmlElementAttribute("ID")]
+        public int id { get; set; }
+    }
+
+    [XmlRootAttribute("Out", Namespace = "", IsNullable = false)]
+    public class PortOutComponent
+    {
+        [XmlElementAttribute("ID")]
+        public int id { get; set; }
+
+    }
     }
   
  
