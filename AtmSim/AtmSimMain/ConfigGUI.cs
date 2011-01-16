@@ -83,7 +83,7 @@ namespace AtmSim
             }
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
             {
-                this.localRouting = new Routing(manager.GetRouting(this.elementName));
+                this.localRouting = new Routing(manager.GetRouting(this.id));
                 this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
                 this.routingPropertyGrid.Refresh();
                 this.addedRouting.Clear();
@@ -161,14 +161,14 @@ namespace AtmSim
         private void saveRouting()
         {
             foreach (string label in removedRouting)
-                manager.RemoveRouting(this.elementName, label);
+                manager.RemoveRouting(this.id, label);
             foreach (string label in addedRouting)
-                manager.AddRouting(this.elementName, label, localRouting[label]);
-            foreach (string label in modifiedRouting)
-                manager.ModifyRouting(this.elementName, label, label, localRouting[label]);
+                manager.AddRouting(this.id, label, localRouting[label]);
+ //           foreach (string label in modifiedRouting)
+ //               manager.ModifyRouting(this.id, label, label, localRouting[label]);
             addedRouting.Clear();
             removedRouting.Clear();
-            modifiedRouting.Clear();
+ //           modifiedRouting.Clear();
         }
 
         private void addRoutingEntryButton_Click(object sender, EventArgs e)

@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace AtmSim
 {
-    public partial class Loading : Form
+    public partial class Loader : Form
     {
         private Manager manager;
-        public Loading(Manager manager)
+        public Loader(Manager manager)
         {
             InitializeComponent();
             this.manager = manager;
@@ -82,20 +82,20 @@ namespace AtmSim
 
             label.Text = "Konfiguracja początkowa...";
             progressBar.Value = 80;
-            manager.AddRouting("Router1", "0:3:-", "1:2:-");
-            manager.AddRouting("Router2", "2:1:2", "0:3:2");
-            manager.AddRouting("Router2", "2:2:1", "0:3:1");
-            manager.AddRouting("Router2", "1:1:3", "0:3:3");
-            manager.AddRouting("Router3", "0:2:1", "0:1:3");
-            manager.AddRouting("Router3", "0:2:2", "1:1:2");
-            manager.AddRouting("Router3", "0:2:3", "1:1:1");
-            manager.AddRouting("Source4", "A", "0:1;2");
-            manager.AddRouting("Source4", "B", "0:2:1");
-            manager.AddRouting("Sink5", "0:1:1", "B");
-            manager.AddRouting("Sink5", "0:1:2", "A");
+            manager.AddRouting(1, "0:3:-", "1:2:-");
+            manager.AddRouting(2, "2:1:2", "0:3:2");
+            manager.AddRouting(2, "2:2:1", "0:3:1");
+            manager.AddRouting(2, "1:1:3", "0:3:3");
+            manager.AddRouting(3, "0:2:1", "0:1:3");
+            manager.AddRouting(3, "0:2:2", "1:1:2");
+            manager.AddRouting(3, "0:2:3", "1:1:1");
+            //manager.AddRouting(4, "A", "0:1;2");
+            //manager.AddRouting(4, "B", "0:2:1");
+            //manager.AddRouting(5, "0:1:1", "B");
+            //manager.AddRouting(5, "0:1:2", "A");
 
-            manager.SetConfig("Source4", "message", "s");
-            manager.SetConfig("Source4", "target", "A");
+            //manager.SetConfig(4, "message", "s");
+            //manager.SetConfig(4, "target", "A");
         }
     }
 }

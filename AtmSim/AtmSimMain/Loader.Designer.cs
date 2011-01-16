@@ -1,6 +1,6 @@
 ﻿namespace AtmSim
 {
-    partial class Loading
+    partial class Loader
     {
         /// <summary>
         /// Required designer variable.
