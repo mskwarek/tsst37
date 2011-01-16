@@ -30,9 +30,9 @@ namespace AtmSim
             manager.Init();
             label.Text = "Tworzenie węzłów...";
             progressBar.Value = 20;
-            Components.Node Router1 = new Components.Node(1, 2, "Router1", manager.Port);
-            Components.Node Router2 = new Components.Node(3, 1, "Router2", manager.Port);
-            Components.Node Router3 = new Components.Node(1, 2, "Router3", manager.Port);
+            Components.Node Router1 = new Components.Node(1, 2, 1, "Router1", manager.Port);
+            Components.Node Router2 = new Components.Node(3, 1, 2, "Router2", manager.Port);
+            Components.Node Router3 = new Components.Node(1, 2, 3, "Router3", manager.Port);
             Components.Source Source4 = new Components.Source("Source4");
             Components.Sink Sink5 = new Components.Sink("Sink5");
 

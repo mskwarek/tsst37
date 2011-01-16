@@ -109,6 +109,50 @@ namespace AtmSim
             this.socket.BeginAccept(OnClientConnect, socket);
         }
 
+        private void OnClientConnect(IAsyncResult asyn)
+        {
+            Node node = new Node();
+            node.socket = this.socket.EndAccept(asyn);
+            string idStr = Get(node.socket, "ID");
+            node.name = Get(node.socket, "Name");
+            node.id = Int32.Parse(idStr);
+            nodes.Add(node.id, node);
+            this.socket.BeginAccept(OnClientConnect, socket);
+        }
+
+        private void OnDataReceived(IAsyncResult asyn)
+        {
+            ConnectionData c = (ConnectionData)asyn;
+            int recv = c.socket.EndReceive(asyn);
+            if (recv == 0)
+            {
+                c.socket.Close();
+                return;
+            }
+            //string receivedData = Encoding
+        }
+
+        private string Get(Socket sock, string param)
+        {
+            string query = "get " + param;
+            sock.Send(Encoding.ASCII.GetBytes(query));
+            byte[] buffer = new byte[4096];
+            sock.Receive(buffer);
+            string response = Encoding.ASCII.GetString(buffer);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
+                return tokens[2];
+            return "";
+        }
+
+        public string Get(int id, string param)
+        {
+            if (nodes.ContainsKey(id))
+                return Get(nodes[id].socket, param);
+            else
+                return "";
+        }
+
         // pobranie listy dostepnych elementow
         public List<string> GetElements()
         {
@@ -213,25 +257,6 @@ namespace AtmSim
         public List<Edge<string>> GetLinks()
         {
             return links1;
-        }
-
-        private void OnClientConnect(IAsyncResult asyn)
-        {
-            ConnectionData c = new ConnectionData(this.socket.EndAccept(asyn));
-            c.socket.BeginReceive(c.buffer, 0, c.buffer.Length, SocketFlags.None, OnDataReceived, c);
-            this.socket.BeginAccept(OnClientConnect, socket);
-        }
-
-        private void OnDataReceived(IAsyncResult asyn)
-        {
-            ConnectionData c = (ConnectionData)asyn;
-            int recv = c.socket.EndReceive(asyn);
-            if (recv == 0)
-            {
-                c.socket.Close();
-                return;
-            }
-            //string receivedData = Encoding
         }
     }
 }
