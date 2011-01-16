@@ -14,16 +14,22 @@ namespace AtmSim
         private int id;
         private string elementName;
         private Manager manager;
-        private Manager.Config localConfig;
         private TreeNode configuration;
         private Routing localRouting;
         // zmodyfikowane wpisy
-        private List<string> modifiedConfig;
+        private Dictionary<string,string> modifiedConfig;
         private List<string> addedRouting;
         private List<string> removedRouting;
         private List<string> modifiedRouting;
+        private string Selected 
+        {
+            get
+            {
+                return configTree.SelectedNode.FullPath;
+            }
+        }
 
-        public ConfigGUI(Manager manager, string name)
+/*        public ConfigGUI(Manager manager, string name)
         {
             this.manager = manager;
             this.elementName = name;
@@ -37,7 +43,7 @@ namespace AtmSim
             this.Text += " " + this.elementName;
             this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
             this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
-        }
+        }*/
 
         public ConfigGUI(Manager manager, int id)
         {
@@ -45,9 +51,8 @@ namespace AtmSim
             this.id = id;
             this.elementName = manager.Get(this.id, "Name");
             this.configuration = getTree(manager.GetConfig(this.id));
-            this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
             this.localRouting = new Routing(manager.GetRouting(this.id));
-            this.modifiedConfig = new List<string>();
+            this.modifiedConfig = new Dictionary<string, string>();
             this.addedRouting = new List<string>();
             this.removedRouting = new List<string>();
             this.modifiedRouting = new List<string>();
@@ -56,13 +61,13 @@ namespace AtmSim
             foreach (TreeNode node in configuration.Nodes)
                 this.configTree.Nodes.Add(node);
             this.configTree.PathSeparator = ".";
-            this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
             this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
         }
 
         private TreeNode getTree(Configuration configuration)
         {
             TreeNode treeNode = new TreeNode(configuration.Name);
+            treeNode.Name = configuration.Name;
             foreach (Configuration node in configuration.Nodes)
             {
                 treeNode.Nodes.Add(getTree(node));
@@ -72,11 +77,8 @@ namespace AtmSim
 
         private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.configTabControl.SelectedIndex == this.generalGridTab.TabIndex)
+            if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
             {
-                this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
-                this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
-                this.generalPropertyGrid.Refresh();
                 this.modifiedConfig.Clear();
             }
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
@@ -92,7 +94,7 @@ namespace AtmSim
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.configTabControl.SelectedIndex == this.generalGridTab.TabIndex)
+            if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
                 saveConfig();
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
                 saveRouting();
@@ -116,7 +118,11 @@ namespace AtmSim
 
         private void configTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            configTextBox.Text = manager.Get(id, configTree.SelectedNode.FullPath);
+            if (modifiedConfig.ContainsKey(Selected))
+                configTextBox.Text = modifiedConfig[Selected];
+            else
+                configTextBox.Text = manager.Get(id, Selected);
+
             if (configTextBox.Text == "")
             {
                 configTextBox.Enabled = false;
@@ -129,9 +135,12 @@ namespace AtmSim
             }
         }
 
-        private void generalPropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
+        private void okButton_Click(object sender, EventArgs e)
         {
-            modifiedConfig.Add((string)e.ChangedItem.Label);
+            if (modifiedConfig.ContainsKey(Selected))
+                modifiedConfig[Selected] = configTextBox.Text;
+            else
+                modifiedConfig.Add(Selected, configTextBox.Text);
         }
 
         private void routingPropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
@@ -142,9 +151,9 @@ namespace AtmSim
 
         private void saveConfig()
         {
-            foreach (string param in modifiedConfig)
+            foreach (string param in modifiedConfig.Keys)
             {
-                manager.SetConfig(this.elementName, param, this.localConfig[param]);
+                manager.Set(id, param, modifiedConfig[param]);
             }
             modifiedConfig.Clear();
         }
@@ -198,7 +207,6 @@ namespace AtmSim
             }
             routingPropertyGrid.Refresh();
         }
-
 
     }
 }
