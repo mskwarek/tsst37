@@ -14,6 +14,7 @@ namespace AtmSim
         private string elementName;
         private Manager manager;
         private Manager.Config localConfig;
+        private TreeNode configuration;
         private Routing localRouting;
         // zmodyfikowane wpisy
         private List<string> modifiedConfig;
@@ -37,9 +38,38 @@ namespace AtmSim
             this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
         }
 
+        public ConfigGUI(Manager manager, int id)
+        {
+            this.manager = manager;
+            this.elementName = manager.Get(id, "Name");
+            this.configuration = getTree(manager.GetConfig(id));
+            this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
+            this.localRouting = new Routing(manager.GetRouting(this.elementName));
+            this.modifiedConfig = new List<string>();
+            this.addedRouting = new List<string>();
+            this.removedRouting = new List<string>();
+            this.modifiedRouting = new List<string>();
+            InitializeComponent();
+            this.Text += " " + this.elementName;
+            foreach (TreeNode node in configuration.Nodes)
+                this.configTree.Nodes.Add(node);
+            this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
+            this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
+        }
+
+        private TreeNode getTree(Configuration configuration)
+        {
+            TreeNode treeNode = new TreeNode(configuration.Name);
+            foreach (Configuration node in configuration.Nodes)
+            {
+                treeNode.Nodes.Add(getTree(node));
+            }
+            return treeNode;
+        }
+
         private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
+            if (this.configTabControl.SelectedIndex == this.generalGridTab.TabIndex)
             {
                 this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
                 this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
@@ -59,7 +89,7 @@ namespace AtmSim
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.configTabControl.SelectedIndex == this.generalTab.TabIndex)
+            if (this.configTabControl.SelectedIndex == this.generalGridTab.TabIndex)
                 saveConfig();
             else if (this.configTabControl.SelectedIndex == this.routingTab.TabIndex)
                 saveRouting();

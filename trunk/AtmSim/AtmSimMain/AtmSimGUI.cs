@@ -12,6 +12,20 @@ namespace AtmSim
     public partial class AtmSimGUI : Form
     {
         private string selectedName = "";
+        private int SelectedId
+        {
+            get
+            {
+                string[] tokens = selectedName.Split(new char[]{'[', ']'}, StringSplitOptions.RemoveEmptyEntries);
+                int id = 0, i=0;
+                while (id == 0)
+                {
+                    id = Convert.ToInt32(tokens[i]);
+                    i++;
+                }
+                return id;
+            }
+        }
         private Manager manager = new Manager();
 
         public AtmSimGUI()
@@ -25,8 +39,7 @@ namespace AtmSim
             Loading loader = new Loading(manager);
             loader.Show();
             loader.LoadNetwork();
-            foreach (string element in manager.GetElements())
-                elementListBox.Items.Add(element);
+            refreshButton_Click(sender, e);
         }
 
         private void net1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -36,8 +49,7 @@ namespace AtmSim
             loader.Show();
             loader.LoadNetwork();
             this.elementListBox.Items.Clear();
-            foreach (string element in manager.GetElements())
-                elementListBox.Items.Add(element);
+            refreshButton_Click(sender, e);
         }
 
         private void net2ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -47,8 +59,7 @@ namespace AtmSim
             loader.Show();
             loader.LoadNetwork();
             this.elementListBox.Items.Clear();
-            foreach (string element in manager.GetElements())
-                elementListBox.Items.Add(element);
+            refreshButton_Click(sender, e);
         }
 
         private void netTopologyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,7 +81,7 @@ namespace AtmSim
             /*ConfigGUI configGUI = new ConfigGUI(
                 Manager.GetConfig(this.selectedName),
                 Manager.GetRouting(this.selectedName));*/
-            ConfigGUI configGUI = new ConfigGUI(this.manager, this.selectedName);
+            ConfigGUI configGUI = new ConfigGUI(this.manager, this.SelectedId);
             configGUI.Show();
         }
 
@@ -85,6 +96,11 @@ namespace AtmSim
             manager.SetConfig(selectedName, "send", "");
         }
 
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            foreach (string element in manager.GetElements())
+                elementListBox.Items.Add(element);
+        }
 
     }
 }
