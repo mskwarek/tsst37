@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimComponents", "AtmSimC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimMain", "AtmSimMain\AtmSimMain.csproj", "{EE26BEE7-D159-4DC4-8D93-BD1E8FCAFA8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimNode", "AtmSimNode\AtmSimNode.csproj", "{046C2504-0959-468E-8C40-D1E78C24E2FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,21 @@ Global
 		{EE26BEE7-D159-4DC4-8D93-BD1E8FCAFA8A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{EE26BEE7-D159-4DC4-8D93-BD1E8FCAFA8A}.Release|x86.ActiveCfg = Release|x86
 		{EE26BEE7-D159-4DC4-8D93-BD1E8FCAFA8A}.Release|x86.Build.0 = Release|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Debug|x86.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Debug|x86.Build.0 = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.DebugWithoutPlugins|Any CPU.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.DebugWithoutPlugins|Mixed Platforms.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.DebugWithoutPlugins|Mixed Platforms.Build.0 = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.DebugWithoutPlugins|x86.ActiveCfg = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.DebugWithoutPlugins|x86.Build.0 = Debug|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Release|Any CPU.ActiveCfg = Release|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Release|x86.ActiveCfg = Release|x86
+		{046C2504-0959-468E-8C40-D1E78C24E2FE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
