@@ -83,8 +83,8 @@ namespace AtmSim
         {
             sock.Send(Encoding.ASCII.GetBytes(query));
             byte[] buffer = new byte[4096];
-            sock.Receive(buffer);
-            return Encoding.ASCII.GetString(buffer);
+            int received = sock.Receive(buffer);
+            return Encoding.ASCII.GetString(buffer, 0, received);
         }
 
         public string Get(Socket sock, string param)
