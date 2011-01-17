@@ -77,9 +77,12 @@ namespace AtmSim.Components
      {
          [XmlElementAttribute("LinkStart")]
          public String linkStart { get; set; }
+         [XmlElementAttribute("IDStart")]
+         public int IDStart { get; set; }
           [XmlElementAttribute("LinkEnd")]
          public String linkEnd { get; set; }
-
+          [XmlElementAttribute("IDEnd")]
+          public int IDEnd { get; set; }
 
           public Link() { linkStart = ""; linkEnd = ""; }
          public Link(String linkStart, String linkEnd) { this.linkStart = linkStart; this.linkEnd = linkEnd; }
