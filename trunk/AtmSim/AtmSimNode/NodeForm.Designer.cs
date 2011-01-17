@@ -40,7 +40,7 @@
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(260, 29);
             this.nameLabel.TabIndex = 0;
-            this.nameLabel.Text = "name";
+            this.nameLabel.Text = node.Name;
             this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // NodeForm
