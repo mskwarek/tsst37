@@ -17,8 +17,6 @@ namespace AtmSim.Components
         
         [XmlElementAttribute("Name")]
         public string name { get; set; }
-        [XmlElementAttribute("ManagerPort")]
-        public int managerPort { get; set; }
         [XmlArrayItem("NodeComponent")]
         public List<NodeComponent> nodeComponent { get; set; }
         [XmlArrayItem("Link")]
@@ -77,12 +75,12 @@ namespace AtmSim.Components
      {
          [XmlElementAttribute("LinkStart")]
          public String linkStart { get; set; }
-         [XmlElementAttribute("IDStart")]
-         public int IDStart { get; set; }
+         [XmlElementAttribute("StartPort")]
+         public int StartPort { get; set; }
           [XmlElementAttribute("LinkEnd")]
          public String linkEnd { get; set; }
-          [XmlElementAttribute("IDEnd")]
-          public int IDEnd { get; set; }
+          [XmlElementAttribute("EndPort")]
+          public int EndPort { get; set; }
 
           public Link() { linkStart = ""; linkEnd = ""; }
          public Link(String linkStart, String linkEnd) { this.linkStart = linkStart; this.linkEnd = linkEnd; }
