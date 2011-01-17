@@ -30,7 +30,7 @@ namespace AtmSim.Components
                 pIn.Add("_port");
                 psIn.Add(pIn);
             }
-            Configuration psOut = new Configuration("PortsIn");
+            Configuration psOut = new Configuration("PortsOut");
             for (int i = 0; i < node.PortsOut.Length; i++)
             {
                 Configuration pOut = new Configuration(i.ToString());

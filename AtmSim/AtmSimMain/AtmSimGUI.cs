@@ -102,6 +102,7 @@ namespace AtmSim
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
+            elementListBox.Items.Clear();
             foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
         }

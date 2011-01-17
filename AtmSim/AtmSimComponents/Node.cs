@@ -46,7 +46,7 @@ namespace AtmSim.Components
         public Node(Config.Node node, int managerPort)
         {
             this.id = node.Id;
-            this.name = node.Name;
+            this.name = (string)node.Name.Clone();
 
             inportsgroup = new PortIn[node.PortsIn.Count];
             outportsgroup = new PortOut[node.PortsOut.Count];
