@@ -10,20 +10,20 @@ namespace AtmSim.Config
     /**
      * Konfiguracja sieci
      */
-    [XmlRootAttribute("Network", Namespace = "", IsNullable = false)]
+    //[XmlRootAttribute("Network", Namespace = "", IsNullable = false)]
     public class Network
     {
         private string name = "";
-        [XmlElementAttribute("Name")]
+        //[XmlElementAttribute("Name")]
         public string Name { get { return name; } set { name = value; } }
 
         private List<Node> nodes = new List<Node>();
-        [XmlArrayItem("Nodes")]
+        //[XmlArrayItem("Nodes")]
         public List<Node> Nodes { get { return nodes; } set { nodes = value; } }
 
         private List<Link> links = new List<Link>();
-        [XmlArrayItem("Link")]
-        public List<Link> Link { get { return links; } set { links = value; } }
+        //[XmlArrayItem("Link")]
+        public List<Link> Links { get { return links; } set { links = value; } }
 
       //ta wartosc bedziemy wysylac do procesu wezla podczas inicjalizacji
       //moge dorobic jescze informacje ktory port z ktorym ma sie zestawic, narazie trzeba by to robic recznie
@@ -68,16 +68,16 @@ namespace AtmSim.Config
     }
 
      // polaczenia miedzy wezlami - id wezlow i portow poczatkowych i koncowych
-     [XmlRootAttribute("Link", Namespace = "", IsNullable = false)]
+     //[XmlRootAttribute("Link", Namespace = "", IsNullable = false)]
      public class Link
      {
-         [XmlElementAttribute("StartNode")]
+         //[XmlElementAttribute("StartNode")]
          public int StartNode { get; set; }
-         [XmlElementAttribute("StartPort")]
+         //[XmlElementAttribute("StartPort")]
          public int StartPort { get; set; }
-         [XmlElementAttribute("EndNode")]
-         public String EndNode { get; set; }
-         [XmlElementAttribute("EndPort")]
+         //[XmlElementAttribute("EndNode")]
+         public int EndNode { get; set; }
+         //[XmlElementAttribute("EndPort")]
          public int EndPort { get; set; }
      }
 }

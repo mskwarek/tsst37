@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Network xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Name>Sieæ przyk³adowa</Name>
+	<Nodes>
+		<Node>
+			<Id>1</Id>
+			<Type>Node</Type>
+			<Name>Switch 1</Name>
+			<PortsIn>
+				<PortIn><Id>0</Id></PortIn>
+			</PortsIn>
+			<PortsOut>
+				<PortOut><Id>0</Id></PortOut>
+				<PortOut><Id>1</Id></PortOut>
+			</PortsOut>
+		</Node>
+		<Node>
+			<Id>2</Id>
+			<Type>Node</Type>
+			<Name>Switch 2</Name>
+			<PortsIn>
+				<PortIn><Id>0</Id></PortIn>
+				<PortIn><Id>1</Id></PortIn>
+				<PortIn><Id>2</Id></PortIn>
+			</PortsIn>
+			<PortsOut>
+				<PortOut><Id>0</Id></PortOut>
+			</PortsOut>
+		</Node>
+		<Node>
+			<Id>3</Id>
+			<Type>Node</Type>
+			<Name>Switch 3</Name>
+			<PortsIn>
+				<PortIn><Id>0</Id></PortIn>
+			</PortsIn>
+			<PortsOut>
+				<PortOut><Id>0</Id></PortOut>
+				<PortOut><Id>1</Id></PortOut>
+			</PortsOut>
+		</Node>
+	</Nodes>
+	<Links>
+		<Link>
+			<StartNode>2</StartNode><StartPort>0</StartPort>
+			<EndNode>1</EndNode><EndPort>0</EndPort>
+		</Link>
+		<Link>
+			<StartNode>1</StartNode><StartPort>0</StartPort>
+			<EndNode>2</EndNode><EndPort>0</EndPort>
+		</Link>
+		<Link>
+			<StartNode>3</StartNode><StartPort>0</StartPort>
+			<EndNode>2</EndNode><EndPort>1</EndPort>
+		</Link>
+		<Link>
+			<StartNode>1</StartNode><StartPort>1</StartPort>
+			<EndNode>3</EndNode><EndPort>0</EndPort>
+		</Link>
+	</Links>
+</Network>

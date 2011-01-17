@@ -163,7 +163,7 @@ namespace AtmSim.Components
                         response += " " + node.PortsOut[n].Open; // póki co niezmienne
                     else if (param[2] == "Connected")
                     {
-                        if (command[2] == "1")
+                        if (command[2] == "True")
                             node.PortsOut[n].Connect();
                         response += " " + node.PortsOut[n].Connected;
                     }

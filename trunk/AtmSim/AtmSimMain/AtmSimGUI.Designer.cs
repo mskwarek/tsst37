@@ -43,6 +43,9 @@
             this.logButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.dBGZapiszToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,19 +63,21 @@
             // 
             // netToolStripMenuItem
             // 
+            this.netToolStripMenuItem.Checked = true;
+            this.netToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.netToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.netNewToolStripMenuItem,
             this.examplesToolStripMenuItem,
-            this.netTopologyToolStripMenuItem});
+            this.netTopologyToolStripMenuItem,
+            this.dBGZapiszToolStripMenuItem});
             this.netToolStripMenuItem.Name = "netToolStripMenuItem";
             this.netToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.netToolStripMenuItem.Text = "&Sieć";
             // 
             // netNewToolStripMenuItem
             // 
-            this.netNewToolStripMenuItem.Enabled = false;
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
@@ -81,7 +86,7 @@
             this.examplesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.net1ToolStripMenuItem});
             this.examplesToolStripMenuItem.Name = "examplesToolStripMenuItem";
-            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.examplesToolStripMenuItem.Text = "&Przykładowe";
             // 
             // net1ToolStripMenuItem
@@ -94,7 +99,7 @@
             // netTopologyToolStripMenuItem
             // 
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
@@ -183,6 +188,18 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "\"pliki XML|*.xml|Wszystkie pliki|*.*\"";
+            this.openFileDialog.Title = "Otwórz konfigurację";
+            // 
+            // dBGZapiszToolStripMenuItem
+            // 
+            this.dBGZapiszToolStripMenuItem.Name = "dBGZapiszToolStripMenuItem";
+            this.dBGZapiszToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dBGZapiszToolStripMenuItem.Text = "DBG Zapisz";
+            this.dBGZapiszToolStripMenuItem.Click += new System.EventHandler(this.dBGZapiszToolStripMenuItem_Click);
+            // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -222,6 +239,9 @@
         private System.Windows.Forms.ToolStripMenuItem examplesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem net1ToolStripMenuItem;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem dBGZapiszToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
