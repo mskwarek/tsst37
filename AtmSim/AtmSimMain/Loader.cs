@@ -24,6 +24,45 @@ namespace AtmSim
             this.Close();
         }
 
+        public void SaveNetwork(string filename)
+        {
+            Config.Network network = new Config.Network();
+            network.Nodes.Add(new Config.Node());
+            network.Nodes[0].Id = 0;
+            network.Nodes[0].Name = "Nouuud";
+            network.Nodes[0].PortsIn.Add(new Config.PortIn());
+            network.Nodes[0].PortsIn[0].Id = 1;
+            network.Nodes[0].PortsOut.Add(new Config.PortOut());
+            network.Nodes[0].PortsOut[0].Id = 2;
+            network.writeFile(filename);
+        }
+
+        public void LoadNetwork(string filename)
+        {
+            Config.Network network = new Config.Network();
+            label.Text = "Uruchamianie zarządcy...";
+            manager.Init();
+            label.Text = "Otwieranie pliku...";
+            progressBar.Value = 10;
+            network.readFile(filename);
+            label.Text = "Tworzenie węzłów...";
+            progressBar.Value = 20;
+            foreach (Config.Node node in network.Nodes)
+            {
+                Components.Node cnode = new Components.Node(node, manager.Port);
+                manager.AddNode(cnode.Name, cnode.Agent);
+                progressBar.Value += (40 / network.Nodes.Count);
+            }
+            label.Text = "Tworzenie łączy...";
+            progressBar.Value = 60;
+            foreach (Config.Link link in network.Links)
+            {
+                manager.AddLink(link);
+                progressBar.Value += (40 / network.Links.Count);
+            }
+            this.Close();
+        }
+
         private void InitTestNetwork1()
         {
             label.Text = "Uruchamianie zarządcy...";

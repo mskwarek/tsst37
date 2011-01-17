@@ -35,11 +35,15 @@ namespace AtmSim
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            manager.Reset();
-            Loader loader = new Loader(manager);
-            loader.Show();
-            loader.LoadNetwork();
-            refreshButton_Click(sender, e);
+            DialogResult result = openFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                manager.Reset();
+                Loader loader = new Loader(manager);
+                loader.Show();
+                loader.LoadNetwork(openFileDialog.FileName);
+                refreshButton_Click(sender, e);
+            }
         }
 
         private void net1ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,6 +104,13 @@ namespace AtmSim
         {
             foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
+        }
+
+        private void dBGZapiszToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = saveFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+                (new Loader(manager)).SaveNetwork(saveFileDialog.FileName);
         }
 
     }

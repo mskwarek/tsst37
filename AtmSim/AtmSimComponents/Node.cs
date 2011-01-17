@@ -43,6 +43,31 @@ namespace AtmSim.Components
  //       public Matrix GetMatrix() { return tab; }  //zwraca Matrix-pole komutacyjne węzla
  //       public void SetMatrix(Matrix m) { tab = m; } //Ustawienie pola kom. dla węzla
 
+        public Node(Config.Node node, int managerPort)
+        {
+            this.id = node.Id;
+            this.name = node.Name;
+
+            inportsgroup = new PortIn[node.PortsIn.Count];
+            outportsgroup = new PortOut[node.PortsOut.Count];
+            tab = new Matrix(this);
+
+            foreach (Config.PortIn portIn in node.PortsIn)
+            {
+                PortIn port = new PortIn(portIn.Id);
+                port.SetReceiver(this.tab);
+                inportsgroup[portIn.Id] = port;
+            }
+
+            foreach (Config.PortOut portOut in node.PortsOut)
+            {
+                outportsgroup[portOut.Id] = new PortOut(portOut.Id);
+            }
+
+            this.log = new Log("Log urzadzenia " + name);
+            this.a = new NodeAgent(this, managerPort);            
+        }
+
         public Node(int numberofin, int numberofout, int id, string name, int managerPort)
         {
             this.id = id;

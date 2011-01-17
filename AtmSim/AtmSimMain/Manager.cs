@@ -183,6 +183,16 @@ namespace AtmSim
             return false;
         }
 
+        public void AddLink(Config.Link link)
+        {
+            if (nodes.ContainsKey(link.StartNode) && nodes.ContainsKey(link.EndNode))
+            {
+                string port = Get(link.EndNode, "PortsIn." + link.EndPort + "._port");
+                Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
+                Set(link.StartNode, "PortsOut." + link.StartPort + ".connected", "True");
+            }
+        }
+
         public List<Edge<string>> GetLinks()
         {
             return links1;
