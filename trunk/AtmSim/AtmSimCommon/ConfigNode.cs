@@ -34,6 +34,32 @@ namespace AtmSim.Config
         private List<PortOut> portsOut = new List<PortOut>();
         //[XmlArrayItem("PortsOut")]
         public List<PortOut> PortsOut { get { return portsOut; } set { portsOut = value; } } // ilos portow wyjsciowych routera
+
+        public void save(string filename)
+        {
+            // create a writer and open the file
+            TextWriter tw = new StreamWriter(filename);
+          
+            // write a line of text to the file
+            tw.Write(Serial.SerializeObject(this));
+
+            // close the stream
+            tw.Close();
+        }
+
+        public static Node fopen(string filename)
+        {
+            TextReader tr = new StreamReader(filename);
+            String str = "";
+            String input = null;
+
+            while ((input = tr.ReadLine()) != null)
+            {
+                str += input;
+            }
+            tr.Close();
+            return ((Node)Serial.DeserializeObject(str, typeof(Node)));
+        }
     }
 
     //[XmlRootAttribute("PortIn", Namespace = "", IsNullable = false)]

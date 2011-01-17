@@ -11,11 +11,13 @@ namespace AtmSim
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (args.Length != 2)
+                return;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new NodeForm());
+            Application.Run(new NodeForm(args));
         }
     }
 }

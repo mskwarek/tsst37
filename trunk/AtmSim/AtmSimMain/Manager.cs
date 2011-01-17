@@ -26,9 +26,9 @@ namespace AtmSim
             public Socket socket;
         }
 
-        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
+//        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
         private Dictionary<int, Node> nodes = new Dictionary<int, Node>();
-        private List<Edge<string>> links1 = new List<Edge<string>>();
+//        private List<Edge<string>> links1 = new List<Edge<string>>();
         private List<Edge<int>> links = new List<Edge<int>>();
         private Socket socket;
 
@@ -43,20 +43,24 @@ namespace AtmSim
             }
         }
 
-        public void AddNode(string name, IAgent node)
-        {
-            nodes1.Add(name, node);
-        }
+        //public void AddNode(string name, IAgent node)
+        //{
+        //    nodes1.Add(name, node);
+        //}
 
-        public void AddLink(string sourceName, string destinationName)
-        {
-            links1.Add(new Edge<string>(sourceName, destinationName));
-        }
+        //public void AddLink(string sourceName, string destinationName)
+        //{
+        //    links1.Add(new Edge<string>(sourceName, destinationName));
+        //}
 
         public void Reset()
         {
-            nodes1.Clear();
-            links1.Clear();
+            foreach (Node node in nodes.Values)
+            {
+                node.socket.Close();
+            }
+            nodes.Clear();
+            links.Clear();
         }
 
         public void Init()
@@ -198,9 +202,9 @@ namespace AtmSim
             }
         }
 
-        public List<Edge<string>> GetLinks()
+        public List<Edge<int>> GetLinks()
         {
-            return links1;
+            return links;
         }
     }
 }
