@@ -16,10 +16,13 @@ namespace AtmSim
         
         public NodeForm(string[] args)
         {
-            InitializeComponent();
+            if (!File.Exists(args[0]))
+                Close();
             Config.Node cNode = Config.Node.fopen(args[0]);
+            File.Delete(args[0]);
             int mPort = Int32.Parse(args[1]);
             node = new Components.Node(cNode, mPort);
+            InitializeComponent();
         }
     }
 }
