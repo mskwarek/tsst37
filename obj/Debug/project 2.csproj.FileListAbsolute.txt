@@ -1,3 +1,0 @@
-C:\Users\Właściciel\Documents\Visual Studio 2008\Projects\WindowsFormsApplication8\WindowsFormsApplication8\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Właściciel\Documents\Visual Studio 2008\Projects\WindowsFormsApplication8\WindowsFormsApplication8\obj\Debug\WindowsFormsApplication8.Properties.Resources.resources
-C:\Users\Właściciel\Documents\Visual Studio 2008\Projects\WindowsFormsApplication8\WindowsFormsApplication8\obj\Debug\project 2.csproj.GenerateResource.Cache

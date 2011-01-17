@@ -5,42 +5,40 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
-namespace AtmSim.Components
-{ /**
-   * Clasa komponent ktora czyta Manager
-   * 
-   */
-     [XmlRootAttribute("Component", Namespace = "", IsNullable = false)]
-   public class Component
+namespace AtmSim.Config
+{ 
+    /**
+     * Konfiguracja sieci
+     */
+    [XmlRootAttribute("Network", Namespace = "", IsNullable = false)]
+    public class Network
     {
-      
-        
+        private string name = "";
         [XmlElementAttribute("Name")]
-        public string name { get; set; }
-        [XmlArrayItem("NodeComponent")]
-        public List<NodeComponent> nodeComponent { get; set; }
-        [XmlArrayItem("Link")]
-        public List<Link> link { get; set; }
+        public string Name { get { return name; } set { name = value; } }
 
-       public Component() { nodeComponent = new List<NodeComponent>();
-                            link = new List<Link>();
-                            name = "";
-                          }
+        private List<Node> nodes = new List<Node>();
+        [XmlArrayItem("Nodes")]
+        public List<Node> Nodes { get { return nodes; } set { nodes = value; } }
+
+        private List<Link> links = new List<Link>();
+        [XmlArrayItem("Link")]
+        public List<Link> Link { get { return links; } set { links = value; } }
 
       //ta wartosc bedziemy wysylac do procesu wezla podczas inicjalizacji
       //moge dorobic jescze informacje ktory port z ktorym ma sie zestawic, narazie trzeba by to robic recznie
         public String getConfigurationToNode(int count)
         {
-            if (count < nodeComponent.Capacity)
-                return Serial.SerializeObject(nodeComponent[count]);
+            if (count < nodes.Capacity)
+                return Serial.SerializeObject(nodes[count]);
             else return null;
         }
 
         //zapisanie konfigracji
-        public void writeFile()
+        public void writeFile(string filename)
         {
             // create a writer and open the file
-            TextWriter tw = new StreamWriter("Configuration.xml");
+            TextWriter tw = new StreamWriter(filename);
           
             // write a line of text to the file
             tw.Write(Serial.SerializeObject(this));
@@ -49,9 +47,9 @@ namespace AtmSim.Components
             tw.Close();
         }
          //wczytanie konfiguracji
-        public void readFile()
+        public void readFile(string filename)
         {
-            TextReader tr = new StreamReader("Configuration.xml");
+            TextReader tr = new StreamReader(filename);
             String str = "";
             String input = null;
 
@@ -60,29 +58,26 @@ namespace AtmSim.Components
                 str += input;
             }
             tr.Close();
-            Component comp = ((Component)Serial.DeserializeObject(str, typeof(Component)));
-            this.nodeComponent = comp.nodeComponent;
-            this.link = comp.link;
+            Network comp = ((Network)Serial.DeserializeObject(str, typeof(Network)));
+            this.nodes = comp.nodes;
+            this.links = comp.links;
             this.name = comp.name;
-            this.managerPort = comp.managerPort;
+            //this.managerPort = comp.managerPort;
         }
 
     }
 
-    //ktory router ma sie zestawic z ktorym, informacja dla gui
+     // polaczenia miedzy wezlami - id wezlow i portow poczatkowych i koncowych
      [XmlRootAttribute("Link", Namespace = "", IsNullable = false)]
      public class Link
      {
-         [XmlElementAttribute("LinkStart")]
-         public String linkStart { get; set; }
+         [XmlElementAttribute("StartNode")]
+         public int StartNode { get; set; }
          [XmlElementAttribute("StartPort")]
          public int StartPort { get; set; }
-          [XmlElementAttribute("LinkEnd")]
-         public String linkEnd { get; set; }
-          [XmlElementAttribute("EndPort")]
-          public int EndPort { get; set; }
-
-          public Link() { linkStart = ""; linkEnd = ""; }
-         public Link(String linkStart, String linkEnd) { this.linkStart = linkStart; this.linkEnd = linkEnd; }
+         [XmlElementAttribute("EndNode")]
+         public String EndNode { get; set; }
+         [XmlElementAttribute("EndPort")]
+         public int EndPort { get; set; }
      }
 }
