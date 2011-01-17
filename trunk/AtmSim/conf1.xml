@@ -5,7 +5,7 @@
 		<Node>
 			<Id>1</Id>
 			<Type>Node</Type>
-			<Name>Switch 1</Name>
+			<Name>Switch_1</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
 			</PortsIn>
@@ -17,7 +17,7 @@
 		<Node>
 			<Id>2</Id>
 			<Type>Node</Type>
-			<Name>Switch 2</Name>
+			<Name>Switch_2</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
 				<PortIn><Id>1</Id></PortIn>
@@ -30,7 +30,7 @@
 		<Node>
 			<Id>3</Id>
 			<Type>Node</Type>
-			<Name>Switch 3</Name>
+			<Name>Switch_3</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
 			</PortsIn>

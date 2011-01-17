@@ -53,6 +53,9 @@ namespace AtmSim
                 manager.AddNode(cnode.Name, cnode.Agent);
                 progressBar.Value += (40 / network.Nodes.Count);
             }
+            label.Text = "Oczekiwanie na agentów...";
+            while (manager.ConnectedNodes < network.Nodes.Count)
+            {}
             label.Text = "Tworzenie łączy...";
             progressBar.Value = 60;
             foreach (Config.Link link in network.Links)

@@ -129,6 +129,11 @@ namespace AtmSim
             return elements;
         }
 
+        public int ConnectedNodes
+        {
+            get { return nodes.Count; }
+        }
+
         public Log GetLog(int id)
         {
             if (nodes.ContainsKey(id))
@@ -189,7 +194,7 @@ namespace AtmSim
             {
                 string port = Get(link.EndNode, "PortsIn." + link.EndPort + "._port");
                 Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
-                Set(link.StartNode, "PortsOut." + link.StartPort + ".connected", "True");
+                Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
             }
         }
 
