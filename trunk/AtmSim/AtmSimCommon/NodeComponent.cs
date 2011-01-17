@@ -5,49 +5,54 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
-//klasa component sluzy to archiwizowania wlasciwowsci zawartych w obiekcie ppodstawowym Node
-namespace AtmSim
+
+
+namespace AtmSim.Config
 {
-    [XmlRootAttribute("NodeComponent", Namespace = "", IsNullable = false)]
-    public class NodeComponent
+    /*
+     * Konfiguracja wezla sieci 
+     */
+    [XmlRootAttribute("Node", Namespace = "", IsNullable = false)]
+    public class Node
     {
+        private int id = 0;
+        [XmlElementAttribute("ID")]
+        public int Id { get { return id; } set { id = value; } }  // identyfikator urzadzenia
 
+        private string type = "";
         [XmlElementAttribute("Type")]
-        public string type { get; set; } //typ wezla, moze byc source, sink lub node, mozna przerobic na enum, ale wteyd bedzie zapisywac do pliku numer a nie stringa      
+        public string Type { get { return type; } set { type = value; } } // typ wezla, moze byc source, sink lub node, mozna przerobic na enum, ale wteyd bedzie zapisywac do pliku numer a nie stringa      
+
+        private string name = "";
         [XmlElementAttribute("Name")]
-        public string name { get; set; } //nazwa routera
-        [XmlElementAttribute("ID")]
-        public int id { get; set; }  //identyfikator routera
+        public string Name { get { return name; } set { name = value; } } // nazwa urzadzenia
 
-        [XmlArrayItem("PortInComponent")]
-        public List<PortInComponent>  portInComponet {get; set;} //ilosc portow wejsciowych wezla
+        private List<PortIn> portsIn = new List<PortIn>();
+        [XmlArrayItem("PortsIn")]
+        public List<PortIn> PortsIn { get { return portsIn; } set { portsIn = value; } } // ilosc portow wejsciowych wezla
 
-        [XmlArrayItem("PortOutComponent")]
-        public List<PortOutComponent> portOutComponet { get; set; } //ilos portow wyjsciowych routera
-        public NodeComponent() { portInComponet = new List<PortInComponent>();
-                                  portOutComponet = new List<PortOutComponent>();
-                                  name = "";
-                                  type = "";
-        }
-
-        }
-
-
-    [XmlRootAttribute("In", Namespace = "", IsNullable = false)]
-    public class PortInComponent
-    {
-        [XmlElementAttribute("ID")]
-        public int id { get; set; }
+        public List<PortOutComponent> portsOut = new List<PortOutComponent>();
+        [XmlArrayItem("PortsOut")]
+        public List<PortOutComponent> PortsOut { get { return portsOut; } set { portsOut = value; } } // ilos portow wyjsciowych routera
     }
 
-    [XmlRootAttribute("Out", Namespace = "", IsNullable = false)]
+    [XmlRootAttribute("PortIn", Namespace = "", IsNullable = false)]
+    public class PortIn
+    {
+        private int id = 0;
+        [XmlElementAttribute("ID")]
+        public int Id { get { return id; } set { id = value; } }
+    }
+
+    [XmlRootAttribute("PortOut", Namespace = "", IsNullable = false)]
     public class PortOutComponent
     {
+        private int id = 0;
         [XmlElementAttribute("ID")]
-        public int id { get; set; }
+        public int Id { get { return id; } set { id = value; } }
+    }
+}
 
-    }
-    }
   
  
 
