@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,21 +21,27 @@ namespace AtmSim
 
         public void LoadNetwork(string filename)
         {
-            Config.Network network = new Config.Network();
             label.Text = "Uruchamianie zarządcy...";
             Refresh();
             manager.Init();
             label.Text = "Otwieranie pliku...";
             progressBar.Value = 10;
             Refresh();
-            network.readFile(filename);
+            Config.Network network = Config.Network.fopen(filename);
             label.Text = "Tworzenie węzłów...";
             progressBar.Value = 20;
             Refresh();
+            Random random = new Random();
             foreach (Config.Node node in network.Nodes)
             {
-                Components.Node cnode = new Components.Node(node, manager.Port);
-                manager.AddNode(cnode.Name, cnode.Agent);
+                //Components.Node cnode = new Components.Node(node, manager.Port);
+                //manager.AddNode(cnode.Name, cnode.Agent);
+                string tempfile = "tmp" + random.Next() + ".xml";
+                node.save(tempfile);
+                Process process = new Process();
+                process.StartInfo.FileName = "AtmSimNode.exe";
+                process.StartInfo.Arguments = tempfile + " " + manager.Port;
+                process.Start();
                 progressBar.Value += (40 / network.Nodes.Count);
                 Refresh();
             }

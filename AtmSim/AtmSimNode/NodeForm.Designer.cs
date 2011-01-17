@@ -28,12 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.nameLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // nameLabel
+            // 
+            this.nameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.nameLabel.Location = new System.Drawing.Point(12, 9);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(260, 29);
+            this.nameLabel.TabIndex = 0;
+            this.nameLabel.Text = "name";
+            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // NodeForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(284, 94);
+            this.Controls.Add(this.nameLabel);
+            this.Name = "NodeForm";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label nameLabel;
     }
 }
 

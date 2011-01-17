@@ -35,7 +35,7 @@ namespace AtmSim.Config
         }
 
         //zapisanie konfigracji
-        public void writeFile(string filename)
+        public void save(string filename)
         {
             // create a writer and open the file
             TextWriter tw = new StreamWriter(filename);
@@ -47,7 +47,7 @@ namespace AtmSim.Config
             tw.Close();
         }
          //wczytanie konfiguracji
-        public void readFile(string filename)
+        public static Network fopen(string filename)
         {
             TextReader tr = new StreamReader(filename);
             String str = "";
@@ -58,13 +58,8 @@ namespace AtmSim.Config
                 str += input;
             }
             tr.Close();
-            Network comp = ((Network)Serial.DeserializeObject(str, typeof(Network)));
-            this.nodes = comp.nodes;
-            this.links = comp.links;
-            this.name = comp.name;
-            //this.managerPort = comp.managerPort;
+            return ((Network)Serial.DeserializeObject(str, typeof(Network)));
         }
-
     }
 
      // polaczenia miedzy wezlami - id wezlow i portow poczatkowych i koncowych

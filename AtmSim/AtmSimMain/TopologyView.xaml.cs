@@ -33,7 +33,7 @@ namespace AtmSim
             {
                 g.AddVertex(node);
             }
-            foreach (Edge<string> connection in manager.GetLinks())
+            foreach (Edge<int> connection in manager.GetLinks())
             {
                 g.AddEdge(new Edge<object>(connection.Source, connection.Target));
             }
