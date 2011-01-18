@@ -24,12 +24,18 @@ namespace AtmSim
             public int id;
             public string name;
             public Socket socket;
+            public Topology.Node node;
         }
 
 //        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
         private Dictionary<int, Node> nodes = new Dictionary<int, Node>();
 //        private List<Edge<string>> links1 = new List<Edge<string>>();
-        private List<Edge<int>> links = new List<Edge<int>>();
+        private List<TaggedEdge<int, string>> links = new List<TaggedEdge<int, string>>();
+        private Topology topology = new Topology();
+        public Topology Topology
+        { get { return topology; } }
+        
+        
         private Socket socket;
 
         public int Port
@@ -79,6 +85,9 @@ namespace AtmSim
             string idStr = Get(node.socket, "ID");
             node.name = Get(node.socket, "Name");
             node.id = Int32.Parse(idStr);
+            Topology.Node tnode = new Topology.Node(node.id, node.name);
+            node.node = tnode;
+            topology.AddVertex(tnode);
             nodes.Add(node.id, node);
             this.socket.BeginAccept(OnClientConnect, socket);
         }
@@ -199,10 +208,24 @@ namespace AtmSim
                 string port = Get(link.EndNode, "PortsIn." + link.EndPort + "._port");
                 Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
                 Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
+                links.Add(new TaggedEdge<int, string>(link.StartNode, link.EndNode, link.StartPort+":"+link.EndPort));
+                topology.AddEdge(new Topology.Link(link.StartPort + ":" + link.EndPort, 
+                   nodes[link.StartNode].node, nodes[link.EndNode].node));
             }
         }
 
-        public List<Edge<int>> GetLinks()
+        public BidirectionalGraph<int, Edge<int>> GetTopology()
+        {
+            BidirectionalGraph<int, Edge<int>> g =
+                new BidirectionalGraph<int, Edge<int>>();
+            //foreach (Node node in nodes.Values)
+            //    g.AddVertex(node.id);
+            foreach (TaggedEdge<int, string> edge in links)
+                g.AddVerticesAndEdge(new Edge<int> (edge.Source, edge.Target));
+            return g;
+        }
+
+        public List<TaggedEdge<int,string>> GetLinks()
         {
             return links;
         }

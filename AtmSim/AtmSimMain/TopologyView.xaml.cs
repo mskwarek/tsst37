@@ -12,32 +12,37 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using QuickGraph;
+using GraphSharp;
+using GraphSharp.Controls;
 
 namespace AtmSim
 {
+    public class TopologyLayout : GraphLayout<Topology.Node, Topology.Link, Topology> { }
+
     /// <summary>
     /// Interaction logic for TopologyView.xaml
     /// </summary>
     public partial class TopologyView : Window
     {
-        private IBidirectionalGraph<object, IEdge<object>> _Graph;
-        public IBidirectionalGraph<object, IEdge<object>> Graph
+        private Topology _Graph = new Topology();
+        public Topology Graph
         {
             get { return _Graph; }
         }
 
         public TopologyView(Manager manager)
         {
-            var g = new BidirectionalGraph<object, IEdge<object>>();
-            foreach (string node in manager.GetElements())
-            {
-                g.AddVertex(node);
-            }
-            foreach (Edge<int> connection in manager.GetLinks())
-            {
-                g.AddEdge(new Edge<object>(connection.Source, connection.Target));
-            }
-            this._Graph = g;
+            //var g = new BidirectionalGraph<object, IEdge<object>>();
+            //foreach (string node in manager.GetElements())
+            //{
+            //    g.AddVertex(node);
+            //}
+            //foreach (Edge<int> connection in manager.GetLinks())
+            //{
+            //    g.AddEdge(new Edge<object>(connection.Source, connection.Target));
+            //}
+            this._Graph = manager.Topology;
+            this.DataContext = this;
             InitializeComponent();
         }
     }

@@ -94,6 +94,7 @@
     <Compile Include="ConfigGUI.Designer.cs">
       <DependentUpon>ConfigGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Topology.cs" />
     <Compile Include="TopologyView.xaml.cs">
       <DependentUpon>TopologyView.xaml</DependentUpon>
     </Compile>
