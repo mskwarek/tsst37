@@ -23,7 +23,7 @@ namespace AtmSim
         {
             label.Text = "Uruchamianie zarządcy...";
             Refresh();
-            manager.Init();
+            //manager.Init();
             label.Text = "Otwieranie pliku...";
             progressBar.Value = 10;
             Refresh();

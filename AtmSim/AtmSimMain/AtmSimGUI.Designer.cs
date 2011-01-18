@@ -43,6 +43,7 @@
             this.refreshButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.mToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +52,8 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.netToolStripMenuItem,
             this.configToolStripMenuItem,
-            this.logToolStripMenuItem});
+            this.logToolStripMenuItem,
+            this.mToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(284, 24);
@@ -72,14 +74,14 @@
             // netNewToolStripMenuItem
             // 
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
             // netTopologyToolStripMenuItem
             // 
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
@@ -173,6 +175,12 @@
             this.openFileDialog.Filter = "\"pliki XML|*.xml|Wszystkie pliki|*.*\"";
             this.openFileDialog.Title = "Otwórz konfigurację";
             // 
+            // mToolStripMenuItem
+            // 
+            this.mToolStripMenuItem.Name = "mToolStripMenuItem";
+            this.mToolStripMenuItem.Size = new System.Drawing.Size(33, 20);
+            this.mToolStripMenuItem.Text = "&M:";
+            // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -212,6 +220,7 @@
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.ToolStripMenuItem mToolStripMenuItem;
     }
 }
 

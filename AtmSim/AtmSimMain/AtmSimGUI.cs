@@ -30,7 +30,9 @@ namespace AtmSim
 
         public AtmSimGUI()
         {
+            manager.Init();
             InitializeComponent();
+            mToolStripMenuItem.Text = "M: " + manager.Port;
         }
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,6 +44,7 @@ namespace AtmSim
                 Loader loader = new Loader(manager);
                 loader.Show();
                 loader.LoadNetwork(openFileDialog.FileName);
+                mToolStripMenuItem.Text = "&M: " + manager.Port;
                 refreshButton_Click(sender, e);
             }
         }

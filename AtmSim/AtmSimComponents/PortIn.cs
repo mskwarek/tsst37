@@ -60,7 +60,17 @@ namespace AtmSim.Components
 
         public void OnDataReceived(IAsyncResult asyn)
         {
-            int recv = remoteSocket.EndReceive(asyn);
+            int recv = 0;
+            try
+            {
+                recv = remoteSocket.EndReceive(asyn);
+            }
+            catch (SocketException)
+            {
+                remoteSocket.Close();
+                connected = false;
+                return;
+            }
             if (recv == 0)
             {
                 remoteSocket.Close();
