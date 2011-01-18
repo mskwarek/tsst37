@@ -23,6 +23,7 @@ namespace AtmSim
             int mPort = Int32.Parse(args[1]);
             node = new Components.Node(cNode, mPort);
             InitializeComponent();
+            nameLabel.Text = node.Name;
         }
     }
 }

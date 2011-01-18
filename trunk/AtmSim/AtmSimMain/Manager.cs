@@ -27,6 +27,17 @@ namespace AtmSim
             public Topology.Node node;
         }
 
+        public class NodeUnaccessibleException : Exception
+        {
+            public int Id = -1;
+            public NodeUnaccessibleException()
+            { }
+            public NodeUnaccessibleException(int id)
+            {
+                Id = id;
+            }
+        }
+
 //        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
         private Dictionary<int, Node> nodes = new Dictionary<int, Node>();
 //        private List<Edge<string>> links1 = new List<Edge<string>>();
@@ -67,6 +78,7 @@ namespace AtmSim
             }
             nodes.Clear();
             links.Clear();
+            topology.Clear();
         }
 
         public void Init()
@@ -82,8 +94,17 @@ namespace AtmSim
         {
             Node node = new Node();
             node.socket = this.socket.EndAccept(asyn);
-            string idStr = Get(node.socket, "ID");
-            node.name = Get(node.socket, "Name");
+            string idStr;
+            try
+            {
+                idStr = Get(node.socket, "ID");
+                node.name = Get(node.socket, "Name");
+            }
+            catch (NodeUnaccessibleException)
+            {
+                this.socket.BeginAccept(OnClientConnect, socket);
+                return;
+            }
             node.id = Int32.Parse(idStr);
             Topology.Node tnode = new Topology.Node(node.id, node.name);
             node.node = tnode;
@@ -94,17 +115,21 @@ namespace AtmSim
 
         private string Query(Socket sock, string query)
         {
-            sock.Send(Encoding.ASCII.GetBytes(query));
-            byte[] buffer = new byte[4096];
-            int received = sock.Receive(buffer);
-            return Encoding.ASCII.GetString(buffer, 0, received);
+            try
+            {
+                sock.Send(Encoding.ASCII.GetBytes(query));
+                byte[] buffer = new byte[4096];
+                int received = sock.Receive(buffer);
+                return Encoding.ASCII.GetString(buffer, 0, received);
+            }
+            catch (SocketException) { throw new NodeUnaccessibleException(); }
         }
 
         public string Get(Socket sock, string param)
         {
             string response = Query(sock, "get " + param);
-            if (param == "config" || param == "routing" || param == "log")
-                return response;
+            //if (param == "config" || param == "routing" || param == "log")
+            //    return response;
             string[] tokens = response.Split(' ');
             if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
                 return tokens[2];
@@ -114,7 +139,10 @@ namespace AtmSim
         public string Get(int id, string param)
         {
             if (nodes.ContainsKey(id))
-                return Get(nodes[id].socket, param);
+            {
+                try { return Get(nodes[id].socket, param); }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
+            }
             return "";
         }
 
@@ -122,10 +150,14 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "set " + param + " " + value);
-                string[] tokens = response.Split(' ');
-                if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
-                    return tokens[2];
+                try
+                {
+                    string response = Query(nodes[id].socket, "set " + param + " " + value);
+                    string[] tokens = response.Split(' ');
+                    if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
+                        return tokens[2];
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return "";
         }
@@ -151,8 +183,12 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "get log");
-                return (Log)Serial.DeserializeObject(response, typeof(Log));
+                try
+                {
+                    string response = Query(nodes[id].socket, "get log");
+                    return (Log)Serial.DeserializeObject(response, typeof(Log));
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return null;
         }
@@ -161,8 +197,12 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "get config");
-                return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
+                try
+                {
+                    string response = Query(nodes[id].socket, "get config");
+                    return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return null;
         }
@@ -171,8 +211,12 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "get routing");
-                return (Routing)Serial.DeserializeObject(response, typeof(Routing));
+                try
+                {
+                    string response = Query(nodes[id].socket, "get routing");
+                    return (Routing)Serial.DeserializeObject(response, typeof(Routing));
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return null;
         }
@@ -181,10 +225,14 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "rtadd " + label + " " + value);
-                string[] tokens = response.Split(' ');
-                if (tokens.Length == 4 && tokens[3] == "ok")
-                    return true;
+                try
+                {
+                    string response = Query(nodes[id].socket, "rtadd " + label + " " + value);
+                    string[] tokens = response.Split(' ');
+                    if (tokens.Length == 4 && tokens[3] == "ok")
+                        return true;
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return false;
         }
@@ -193,10 +241,14 @@ namespace AtmSim
         {
             if (nodes.ContainsKey(id))
             {
-                string response = Query(nodes[id].socket, "rtdel " + label);
-                string[] tokens = response.Split(' ');
-                if (tokens.Length == 3 && tokens[2] == "ok")
-                    return true;
+                try
+                {
+                    string response = Query(nodes[id].socket, "rtdel " + label);
+                    string[] tokens = response.Split(' ');
+                    if (tokens.Length == 3 && tokens[2] == "ok")
+                        return true;
+                }
+                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
             }
             return false;
         }
@@ -214,6 +266,7 @@ namespace AtmSim
             }
         }
 
+        // przestarzałe
         public BidirectionalGraph<int, Edge<int>> GetTopology()
         {
             BidirectionalGraph<int, Edge<int>> g =
