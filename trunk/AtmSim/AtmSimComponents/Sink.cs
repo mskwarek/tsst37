@@ -10,6 +10,7 @@ namespace AtmSim.Components
      **/
     public class Sink : INetworkNode
     {
+        public int Id;
         public string Name;
         private Log log;
         public Log Log { get { return log; } set { log = value; } }

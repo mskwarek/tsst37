@@ -63,6 +63,12 @@ namespace AtmSim
                 this.selectedName = (string)this.elementListBox.Items[this.elementListBox.SelectedIndex];
             if (manager.Ping(this.SelectedId) == false)
                 RefreshList();
+            string type = manager.Get(this.SelectedId, "type") ;
+            if (type != "Switch")
+                configButton.Enabled = false;
+            else
+                configButton.Enabled = true;
+            Refresh();
         }
 
         private void configButton_Click(object sender, EventArgs e)

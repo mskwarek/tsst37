@@ -8,15 +8,13 @@ namespace AtmSim.Components
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
     public class Source : INetworkNode
     {
+        public int Id;
         public string Name;
         private Log log;
         public Log Log { get { return log; } set { log = value; } }
 
         private SourceAgent agent;
-        public IAgent Agent
-        {
-            get { return agent; }
-        }
+        public IAgent Agent { get { return agent; } }
 
         private string message = "";
         private string target = "";
@@ -31,17 +29,16 @@ namespace AtmSim.Components
 
         private AdaptationLayer aal = new AdaptationLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
 
-        private IPortOut firstport; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
+        private PortOut portOut; //jedyny port wyjsciowy ktory jest w tej klasie do wysylania ProtocolUnitow.
+        public PortOut PortOut { get { return portOut; } }
 
-        public Source(string name)
+        public Source(Config.Node node, int managerPort)
         {
-            this.Name = name;
-            this.log = new Log("Log źródła " + name);
-            agent = new SourceAgent(this);
+            this.Id = node.Id;
+            this.Name = (string)node.Name.Clone();
+            this.log = new Log("Log źródła " + Name);
+            this.agent = new SourceAgent(this, managerPort);
         }
-
-        public void SetPortOut(IPortOut po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym
-        public IPortOut GetPortOut() { return firstport; } //metoda zwraca port skojarzony z Klasa Sorce
 
         /*jezeli wybierzemy w metodzie GenerateData tryb losowego generowania strumienia uzytkowego to to bedzie maxymalna mozliwa
         dlugosc wylosowanego strumienia. Ta dlugosc ustawia sie poczatkowo automatycznie na wartosc 1000.
@@ -81,7 +78,7 @@ namespace AtmSim.Components
                 pu.Vpi = firstvpi;
                 pu.Vci = firstvci ;
                 putab[count] = pu; //to jest tylko po to zeby metoda zwracala tablice utworzonych pakietow ze strumienia uzytkowego.
-                this.firstport.Send(pu);
+                this.portOut.Send(pu);
                 Log.LogMsg("Wysłano " + p.Id);
             }
             return putab;
