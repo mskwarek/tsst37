@@ -21,9 +21,6 @@ namespace AtmSim
 
         public void LoadNetwork(string filename)
         {
-            label.Text = "Uruchamianie zarządcy...";
-            Refresh();
-            //manager.Init();
             label.Text = "Otwieranie pliku...";
             progressBar.Value = 10;
             Refresh();
@@ -35,14 +32,13 @@ namespace AtmSim
                 this.Close();
                 return;
             }
+
             label.Text = "Tworzenie węzłów...";
             progressBar.Value = 20;
             Refresh();
             Random random = new Random();
             foreach (Config.Node node in network.Nodes)
             {
-                //Components.Node cnode = new Components.Node(node, manager.Port);
-                //manager.AddNode(cnode.Name, cnode.Agent);
                 string tempfile = "tmp" + random.Next() + ".xml";
                 node.save(tempfile);
                 Process process = new Process();
@@ -52,10 +48,12 @@ namespace AtmSim
                 progressBar.Value += (40 / network.Nodes.Count);
                 Refresh();
             }
+
             label.Text = "Oczekiwanie na agentów...";
             Refresh();
             while (manager.ConnectedNodes < network.Nodes.Count)
             {}
+
             label.Text = "Tworzenie łączy...";
             progressBar.Value = 60;
             Refresh();

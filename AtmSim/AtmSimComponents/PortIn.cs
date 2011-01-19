@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace AtmSim.Components
 {
-    public class PortIn : IPortIn
+    public class PortIn
     {
         private int portID;
         public int PortID
@@ -16,7 +16,7 @@ namespace AtmSim.Components
             get { return portID; }
             set { portID = value; }
         }
-        private Socket thisSocket;
+        private Socket listenerSocket;
         private Socket remoteSocket;
         private byte[] buffer = new byte[1024];
         private int tcpPort;
@@ -37,12 +37,12 @@ namespace AtmSim.Components
 
         public PortIn()
         {
-            thisSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            listenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ipLocal = new IPEndPoint(IPAddress.Any, 0); // tworzenie end-pointu na dowolnym wolnym porcie
-            thisSocket.Bind(ipLocal);
-            tcpPort = ((IPEndPoint)thisSocket.LocalEndPoint).Port;
-            thisSocket.Listen(1);
-            thisSocket.BeginAccept(OnClientConnect, thisSocket);
+            listenerSocket.Bind(ipLocal);
+            tcpPort = ((IPEndPoint)listenerSocket.LocalEndPoint).Port;
+            listenerSocket.Listen(1);
+            listenerSocket.BeginAccept(OnClientConnect, listenerSocket);
             open = true;
         }
 
@@ -52,10 +52,10 @@ namespace AtmSim.Components
             {
                 remoteSocket.Close(); // przychodzace polaczenie spowoduje zamkniecie istniejacego
             }
-            remoteSocket = thisSocket.EndAccept(asyn);
+            remoteSocket = listenerSocket.EndAccept(asyn);
             connected = true;
             remoteSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, remoteSocket);
-            thisSocket.BeginAccept(OnClientConnect, thisSocket);
+            listenerSocket.BeginAccept(OnClientConnect, listenerSocket);
         }
 
         public void OnDataReceived(IAsyncResult asyn)
@@ -80,11 +80,6 @@ namespace AtmSim.Components
             string receivedData = Encoding.ASCII.GetString (buffer, 0, recv);
             Receive( (ProtocolUnit) Serial.DeserializeObject( receivedData, typeof(ProtocolUnit)) );
             remoteSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, remoteSocket);
-        }
-
-        public void Receive(string pu)
-        {
-            
         }
 
         public void Receive(ProtocolUnit pu)

@@ -209,9 +209,9 @@ namespace AtmSim
             get { return nodes.Count; }
         }
 
-        public Log GetLog(int id)
+        public Log GetLog(int id, int index)
         {
-            string response = Query(id, "get log");
+            string response = Query(id, "get log " + index);
             if (response != "")
                 return (Log)Serial.DeserializeObject(response, typeof(Log));
             else

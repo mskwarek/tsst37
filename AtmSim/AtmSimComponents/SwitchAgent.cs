@@ -8,16 +8,16 @@ using System.Net.Sockets;
 
 namespace AtmSim.Components
 {
-    public class NodeAgent : IAgent
+    public class SwitchAgent
     {
-        // Referencja wezla zarzadzanego przez agenta
-        Node node;
+        // Referencja switcha zarzadzanego przez agenta
+        Switch node;
         // Zawartosc konfiguracji wezla
         Configuration config;
         Socket managerSocket;
         byte[] buffer = new byte[4086];
 
-        public NodeAgent(Node n, int port)
+        public SwitchAgent(Switch n, int port)
         {
             node = n;
             config = new Configuration(n.Name);
@@ -75,14 +75,22 @@ namespace AtmSim.Components
             }
             else if (command[0] == "get")
             {
+                if (command[1] == "log" && command.Length == 3)
+                {
+                    int n;
+                    try { n = Int32.Parse(command[2]); }
+                    catch (ArgumentNullException) { n = 0; }
+                    if (n == 0)
+                        return Serial.SerializeObject(node.Log);
+                    else
+                        return Serial.SerializeObject(new Log(node.Log, n));
+                }
                 if (command.Length != 2)
                     return response;
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
                     return Serial.SerializeObject(GetRoutingTable());
-                if (command[1] == "log")
-                    return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "type")
@@ -215,30 +223,7 @@ namespace AtmSim.Components
             return response;
         }
 
-        public string[] GetParamList()
-        {
-            string[] param = { "name", "portsIn", "portsOut" };
-            return param;
-        }
-
-        public string GetParam(string name)
-        {
-            if (name == "name")
-                return node.Name;
-            else if (name == "portsIn")
-                return "0-" + (node.PortsIn.Length - 1);
-            else if (name == "portsOut")
-                return "0-" + (node.PortsOut.Length - 1);
-            else return "";
-        }
-
-        public void SetParam(string name, string value)
-        {
-            if (name == "name")
-                node.Name = value;
-        }
-
-        public Routing GetRoutingTable()
+        private Routing GetRoutingTable()
         {
             Routing table = new Routing();
             foreach (var element in node.Matrix.RoutingTable)
@@ -246,21 +231,6 @@ namespace AtmSim.Components
                 table.Add(element.Key.ToString(), element.Value.ToString());
             }
             return table;
-        }
-
-        public void AddRoutingEntry(string label, string value)
-        {
-            node.Matrix.AddToMatrix(new RoutingEntry(label), new RoutingEntry(value));
-        }
-
-        public void RemoveRoutingEntry(string entry)
-        {
-            node.Matrix.DeleteFromMatrix(new RoutingEntry(entry));
-        }
-
-        public string GetLog()
-        {
-            return node.Log.ToString();
         }
     }
 }

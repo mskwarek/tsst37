@@ -12,11 +12,11 @@ namespace AtmSim
 {
     public partial class NodeForm : Form
     {
-        private Components.Node node;
+        private Components.Switch node;
         
         public NodeForm(Config.Node cNode, int mPort)
         {
-            node = new Components.Node(cNode, mPort);
+            node = new Components.Switch(cNode, mPort);
             InitializeComponent();
             nameLabel.Text = node.Name;
             this.Text = node.Name;

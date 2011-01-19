@@ -8,10 +8,8 @@ using System.Net.Sockets;
 
 namespace AtmSim.Components
 {
-    public class SourceAgent : IAgent
+    public class SourceAgent
     {
-        //ArrayList informacionlist = new ArrayList();
-
         Source node;
         Configuration config;
         Socket managerSocket;
@@ -62,14 +60,22 @@ namespace AtmSim.Components
             }
             else if (command[0] == "get")
             {
+                if (command[1] == "log" && command.Length == 3)
+                {
+                    int n;
+                    try { n = Int32.Parse(command[2]); }
+                    catch (ArgumentNullException) { n = 0; }
+                    if (n == 0)
+                        return Serial.SerializeObject(node.Log);
+                    else
+                        return Serial.SerializeObject(new Log(node.Log, n));
+                }
                 if (command.Length != 2)
                     return response;
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
                     return Serial.SerializeObject(GetRoutingTable());
-                if (command[1] == "log")
-                    return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "type")
@@ -159,39 +165,7 @@ namespace AtmSim.Components
         }
 
 
-        public string[] GetParamList()
-        {
-            string[] param = { "name","message","target" } ;
-            return param;
-        }
-
-        public string GetParam(string name)
-        {
-            if (name == "name")
-                return node.Name;
-            else if (name == "message")
-                return node.Message;
-            else if (name == "target")
-                return node.Target;
-            else
-                return "";
-        }
-
-        public void SetParam(string name, string value)
-        {
-            if (name == "name")
-                node.Name = value;
-            else if (name == "message")
-                if (value == "random") { node.Message = null; }
-                else { node.Message = value; }
-            else if (name == "send")
-                node.Send();
-            else if (name == "target")
-                node.Target = value;
-
-        }
-
-        public Routing GetRoutingTable()
+        private Routing GetRoutingTable()
         {
             Routing table = new Routing();
             foreach (var element in node.Matrix)
@@ -199,23 +173,6 @@ namespace AtmSim.Components
                 table.Add(element.Key, element.Value.ToString());
             }
             return table;
-        }
-
-        public void AddRoutingEntry(string label, string value)
-        {
-            if (!node.Matrix.ContainsKey(label))
-                node.Matrix.Add(label, new RoutingEntry(value));
-        }
-
-        public void RemoveRoutingEntry(string entry)
-        {
-            if (node.Matrix.ContainsKey(entry))
-                node.Matrix.Remove(entry);
-        }
-  
-        public string GetLog()
-        {
-            return node.Log.ToString();
         }
     }
 }

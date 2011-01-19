@@ -13,9 +13,10 @@ namespace AtmSim.Components
         private int vci;
         private DataUnit datau;
 
-        public int Vpi{
-        set{ vpi= value;}
-        get { return vpi; }
+        public int Vpi
+        {
+            set { vpi = value; }
+            get { return vpi; }
         }
 
         public int Vci
@@ -24,9 +25,9 @@ namespace AtmSim.Components
             get { return vci; }
         }
 
-        public DataUnit DataUnit 
+        public DataUnit DataUnit
         {
-            set {datau=value;}
+            set { datau = value; }
             get { return datau; }
         }
     }
