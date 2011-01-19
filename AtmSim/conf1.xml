@@ -4,7 +4,7 @@
 	<Nodes>
 		<Node>
 			<Id>1</Id>
-			<Type>Node</Type>
+			<Type>Switch</Type>
 			<Name>Switch_1</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
@@ -16,7 +16,7 @@
 		</Node>
 		<Node>
 			<Id>2</Id>
-			<Type>Node</Type>
+			<Type>Switch</Type>
 			<Name>Switch_2</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
@@ -29,7 +29,7 @@
 		</Node>
 		<Node>
 			<Id>3</Id>
-			<Type>Node</Type>
+			<Type>Switch</Type>
 			<Name>Switch_3</Name>
 			<PortsIn>
 				<PortIn><Id>0</Id></PortIn>
@@ -39,6 +39,25 @@
 				<PortOut><Id>1</Id></PortOut>
 			</PortsOut>
 		</Node>
+		<Node>
+			<Id>4</Id>
+			<Type>Source</Type>
+			<Name>Source_1</Name>
+			<PortsIn/>
+			<PortsOut>
+				<PortOut><Id>0</Id></PortOut>
+			</PortsOut>
+		</Node>
+		<!--<Node>
+			<Id>5</Id>
+			<Type>Sink</Type>
+			<Name>Sink_1</Name>
+			<PortsIn>
+				<PortIn><Id>0</Id></PortIn>
+			</PortsIn>
+			<PortsOut/>
+		</Node>-->
+
 	</Nodes>
 	<Links>
 		<Link>

@@ -1,6 +1,6 @@
 ﻿namespace AtmSim
 {
-    partial class NodeForm
+    partial class SinkForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,17 +39,17 @@
             this.nameLabel.Location = new System.Drawing.Point(12, 9);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(260, 29);
-            this.nameLabel.TabIndex = 0;
+            this.nameLabel.TabIndex = 1;
             this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // NodeForm
+            // SinkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 94);
             this.Controls.Add(this.nameLabel);
-            this.Name = "NodeForm";
-            this.Text = "Node";
+            this.Name = "SinkForm";
+            this.Text = "Sink";
             this.ResumeLayout(false);
 
         }
@@ -59,4 +59,3 @@
         private System.Windows.Forms.Label nameLabel;
     }
 }
-

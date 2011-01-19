@@ -85,6 +85,8 @@ namespace AtmSim.Components
                     return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
+                if (param[0] == "type")
+                    response += " Switch";
                 if (param[0] == "ID")
                     response += " " + node.Id;
                 else if (param[0] == "Name")
@@ -131,7 +133,7 @@ namespace AtmSim.Components
                 response += "setresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")
-                    response += " X"; // parametr niezmienny
+                    response += " " + node.Id; // parametr niezmienny
                 else if (param[0] == "Name")
                 {
                     node.Name = command[2];

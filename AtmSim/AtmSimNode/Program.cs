@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
 
 namespace AtmSim
 {
@@ -15,9 +16,19 @@ namespace AtmSim
         {
             if (args.Length != 2)
                 return;
+            if (!File.Exists(args[0]))
+                return;
+            Config.Node cNode = Config.Node.fopen(args[0]);
+            File.Delete(args[0]);
+            int mPort = Int32.Parse(args[1]);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new NodeForm(args));
+            if (cNode.Type == "Switch")
+                Application.Run(new NodeForm(cNode, mPort));
+            else if (cNode.Type == "Source")
+                Application.Run(new SourceForm(cNode, mPort));
+            else if (cNode.Type == "Sink")
+                Application.Run(new SinkForm(cNode, mPort));
         }
     }
 }
