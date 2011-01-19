@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.nameLabel = new System.Windows.Forms.Label();
+            this.messageTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -42,20 +43,36 @@
             this.nameLabel.TabIndex = 1;
             this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // messageTextBox
+            // 
+            this.messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.messageTextBox.Location = new System.Drawing.Point(6, 11);
+            this.messageTextBox.Multiline = true;
+            this.messageTextBox.Name = "messageTextBox";
+            this.messageTextBox.ReadOnly = true;
+            this.messageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.messageTextBox.Size = new System.Drawing.Size(265, 71);
+            this.messageTextBox.TabIndex = 2;
+            // 
             // SinkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 94);
+            this.Controls.Add(this.messageTextBox);
             this.Controls.Add(this.nameLabel);
             this.Name = "SinkForm";
             this.Text = "Sink";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.TextBox messageTextBox;
     }
 }

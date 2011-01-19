@@ -64,8 +64,8 @@ namespace AtmSim.Components
                     return response;
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
-                //if (command[1] == "routing")
-                //    return Serial.SerializeObject(GetRoutingTable());
+                if (command[1] == "routing")
+                    return Serial.SerializeObject(GetRoutingTable());
                 if (command[1] == "log")
                     return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
@@ -102,9 +102,9 @@ namespace AtmSim.Components
                     node.Name = command[2];
                     response += " " + node.Name;
                 }
-                else if (param[0] == "PortIn")
+                else if (param[0] == "PortsIn")
                 {
-                    if (param.Length != 2)
+                    if (param.Length != 3)
                         return response;
                     if (param[2] == "Open")
                         response += " " + node.PortIn.Open; // póki co niezmienne
@@ -114,6 +114,35 @@ namespace AtmSim.Components
                         response += " " + node.PortIn.TcpPort; // niezmienne
                     else return response;
                 }
+                return response;
+
+            }
+            else if (command[0] == "rtadd")
+            {
+                if (command.Length != 3)
+                    return response;
+                response += "rtaddresp " + command[1] + " " + command[2];
+                try
+                {
+                    node.Receiver.Sources.Add(new RoutingEntry(command[1]), command[2]);
+                }
+                catch (ArgumentException)
+                {
+                    response += " fail";
+                    return response;
+                }
+                response += " ok";
+
+            }
+            else if (command[0] == "rtdel")
+            {
+                if (command.Length != 2)
+                    return response;
+                response += "rtdelresp " + command[1];
+                if (node.Receiver.Sources.Remove(new RoutingEntry(command[1])))
+                    response += " ok";
+                else
+                    response += " fail";
             }
             return response;
         }

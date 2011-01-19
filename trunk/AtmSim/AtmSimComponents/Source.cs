@@ -81,6 +81,7 @@ namespace AtmSim.Components
                 putab[count] = pu; //to jest tylko po to zeby metoda zwracala tablice utworzonych pakietow ze strumienia uzytkowego.
                 this.portOut.Send(pu);
                 Log.LogMsg("Wysłano " + p.Id);
+                System.Threading.Thread.Sleep(500);
             }
             return putab;
         }
