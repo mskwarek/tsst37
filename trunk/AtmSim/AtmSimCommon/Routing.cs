@@ -11,6 +11,13 @@ namespace AtmSim
         //private Dictionary<string, string> routing;
         public Routing() : base() { }
         public Routing(Routing routing) : base((Dictionary<string, string>)routing) { }
+        public Routing(RoutingTable table) : base()
+        {
+            foreach (var element in table)
+            {
+                Add(element.Key.ToString(), element.Value.ToString());
+            }
+        }
         
         #region IXmlSerializable Members
         public System.Xml.Schema.XmlSchema GetSchema()
