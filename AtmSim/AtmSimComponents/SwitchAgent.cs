@@ -90,7 +90,7 @@ namespace AtmSim.Components
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
-                    return Serial.SerializeObject(GetRoutingTable());
+                    return Serial.SerializeObject(new Routing(node.Matrix.RoutingTable));
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "type")
@@ -195,20 +195,36 @@ namespace AtmSim.Components
             }
             else if (command[0] == "rtadd")
             {
-                if (command.Length != 3)
-                    return response;
-                response += "rtaddresp " + command[1] + " " + command[2];
-                try
+                if (command.Length == 3)
                 {
-                    node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]));
+                    response += "rtaddresp " + command[1] + " " + command[2];
+                    try
+                    {
+                        node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]));
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                        return response;
+                    }
+                    response += " ok";
                 }
-                catch (ArgumentException)
+                else if (command.Length == 4)
                 {
-                    response += " fail";
-                    return response;
+                    response += "rtaddresp " + command[1] + " " + command[2] + " " + command[3];
+                    try
+                    {
+                        int id = Int32.Parse(command[3]);
+                        node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]), id);
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                        return response;
+                    }
+                    response += " ok";
                 }
-                response += " ok";
-
+                else return response;
             }
             else if (command[0] == "rtdel")
             {
@@ -221,16 +237,6 @@ namespace AtmSim.Components
                     response += " fail";
             }
             return response;
-        }
-
-        private Routing GetRoutingTable()
-        {
-            Routing table = new Routing();
-            foreach (var element in node.Matrix.RoutingTable)
-            {
-                table.Add(element.Key.ToString(), element.Value.ToString());
-            }
-            return table;
         }
     }
 }

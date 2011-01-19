@@ -81,10 +81,65 @@ namespace AtmSim
     }
     
 
-    public class RoutingTable : Dictionary<RoutingEntry, RoutingEntry>
+    public class RoutingTable// : Dictionary<RoutingEntry, RoutingEntry>
     {
-        public RoutingTable() : base(new RoutingEntry.EqualityComparer()) { }
-        public RoutingTable(RoutingTable routingTable) : base((Dictionary<RoutingEntry, RoutingEntry>)routingTable, new RoutingEntry.EqualityComparer()) { }
+        private Dictionary<RoutingEntry, RoutingEntry> table;
+        private Dictionary<int, RoutingEntry> map;
+
+        public RoutingEntry this[RoutingEntry entry] { get { return table[entry]; } }
+        public RoutingEntry this[int id] { get { return map[id]; } }
+
+        public RoutingTable()// : base(new RoutingEntry.EqualityComparer()) { }
+        {
+            table = new Dictionary<RoutingEntry,RoutingEntry>(new RoutingEntry.EqualityComparer());
+            map = new Dictionary<int, RoutingEntry>();
+        }
+
+        public RoutingTable(RoutingTable routingTable)// : base((Dictionary<RoutingEntry, RoutingEntry>)routingTable, new RoutingEntry.EqualityComparer()) { }
+        {
+            table = new Dictionary<RoutingEntry, RoutingEntry>(routingTable.table, new RoutingEntry.EqualityComparer());
+            map = new Dictionary<int, RoutingEntry>();
+        }
+
+        public void Add(RoutingEntry e1, RoutingEntry e2)
+        {
+            table.Add(e1, e2);
+        }
+
+        public void Add(RoutingEntry e1, RoutingEntry e2, int id)
+        {
+            table.Add(e1, e2);
+            map.Add(id, e1);
+        }
+
+        public bool Remove(RoutingEntry e)
+        {
+            if (map.ContainsValue(e))
+                return false;
+            return table.Remove(e);
+        }
+
+        public bool Remove(int id)
+        {
+            if (map.ContainsKey(id))
+                table.Remove(map[id]);
+            return map.Remove(id);
+        }
+
+        public bool ContainsKey(RoutingEntry e)
+        {
+            return table.ContainsKey(e);
+        }
+
+        public bool ContainsKey(int id)
+        {
+            return map.ContainsKey(id);
+        }
+
+        public Dictionary<RoutingEntry,RoutingEntry>.Enumerator GetEnumerator()
+        {
+            return table.GetEnumerator();
+        }
     }
 
 }
