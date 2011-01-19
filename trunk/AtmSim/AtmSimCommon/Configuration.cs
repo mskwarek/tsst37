@@ -27,7 +27,8 @@ namespace AtmSim
         }
         public void Add(Configuration c)
         {
-            this.Nodes.Add(c);
+            if (c != this)
+                this.Nodes.Add(c);
         }
         public void Add(string n)
         {

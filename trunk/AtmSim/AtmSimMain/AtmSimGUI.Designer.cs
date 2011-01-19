@@ -35,15 +35,15 @@
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.elementListBox = new System.Windows.Forms.ListBox();
             this.elementLabel = new System.Windows.Forms.Label();
             this.configButton = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.mToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,14 +74,14 @@
             // netNewToolStripMenuItem
             // 
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
             // netTopologyToolStripMenuItem
             // 
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
@@ -104,6 +104,12 @@
             this.logSaveToolStripMenuItem.Name = "logSaveToolStripMenuItem";
             this.logSaveToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.logSaveToolStripMenuItem.Text = "&Zapisz";
+            // 
+            // mToolStripMenuItem
+            // 
+            this.mToolStripMenuItem.Name = "mToolStripMenuItem";
+            this.mToolStripMenuItem.Size = new System.Drawing.Size(33, 20);
+            this.mToolStripMenuItem.Text = "&M:";
             // 
             // elementListBox
             // 
@@ -148,25 +154,14 @@
             this.logButton.UseVisualStyleBackColor = true;
             this.logButton.Click += new System.EventHandler(this.logButton_Click);
             // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(174, 277);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "loggme!";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // refreshButton
             // 
-            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.refreshButton.Location = new System.Drawing.Point(255, 277);
+            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.refreshButton.Location = new System.Drawing.Point(212, 277);
             this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(17, 23);
+            this.refreshButton.Size = new System.Drawing.Size(60, 23);
             this.refreshButton.TabIndex = 6;
-            this.refreshButton.Text = "r";
+            this.refreshButton.Text = "Odśwież";
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
@@ -175,19 +170,23 @@
             this.openFileDialog.Filter = "\"pliki XML|*.xml|Wszystkie pliki|*.*\"";
             this.openFileDialog.Title = "Otwórz konfigurację";
             // 
-            // mToolStripMenuItem
+            // button1
             // 
-            this.mToolStripMenuItem.Name = "mToolStripMenuItem";
-            this.mToolStripMenuItem.Size = new System.Drawing.Size(33, 20);
-            this.mToolStripMenuItem.Text = "&M:";
+            this.button1.Location = new System.Drawing.Point(174, 277);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(32, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "R";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 312);
-            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.configButton);
             this.Controls.Add(this.elementLabel);
@@ -216,11 +215,11 @@
         private System.Windows.Forms.Label elementLabel;
         private System.Windows.Forms.Button configButton;
         private System.Windows.Forms.Button logButton;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem mToolStripMenuItem;
+        private System.Windows.Forms.Button button1;
     }
 }
 

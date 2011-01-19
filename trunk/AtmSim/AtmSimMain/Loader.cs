@@ -27,7 +27,14 @@ namespace AtmSim
             label.Text = "Otwieranie pliku...";
             progressBar.Value = 10;
             Refresh();
-            Config.Network network = Config.Network.fopen(filename);
+            Config.Network network;
+            try { network = Config.Network.fopen(filename); }
+            catch (InvalidOperationException e)
+            {
+                MessageBox.Show(e.Message, "Nieprawidłowy plik wejściowy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
             label.Text = "Tworzenie węzłów...";
             progressBar.Value = 20;
             Refresh();

@@ -44,8 +44,7 @@ namespace AtmSim
                 Loader loader = new Loader(manager);
                 loader.Show();
                 loader.LoadNetwork(openFileDialog.FileName);
-                mToolStripMenuItem.Text = "&M: " + manager.Port;
-                refreshButton_Click(sender, e);
+                RefreshList();
             }
         }
 
@@ -86,11 +85,6 @@ namespace AtmSim
             logGUI.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            manager.Set(SelectedId, "send", "");
-        }
-
         private void refreshButton_Click(object sender, EventArgs e)
         {
             RefreshList();
@@ -101,6 +95,11 @@ namespace AtmSim
             elementListBox.Items.Clear();
             foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
 
         }
     }

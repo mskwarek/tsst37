@@ -21,27 +21,44 @@ namespace AtmSim
             set { log = value; }
         }
         private List<ILogListener> listeners = new List<ILogListener>();
+        private DateTime logStarted;
+        private TimeSpan upTime
+        {
+            get { return DateTime.Now - logStarted; }
+        }
 
         public Log()
         {
             this.log = new List<string>();
-            this.log.Add("Nowy log!");
+            this.logStarted = DateTime.Now;
         }
 
         public Log(string initString)
         {
             this.log = new List<string>();
-            this.log.Add(initString);
+            this.logStarted = DateTime.Now;
+            this.log.Add("[" + upTime.TotalSeconds + "] " + initString);
         }
 
         public Log(Log origin)
         {
             this.log = new List<string>(origin.log);
+            this.logStarted = DateTime.Now;
+        }
+
+        public Log(Log origin, int startIndex)
+        {
+            this.log = new List<string>(origin.log.Count);
+            this.logStarted = DateTime.Now;
+            for (int i = startIndex; i < origin.log.Count; i++)
+            {
+                this.log.Add(origin.log[i]);
+            }
         }
 
         public void LogMsg(string msg)
         {
-            this.log.Add(msg);
+            this.log.Add("[" + upTime.TotalSeconds + "] " + msg);
             foreach (ILogListener listener in this.listeners)
             {
                 if (listener != null)
@@ -60,11 +77,6 @@ namespace AtmSim
                 logString += msg + Environment.NewLine;
             }
             return logString;
-        }
-
-        public void ChangeInit(string initString)
-        {
-            log[0] = initString;
         }
 
         public void Subscribe(ILogListener listener)
