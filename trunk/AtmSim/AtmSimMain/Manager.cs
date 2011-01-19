@@ -21,10 +21,18 @@ namespace AtmSim
     {
         private class Node
         {
-            public int id;
-            public string name;
-            public Socket socket;
-            public Topology.Node node;
+            public int Id
+            {
+                get { return tnode.Id; }
+                set { tnode.Id = value; }
+            }
+            public string Name
+            {
+                get { return tnode.Name; }
+                set { tnode.Name = value; }
+            }
+            public Socket Socket;
+            public Topology.Node tnode;
         }
 
         public class NodeUnaccessibleException : Exception
@@ -38,15 +46,13 @@ namespace AtmSim
             }
         }
 
-//        private Dictionary<string, IAgent> nodes1 = new Dictionary<string, IAgent>(); // potrzebne póki nie mamy podziału na procesy
-        private Dictionary<int, Node> nodes = new Dictionary<int, Node>();
-//        private List<Edge<string>> links1 = new List<Edge<string>>();
+        private Dictionary<int, Node> nodes = new Dictionary<int, Node>(); // mapa numerów id na metadane węzłów
         private List<TaggedEdge<int, string>> links = new List<TaggedEdge<int, string>>();
-        private Topology topology = new Topology();
+        private Topology topology = new Topology(); // topologia sieci
         public Topology Topology
         { get { return topology; } }
-        
-        
+
+
         private Socket socket;
 
         public int Port
@@ -74,7 +80,7 @@ namespace AtmSim
         {
             foreach (Node node in nodes.Values)
             {
-                node.socket.Close();
+                node.Socket.Close();
             }
             nodes.Clear();
             links.Clear();
@@ -93,23 +99,22 @@ namespace AtmSim
         private void OnClientConnect(IAsyncResult asyn)
         {
             Node node = new Node();
-            node.socket = this.socket.EndAccept(asyn);
+            node.tnode = new Topology.Node();
+            node.Socket = this.socket.EndAccept(asyn);
             string idStr;
             try
             {
-                idStr = Get(node.socket, "ID");
-                node.name = Get(node.socket, "Name");
+                idStr = Get(node.Socket, "ID");
+                node.Name = Get(node.Socket, "Name");
             }
             catch (NodeUnaccessibleException)
             {
                 this.socket.BeginAccept(OnClientConnect, socket);
                 return;
             }
-            node.id = Int32.Parse(idStr);
-            Topology.Node tnode = new Topology.Node(node.id, node.name);
-            node.node = tnode;
-            topology.AddVertex(tnode);
-            nodes.Add(node.id, node);
+            node.Id = Int32.Parse(idStr);
+            topology.AddVertex(node.tnode);
+            nodes.Add(node.Id, node);
             this.socket.BeginAccept(OnClientConnect, socket);
         }
 
@@ -125,11 +130,29 @@ namespace AtmSim
             catch (SocketException) { throw new NodeUnaccessibleException(); }
         }
 
+        private string Query(int id, string query)
+        {
+            if (nodes.ContainsKey(id))
+            {
+                try
+                {
+                    nodes[id].Socket.Send(Encoding.ASCII.GetBytes(query));
+                    byte[] buffer = new byte[4096];
+                    int received = nodes[id].Socket.Receive(buffer);
+                    return Encoding.ASCII.GetString(buffer, 0, received);
+                }
+                catch (SocketException)
+                {
+                    Topology.RemoveVertex(nodes[id].tnode);
+                    nodes.Remove(id);
+                }
+            }
+            return "";
+        }
+
         public string Get(Socket sock, string param)
         {
             string response = Query(sock, "get " + param);
-            //if (param == "config" || param == "routing" || param == "log")
-            //    return response;
             string[] tokens = response.Split(' ');
             if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
                 return tokens[2];
@@ -138,27 +161,19 @@ namespace AtmSim
 
         public string Get(int id, string param)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try { return Get(nodes[id].socket, param); }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
+            string response = Query(id, "get " + param);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[0] == "getresp" && tokens[1] == param)
+                return tokens[2];
             return "";
         }
 
         public string Set(int id, string param, string value)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "set " + param + " " + value);
-                    string[] tokens = response.Split(' ');
-                    if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
-                        return tokens[2];
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
+            string response = Query(id, "set " + param + " " + value);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[0] == "setresp" && tokens[1] == param)
+                return tokens[2];
             return "";
         }
 
@@ -166,12 +181,27 @@ namespace AtmSim
         public List<string> GetElements()
         {
             List<string> elements = new List<string>();
-            foreach (int key in nodes.Keys)
+            int[] keys = new int[nodes.Count];
+            nodes.Keys.CopyTo(keys, 0);
+            Array.Sort(keys);
+            foreach (int key in keys)
             {
-                string element = "[" + key + "] " + nodes[key].name;
-                elements.Add(element);
+                if (Ping(key))
+                {
+                    string element = "[" + key + "] " + nodes[key].Name;
+                    elements.Add(element);
+                }
             }
             return elements;
+        }
+
+        public bool Ping(int id)
+        {
+            string pong = Query(id, "ping");
+            if (pong == "pong")
+                return true;
+            else 
+                return false;
         }
 
         public int ConnectedNodes
@@ -181,75 +211,47 @@ namespace AtmSim
 
         public Log GetLog(int id)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "get log");
-                    return (Log)Serial.DeserializeObject(response, typeof(Log));
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
-            return null;
+            string response = Query(id, "get log");
+            if (response != "")
+                return (Log)Serial.DeserializeObject(response, typeof(Log));
+            else
+                return null;
         }
 
         public Configuration GetConfig(int id)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "get config");
-                    return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
-            return null;
+            string response = Query(id, "get config");
+            if (response != "")
+                return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
+            else
+                return null;
         }
 
         public Routing GetRouting(int id)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "get routing");
-                    return (Routing)Serial.DeserializeObject(response, typeof(Routing));
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
-            return null;
+            string response = Query(id, "get routing");
+            if (response != "")
+                return (Routing)Serial.DeserializeObject(response, typeof(Routing));
+            else
+                return null;
         }
 
         public bool AddRouting(int id, string label, string value)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "rtadd " + label + " " + value);
-                    string[] tokens = response.Split(' ');
-                    if (tokens.Length == 4 && tokens[3] == "ok")
-                        return true;
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
-            return false;
+            string response = Query(id, "rtadd " + label + " " + value);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 4 && tokens[3] == "ok")
+                return true;
+            else
+                return false;
         }
 
         public bool RemoveRouting(int id, string label)
         {
-            if (nodes.ContainsKey(id))
-            {
-                try
-                {
-                    string response = Query(nodes[id].socket, "rtdel " + label);
-                    string[] tokens = response.Split(' ');
-                    if (tokens.Length == 3 && tokens[2] == "ok")
-                        return true;
-                }
-                catch (NodeUnaccessibleException) { throw new NodeUnaccessibleException(id); }
-            }
+            string response = Query(id, "rtdel " + label);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[2] == "ok")
+                return true;
             return false;
         }
 
@@ -260,9 +262,9 @@ namespace AtmSim
                 string port = Get(link.EndNode, "PortsIn." + link.EndPort + "._port");
                 Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
                 Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
-                links.Add(new TaggedEdge<int, string>(link.StartNode, link.EndNode, link.StartPort+":"+link.EndPort));
-                topology.AddEdge(new Topology.Link(link.StartPort + ":" + link.EndPort, 
-                   nodes[link.StartNode].node, nodes[link.EndNode].node));
+                links.Add(new TaggedEdge<int, string>(link.StartNode, link.EndNode, link.StartPort + ":" + link.EndPort));
+                topology.AddEdge(new Topology.Link(link.StartPort + ":" + link.EndPort,
+                   nodes[link.StartNode].tnode, nodes[link.EndNode].tnode));
             }
         }
 
@@ -274,11 +276,11 @@ namespace AtmSim
             //foreach (Node node in nodes.Values)
             //    g.AddVertex(node.id);
             foreach (TaggedEdge<int, string> edge in links)
-                g.AddVerticesAndEdge(new Edge<int> (edge.Source, edge.Target));
+                g.AddVerticesAndEdge(new Edge<int>(edge.Source, edge.Target));
             return g;
         }
 
-        public List<TaggedEdge<int,string>> GetLinks()
+        public List<TaggedEdge<int, string>> GetLinks()
         {
             return links;
         }
