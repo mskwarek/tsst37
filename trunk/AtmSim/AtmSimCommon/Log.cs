@@ -5,13 +5,6 @@ using System.Text;
 
 namespace AtmSim
 {
-    // interfejs potrzebny do aktualizacji loga na biezaco
-    public interface ILogListener
-    {
-        void LogUpdated();
-        void LogUpdated(string msg);
-    }
-
     public class Log
     {
         private List<string> log;
@@ -20,7 +13,7 @@ namespace AtmSim
             get { return log; }
             set { log = value; }
         }
-        private List<ILogListener> listeners = new List<ILogListener>();
+
         private DateTime logStarted;
         private TimeSpan upTime
         {
@@ -59,14 +52,12 @@ namespace AtmSim
         public void LogMsg(string msg)
         {
             this.log.Add("[" + upTime.TotalSeconds + "] " + msg);
-            foreach (ILogListener listener in this.listeners)
-            {
-                if (listener != null)
-                {
-                    listener.LogUpdated();
-                    listener.LogUpdated(msg);
-                }
-            }
+        }
+
+        public void Append(Log log)
+        {
+            foreach (string entry in log.log)
+                this.log.Add(entry);
         }
 
         public override string ToString()
@@ -79,16 +70,5 @@ namespace AtmSim
             return logString;
         }
 
-        public void Subscribe(ILogListener listener)
-        {
-            if (!listeners.Contains(listener))
-                this.listeners.Add(listener);
-        }
-
-        public void Unsubscribe(ILogListener listener)
-        {
-            if (this.listeners.Contains(listener))
-                listeners.Remove(listener);
-        }
     }
 }

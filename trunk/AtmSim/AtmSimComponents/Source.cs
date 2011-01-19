@@ -6,26 +6,28 @@ using System.Text;
 namespace AtmSim.Components
 {
     //generyczne źródło ruchu, wysyłające przez swój port dane o losowej długości 
-    public class Source : INetworkNode
+    public class Source
     {
-        public int Id;
-        public string Name;
+        private int id;
+        public int Id { get { return id; } }
+
+        private string name;
+        public string Name { get { return name; } set { name = value; } }
+
         private Log log;
-        public Log Log { get { return log; } set { log = value; } }
+        public Log Log { get { return log; } }
 
         private SourceAgent agent;
-        public IAgent Agent { get { return agent; } }
+        public SourceAgent Agent { get { return agent; } }
 
         private string message = "";
-        private string target = "";
         public string Message { get { return message; } set { message = value; } }
+
+        private string target = "";
         public string Target { get { return target; } set { target = value; } }
 
         private Dictionary<string, RoutingEntry> targets = new Dictionary<string, RoutingEntry>();
-        public Dictionary<string, RoutingEntry> Matrix {
-            get { return targets; }
-            set { targets = value; }
-        }
+        public Dictionary<string, RoutingEntry> Matrix { get { return targets; } }
 
         private AdaptationLayer aal = new AdaptationLayer();  //czyli AAL.Za pomoca tej klasy bedziemy mapowac strumien uzytkowy ktory sobie tez tu utworzymy
 
@@ -34,8 +36,8 @@ namespace AtmSim.Components
 
         public Source(Config.Node node, int managerPort)
         {
-            this.Id = node.Id;
-            this.Name = (string)node.Name.Clone();
+            this.id = node.Id;
+            this.name = (string)node.Name.Clone();
             this.log = new Log("Log zrodla " + Name);
             this.agent = new SourceAgent(this, managerPort);
             this.portOut = new PortOut(0);

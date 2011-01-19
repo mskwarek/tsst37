@@ -8,20 +8,24 @@ namespace AtmSim.Components
     /**
      * Urządzenie odbierające ze swojego portu ruch sieciowy. 
      **/
-    public class Sink : INetworkNode
+    public class Sink
     {
-        public int Id;
-        public string Name;
+        private int id;
+        public int Id { get { return id; } }
+
+        private string name;
+        public string Name { get { return name; } set { name = value; } }
+
         private Log log;
-        public Log Log { get { return log; } set { log = value; } }
+        public Log Log { get { return log; } }
 
         private SinkAgent agent;
-        public IAgent Agent { get { return agent; } }
+        public SinkAgent Agent { get { return agent; } }
         
         private PortIn portIn;
         public PortIn PortIn { get { return portIn; } }
 
-        public  class SinkReceiver : IFrameReceiver
+        public class SinkReceiver : IFrameReceiver
         {  
             private Sink sink;
             private Dictionary<RoutingEntry, string> sources = new Dictionary<RoutingEntry, string>(new RoutingEntry.EqualityComparer());
@@ -51,8 +55,8 @@ namespace AtmSim.Components
 
         public Sink(Config.Node node, int managerPort)
         {
-            this.Id = node.Id;
-            this.Name = (string)node.Name.Clone();
+            this.id = node.Id;
+            this.name = (string)node.Name.Clone();
             this.log = new Log("Log urzadzenia " + Name);
             this.agent = new SinkAgent(this, managerPort);
             portIn = new PortIn(0);

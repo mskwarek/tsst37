@@ -42,8 +42,6 @@
   <ItemGroup>
     <Compile Include="ConfigNetwork.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="IAgent.cs" />
-    <Compile Include="INetworkNode.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="ConfigNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

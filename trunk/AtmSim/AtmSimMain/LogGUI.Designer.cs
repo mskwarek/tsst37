@@ -92,7 +92,6 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "LogGUI";
             this.Text = "Log";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogGUI_Closing);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);

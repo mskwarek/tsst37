@@ -64,16 +64,12 @@
   -->
   <ItemGroup>
     <Compile Include="AdaptationLayer.cs" />
-    <Compile Include="NodeAgent.cs" />
-    <Compile Include="Central.cs" />
-    <Compile Include="Component.cs" />
+    <Compile Include="SwitchAgent.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="DataUnit.cs" />
     <Compile Include="IFrameReceiver.cs" />
-    <Compile Include="IPortIn.cs" />
-    <Compile Include="IPortOut.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="Node.cs" />
+    <Compile Include="Switch.cs" />
     <Compile Include="PortIn.cs" />
     <Compile Include="PortOut.cs" />
     <Compile Include="ProtocolUnit.cs" />
@@ -81,8 +77,6 @@
     <Compile Include="SinkAgent.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="SourceAgent.cs" />
-    <Compile Include="TestPortIn.cs" />
-    <Compile Include="TestPortOut.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

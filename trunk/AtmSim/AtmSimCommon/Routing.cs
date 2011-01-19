@@ -11,7 +11,7 @@ namespace AtmSim
         //private Dictionary<string, string> routing;
         public Routing() : base() { }
         public Routing(Routing routing) : base((Dictionary<string, string>)routing) { }
-
+        
         #region IXmlSerializable Members
         public System.Xml.Schema.XmlSchema GetSchema()
         {

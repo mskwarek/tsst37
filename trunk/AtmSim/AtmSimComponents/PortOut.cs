@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace AtmSim.Components
 {
-    public class PortOut : IPortOut
+    public class PortOut
     {
         int portID;
         public int PortID
@@ -17,7 +17,6 @@ namespace AtmSim.Components
             set { portID = value; }
         }
         private Socket clientSocket;
-        //private byte[] buffer = new byte[1024];
         private int tcpPort;
         public int TcpPort
         {
@@ -32,11 +31,6 @@ namespace AtmSim.Components
         public PortOut(int id)
         {
             portID = id;
-        }
-
-        public void Send(string pu)
-        {
-            throw new NotImplementedException();
         }
 
         public void Send(ProtocolUnit pu)

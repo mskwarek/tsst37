@@ -20,7 +20,6 @@ namespace AtmSim
         private Dictionary<string,string> modifiedConfig;
         private List<string> addedRouting;
         private List<string> removedRouting;
-        private List<string> modifiedRouting;
         private string Selected 
         {
             get
@@ -28,22 +27,6 @@ namespace AtmSim
                 return configTree.SelectedNode.FullPath;
             }
         }
-
-/*        public ConfigGUI(Manager manager, string name)
-        {
-            this.manager = manager;
-            this.elementName = name;
-            this.localConfig = new Manager.Config(manager.GetConfig(this.elementName));
-            this.localRouting = new Routing(manager.GetRouting(this.elementName));
-            this.modifiedConfig = new List<string>();
-            this.addedRouting = new List<string>();
-            this.removedRouting = new List<string>();
-            this.modifiedRouting = new List<string>();
-            InitializeComponent();
-            this.Text += " " + this.elementName;
-            this.generalPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localConfig);
-            this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
-        }*/
 
         public ConfigGUI(Manager manager, int id)
         {
@@ -55,7 +38,6 @@ namespace AtmSim
             this.modifiedConfig = new Dictionary<string, string>();
             this.addedRouting = new List<string>();
             this.removedRouting = new List<string>();
-            this.modifiedRouting = new List<string>();
             InitializeComponent();
             this.Text += " " + this.elementName;
             foreach (TreeNode node in configuration.Nodes)
@@ -88,7 +70,6 @@ namespace AtmSim
                 this.routingPropertyGrid.Refresh();
                 this.addedRouting.Clear();
                 this.removedRouting.Clear();
-                this.modifiedRouting.Clear();
             }
         }
 
@@ -102,7 +83,7 @@ namespace AtmSim
 
         private void ConfigGUI_FormClosing(object sender, EventArgs e)
         {
-            if (modifiedRouting.Count > 0 || addedRouting.Count > 0 || removedRouting.Count > 0)
+            if (addedRouting.Count > 0 || removedRouting.Count > 0)
             {
                 DialogResult dlg = MessageBox.Show("Zapisać ustawienia routingu?", "Konfiguracja", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes)
@@ -143,12 +124,6 @@ namespace AtmSim
                 modifiedConfig.Add(Selected, configTextBox.Text);
         }
 
-        private void routingPropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
-        {
-            string modifiedEntry = (string)e.ChangedItem.Label;
-            modifiedRouting.Add(modifiedEntry);
-        }
-
         private void saveConfig()
         {
             foreach (string param in modifiedConfig.Keys)
@@ -164,11 +139,8 @@ namespace AtmSim
                 manager.RemoveRouting(this.id, label);
             foreach (string label in addedRouting)
                 manager.AddRouting(this.id, label, localRouting[label]);
- //           foreach (string label in modifiedRouting)
- //               manager.ModifyRouting(this.id, label, label, localRouting[label]);
             addedRouting.Clear();
             removedRouting.Clear();
- //           modifiedRouting.Clear();
         }
 
         private void addRoutingEntryButton_Click(object sender, EventArgs e)
@@ -180,16 +152,8 @@ namespace AtmSim
 
         public void AddRoutingEntry(string label, string value)
         {
-            if (localRouting.ContainsKey(label))
-            {
-                localRouting[label] = value;
-                this.modifiedRouting.Add(label);
-            }
-            else
-            {
-                localRouting.Add(label, value);
-                this.addedRouting.Add(label);
-            }
+            localRouting.Add(label, value);
+            this.addedRouting.Add(label);
             routingPropertyGrid.Refresh();
         }
 
@@ -200,8 +164,6 @@ namespace AtmSim
             {
                 localRouting.Remove(selectedEntry);
                 removedRouting.Add(selectedEntry);
-                if (modifiedRouting.Contains(selectedEntry))
-                    modifiedRouting.Remove(selectedEntry);
                 if (addedRouting.Contains(selectedEntry))
                     addedRouting.Remove(selectedEntry);
             }

@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace AtmSim.Components
 {
-    class SinkAgent : IAgent
+    public class SinkAgent
     {
         Sink node;
         Configuration config;
@@ -60,14 +60,22 @@ namespace AtmSim.Components
             }
             else if (command[0] == "get")
             {
+                if (command[1] == "log" && command.Length == 3)
+                {
+                    int n;
+                    try { n = Int32.Parse(command[2]); }
+                    catch (ArgumentNullException) { n = 0; }
+                    if (n == 0)
+                        return Serial.SerializeObject(node.Log);
+                    else
+                        return Serial.SerializeObject(new Log(node.Log, n));
+                }
                 if (command.Length != 2)
                     return response;
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
                     return Serial.SerializeObject(GetRoutingTable());
-                if (command[1] == "log")
-                    return Serial.SerializeObject(node.Log);
                 response += "getresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "type")
@@ -147,27 +155,7 @@ namespace AtmSim.Components
             return response;
         }
 
-        public string[] GetParamList()
-        {
-            string[] param = { "name" } ;
-            return param;
-        }
-
-        public string GetParam(string name)
-        {
-            if (name == "name")
-                return node.Name;
-            else
-                return "";
-        }
-
-        public void SetParam(string name, string value)
-        {
-            if (name == "name")
-                node.Name = value;
-        }
-
-        public Routing GetRoutingTable()
+        private Routing GetRoutingTable()
         {
             Routing table = new Routing();
             foreach (var element in node.Receiver.Sources)
@@ -177,21 +165,5 @@ namespace AtmSim.Components
             return table;
         }
 
-        public void AddRoutingEntry(string label, string value)
-        {
-            if (!node.Receiver.Sources.ContainsKey(new RoutingEntry(label)))
-                node.Receiver.Sources.Add(new RoutingEntry(label), value);
-        }
-
-        public void RemoveRoutingEntry(string entry)
-        {
-            if (node.Receiver.Sources.ContainsKey(new RoutingEntry(entry)))
-                node.Receiver.Sources.Remove(new RoutingEntry(entry));
-        }
-  
-        public string GetLog()
-        {
-            return node.Log.ToString();
-        }
     }
 }
