@@ -26,6 +26,7 @@ namespace AtmSim.Components
             private Sink sink;
             private Dictionary<RoutingEntry, string> sources = new Dictionary<RoutingEntry, string>(new RoutingEntry.EqualityComparer());
             public Dictionary<RoutingEntry, string> Sources { get { return sources; } set { sources = value; } }
+            public String Buffer;
 
             public SinkReceiver(Sink sink)
             {
@@ -36,7 +37,10 @@ namespace AtmSim.Components
             {   
                 RoutingEntry source = new RoutingEntry(port, pu.Vpi, pu.Vci);
                 if (sources.ContainsKey(source))
+                {
                     sink.log.LogMsg("Wiadomosc " + pu.DataUnit.Id + " z polaczenia " + sources[source]);
+                    Buffer += pu.DataUnit.Id;
+                }
                 else
                     sink.Log.LogMsg("Ramka: " + source.ToString());
            }
