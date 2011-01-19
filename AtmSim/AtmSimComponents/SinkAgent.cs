@@ -19,13 +19,15 @@ namespace AtmSim.Components
         {
             node = n;
             config = new Configuration(n.Name);
-            Configuration pOut = new Configuration("PortIn");
+            Configuration pOut = new Configuration("0");
             pOut.Add("Open");
             pOut.Add("Connected");
             pOut.Add("_port");
+            Configuration psOut = new Configuration("PortsIn");
+            psOut.Add(pOut);
             config.Add("ID");
             config.Add("Name");
-            config.Add(pOut);
+            config.Add(psOut);
 
             managerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint server = new IPEndPoint(IPAddress.Loopback, port);
@@ -74,9 +76,9 @@ namespace AtmSim.Components
                     response += " " + node.Id;
                 else if (param[0] == "Name")
                     response += " " + node.Name;
-                else if (param[0] == "PortIn")
+                else if (param[0] == "PortsIn")
                 {
-                    if (param.Length != 2)
+                    if (param.Length != 3)
                         return response;
                     if (param[2] == "Open")
                         response += " " + node.PortIn.Open;

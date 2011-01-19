@@ -36,7 +36,7 @@ namespace AtmSim.Components
         {
             this.Id = node.Id;
             this.Name = (string)node.Name.Clone();
-            this.log = new Log("Log źródła " + Name);
+            this.log = new Log("Log zrodla " + Name);
             this.agent = new SourceAgent(this, managerPort);
             this.portOut = new PortOut(0);
         }
