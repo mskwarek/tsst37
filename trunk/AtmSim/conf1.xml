@@ -48,7 +48,7 @@
 				<PortOut><Id>0</Id></PortOut>
 			</PortsOut>
 		</Node>
-		<!--<Node>
+		<Node>
 			<Id>5</Id>
 			<Type>Sink</Type>
 			<Name>Sink_1</Name>
@@ -56,7 +56,7 @@
 				<PortIn><Id>0</Id></PortIn>
 			</PortsIn>
 			<PortsOut/>
-		</Node>-->
+		</Node>
 
 	</Nodes>
 	<Links>

@@ -38,6 +38,7 @@ namespace AtmSim.Components
             this.Name = (string)node.Name.Clone();
             this.log = new Log("Log źródła " + Name);
             this.agent = new SourceAgent(this, managerPort);
+            this.portOut = new PortOut(0);
         }
 
         /*jezeli wybierzemy w metodzie GenerateData tryb losowego generowania strumienia uzytkowego to to bedzie maxymalna mozliwa

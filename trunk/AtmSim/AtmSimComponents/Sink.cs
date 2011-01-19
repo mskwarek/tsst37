@@ -18,7 +18,8 @@ namespace AtmSim.Components
         private SinkAgent agent;
         public IAgent Agent { get { return agent; } }
         
-        private IPortIn firstport;
+        private PortIn portIn;
+        public PortIn PortIn { get { return portIn; } }
 
         public  class SinkReceiver : IFrameReceiver
         {  
@@ -44,16 +45,13 @@ namespace AtmSim.Components
         private SinkReceiver receiver;
         public SinkReceiver Receiver { get { return receiver; } }
 
-        public void SetPortIn(IPortIn po) { firstport = po; } //skojarzenie Sorcea z odpowiednim portem wyjsciowym
-        public IPortIn GetPortIn() { return firstport; }
-    
-        public Sink(String name)
+        public Sink(Config.Node node, int managerPort)
         {
-            this.Name = name;
-            this.log = new Log("Log źródła " + name);
-            agent = new SinkAgent(this);
-            receiver = new SinkReceiver(this);
-            firstport = new TestPortIn(0);
+            this.Id = node.Id;
+            this.Name = (string)node.Name.Clone();
+            this.log = new Log("Log źródła " + Name);
+            this.agent = new SinkAgent(this, managerPort);
+            portIn = new PortIn(0);
         }
     }
 }
