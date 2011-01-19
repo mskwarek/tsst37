@@ -11,8 +11,11 @@ namespace AtmSim
     {
         public class Node
         {
-            public int Id;
-            public string Name;
+            public int Id = 0;
+            public string Name = "";
+
+            public Node()
+            { }
 
             public Node(int id, string name)
             {

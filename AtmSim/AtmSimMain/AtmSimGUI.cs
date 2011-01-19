@@ -18,7 +18,7 @@ namespace AtmSim
             {
                 string[] tokens = selectedName.Split(new char[]{'[', ']'}, StringSplitOptions.RemoveEmptyEntries);
                 int id = 0, i=0;
-                while (id == 0)
+                while (id == 0 && i<tokens.Length)
                 {
                     id = Convert.ToInt32(tokens[i]);
                     i++;
@@ -61,6 +61,8 @@ namespace AtmSim
         {
             if (this.elementListBox.SelectedIndex >= 0)
                 this.selectedName = (string)this.elementListBox.Items[this.elementListBox.SelectedIndex];
+            if (manager.Ping(this.SelectedId) == false)
+                RefreshList();
         }
 
         private void configButton_Click(object sender, EventArgs e)
@@ -85,9 +87,15 @@ namespace AtmSim
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
+            RefreshList();
+        }
+
+        private void RefreshList()
+        {
             elementListBox.Items.Clear();
             foreach (string element in manager.GetElements())
                 elementListBox.Items.Add(element);
+
         }
     }
 }

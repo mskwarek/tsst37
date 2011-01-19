@@ -69,7 +69,11 @@ namespace AtmSim.Components
         {
             string[] command = query.Split(' ');
             string response = "";
-            if (command[0] == "get")
+            if (command[0] == "ping")
+            {
+                response += "pong";
+            }
+            else if (command[0] == "get")
             {
                 if (command.Length != 2)
                     return response;
