@@ -13,6 +13,7 @@ namespace AtmSim
 
         private Manager manager;
         private String strDebug="";
+        private Random random = new Random();
         public RoutingController(Manager manager) 
         {
             this.manager = manager;
@@ -30,6 +31,7 @@ namespace AtmSim
             public int target { get; set;}
             public Topology ownTopology { get; set; }
             public List<Topology.Link> path { get; set; }
+            public List<string> vcivpiList { get; set; }
             public int connectN{ get; set; }
             public SetupStore(int source, int target, Topology ownTopology, int connectN) {
                 this.source = source;
@@ -37,6 +39,8 @@ namespace AtmSim
                 this.ownTopology = ownTopology;
                 this.connectN = connectN;
                 path = new List<Topology.Link>();
+                vcivpiList = new List<string>();
+               
             }
             public SetupStore() { }
         }
@@ -54,14 +58,14 @@ namespace AtmSim
                  //ss.path = this.findBestPath(ss);
                  if (this.findBestPath(ss))
                  {
-                     index = this.askLRMs(ss);
+                     index = askLRMs(ss);
                      if (index < 0) //if true we find the best path
                          break;
                  }
                  else break; //it is imposible to make path
                   ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));   //delete edge that is full
              }
-             
+             this.setupNodes(ss);
           //recreating graf for new connection
              //TODO:
              //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenia
@@ -110,31 +114,54 @@ namespace AtmSim
         }
 
         public int askLRMs(SetupStore ss){
-                      // ss.path.
 
+
+            string start = "";
+            string end="";
+            string VpiVci = "";
             foreach (var e in ss.path)
             {
-                   if (!doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." +e.Source +".Available.Vpi.Vci")))
-                   return (ss.path).IndexOf(e);
-                   if (!doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available.Vpi.Vci")))
-                 return (ss.path).IndexOf(e);
+                
+                 if (e.Source.Name.Substring(0, 6) == "Source")
+                 { start = rand() + ":" + rand(); end = "--"; }
+                 if (e.Source.Name.Substring(0, 6) == "Switch")
+                 { start =  rand() + ":" + rand(); }
+                 if (e.Target.Name.Substring(0, 4) == "Sink")
+                 { end =  rand() + ":" + rand(); start = "--"; }
+                     VpiVci = end +"."+ start;
+                    end = start;
+                    ss.vcivpiList.Add(VpiVci);
+
+
+                   if (!doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." +e.SourcePort +".Available."+VpiVci))) //to change
+                     return (ss.path).IndexOf(e);
+                   if (!doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))) //to change
+                     return (ss.path).IndexOf(e);
             }
 
             return -1; //no problems
         }
 
+        private void setupNodes(SetupStore ss)
+        {
+            string label;
+            string value;
+            int index = 0;
+            foreach (var e in ss.path) {
+               label = e.SourcePort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[0];
+                value =e.TargetPort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[1];
+                    this.addRouting(e.Source.Id, label, value, ss.connectN);   //to change
 
-        private void setupNodes(IEnumerable<Topology.Link> path, int connectN)
-        {    
-            
-            foreach (var e in path)
-            { 
-           //  if(e.Source.Name=="switch")
-                // path.ElementAt()
-            
+                if (index == ss.path.Capacity - 1)
+                {
+                    label = e.SourcePort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[0];
+                    value =e.TargetPort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[1];
+                    this.addRouting(e.Source.Id, label, value, ss.connectN);  //to change
+                }
+                index++;
             }
+           
         }
-
 
         private String Get(int id,  String str) //debugging
         {
@@ -143,5 +170,12 @@ namespace AtmSim
 
 
         private void addRouting(int id, String lable, String value, int idNumber){} //debugging
+
+
+        private String rand(){
+           
+            int num = random.Next()%100;
+            return Convert.ToString(num);
+        }
     }
 }
