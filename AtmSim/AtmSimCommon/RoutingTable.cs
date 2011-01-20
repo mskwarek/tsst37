@@ -34,23 +34,16 @@ namespace AtmSim
         public RoutingEntry(string entry)
         {
             string[] pvv = entry.Split(';', ':', ',', '.');
-            if (pvv.Length != 3) throw new ArgumentException();
-            try
+            if (pvv.Length != 3) throw new FormatException();
+            this.port = int.Parse(pvv[0]);
+            this.vpi = int.Parse(pvv[1]);
+            if (pvv[2] == "-" || pvv[2] == "")
             {
-                this.port = int.Parse(pvv[0]);
-                this.vpi = int.Parse(pvv[1]);
-                if (pvv[2] == "-" || pvv[2] == "")
-                {
-                    this.novci = true;
-                    this.vci = 0;
-                }
-                else
-                    this.vci = int.Parse(pvv[2]);
+                this.novci = true;
+                this.vci = 0;
             }
-            catch (System.FormatException)
-            {
-                throw new ArgumentException();
-            }
+            else
+                this.vci = int.Parse(pvv[2]);
         }
 
         public override string ToString()
