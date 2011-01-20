@@ -86,7 +86,7 @@ namespace AtmSim.Components
                         return Serial.SerializeObject(new Log(node.Log, n));
                 }
                 if (command.Length != 2)
-                    return "getresp null";
+                    return "getresp";
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
@@ -95,7 +95,7 @@ namespace AtmSim.Components
                 string[] param = command[1].Split('.');
                 if (param[0] == "type")
                     response += " Switch";
-                if (param[0] == "ID")
+                else if (param[0] == "ID")
                     response += " " + node.Id;
                 else if (param[0] == "Name")
                     response += " " + node.Name;
@@ -157,7 +157,7 @@ namespace AtmSim.Components
             else if (command[0] == "set")
             {
                 if (command.Length != 3)
-                    return response;
+                    return "setresp";
                 response += "setresp " + command[1];
                 string[] param = command[1].Split('.');
                 if (param[0] == "ID")
@@ -182,7 +182,6 @@ namespace AtmSim.Components
                         response += " " + node.PortsIn[n].Connected; // niezmienne
                     else if (param[2] == "_port")
                         response += " " + node.PortsIn[n].TcpPort; // niezmienne
-                    else return response;
                 }
                 else if (param[0] == "PortsOut")
                 {
@@ -210,46 +209,59 @@ namespace AtmSim.Components
                         catch (ArgumentNullException) { return response; }
                         response += " " + node.PortsOut[n].TcpPort;
                     }
-                    else return response;
                 }
             }
             else if (command[0] == "rtadd")
             {
+                response += "rtaddresp ";
                 if (command.Length == 3)
                 {
-                    response += "rtaddresp " + command[1] + " " + command[2];
+                    response += command[1] + " " + command[2];
                     try
                     {
-                        node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]));
+                        RoutingEntry incoming = new RoutingEntry(command[1]);
+                        RoutingEntry outcoming = new RoutingEntry(command[1]);
+                        if (node.PortsIn.Length > incoming.Port && node.PortsOut.Length > outcoming.Port)
+                        {
+                            node.Matrix.RoutingTable.Add(incoming, outcoming);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
                     }
                     catch (ArgumentException)
                     {
                         response += " fail";
-                        return response;
                     }
-                    response += " ok";
                 }
                 else if (command.Length == 4)
                 {
-                    response += "rtaddresp " + command[1] + " " + command[2] + " " + command[3];
+                    response += command[1] + " " + command[2] + " " + command[3];
                     try
                     {
                         int id = Int32.Parse(command[3]);
-                        node.Matrix.RoutingTable.Add(new RoutingEntry(command[1]), new RoutingEntry(command[2]), id);
+                        RoutingEntry incoming = new RoutingEntry(command[1]);
+                        RoutingEntry outcoming = new RoutingEntry(command[1]);
+                        if (node.PortsIn.Length > incoming.Port && node.PortsOut.Length > outcoming.Port)
+                        {
+                            node.Matrix.RoutingTable.Add(incoming, outcoming, id);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
                     }
                     catch (ArgumentException)
                     {
                         response += " fail";
-                        return response;
                     }
-                    response += " ok";
                 }
-                else return response;
             }
             else if (command[0] == "rtdel")
             {
+                response += "rtdelresp ";
                 if (command.Length != 2)
                     return response;
+                response += command[1];
                 try
                 {
                     int c = Int32.Parse(command[1]);
@@ -269,14 +281,17 @@ namespace AtmSim.Components
             }
             else if (command[0] == "rtcdel")
             {
+                response += "rtdelresp ";
                 if (command.Length != 2)
                     return response;
-                response += "rtdelresp " + command[1];
+                response += command[1];
                 if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
                     response += " ok";
                 else
                     response += " fail";
             }
+            else
+                response = command[0] + "resp none";
             return response;
         }
 
