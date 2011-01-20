@@ -12,25 +12,25 @@ namespace AtmSim
     {
 
        private Manager manager;
-       private Topology ownTopology;
-       private IEnumerable<Topology.Link> path;
-       private String stringToSave = "";
         public RoutingController(Manager manager) 
         {
             this.manager = manager;
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
-            ownTopology = manager.Topology;
+            
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-         //   this.setupConnection(4, 5);  for debuging
+           //this.setupConnection(4, 5);  
         }
 
 
          public void setupConnection(int src, int trg){
+             Topology ownTopology = manager.Topology;//recreating graf for new connection
+             IEnumerable<Topology.Link> path;
             int index=-1;
              while(ownTopology.EdgeCount!=0){
-                 if (this.findBestPath(src, trg))
+                 path = this.findBestPath(src, trg, ownTopology);
+                 if (path!=null)
                  {
-                     index = this.askLRMs();
+                     index = this.askLRMs(path);
                      if (index < 0) //if true we find the best path
                          break;
                  }
@@ -38,22 +38,24 @@ namespace AtmSim
                   ownTopology.RemoveEdge(ownTopology.Edges.ElementAt(index));   //delete edge that is full
              }
 
-             ownTopology = manager.Topology; //recreating graf for new connection
+          //recreating graf for new connection
              //TODO:
              //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenia
          }
 
 
 
-        private Topology.Node IDtoNode(int id) { 
+         private Topology.Node IDtoNode(int id, Topology ownTopology)
+         { 
  
             return ownTopology.Vertices.ToList().Find(delegate(Topology.Node no) { 
                 return no.Id == id; 
             });
 
         }
-        
-        private Boolean findBestPath(int idSource, int idDestination) {
+
+         private IEnumerable<Topology.Link> findBestPath(int idSource, int idDestination, Topology ownTopology)
+        {
             Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
 
             // We want to use Dijkstra on this graph
@@ -62,11 +64,11 @@ namespace AtmSim
             // Attach a Vertex Predecessor Recorder Observer to give us the paths
             var predecessorObserver = new VertexPredecessorRecorderObserver<Topology.Node, Topology.Link>();
             predecessorObserver.Attach(dijkstra);
-            dijkstra.Compute(this.IDtoNode(idSource));
-           
-            if (predecessorObserver.TryGetPath(this.IDtoNode(idDestination), out path))
-                return true;
-            else return false;  
+            dijkstra.Compute(this.IDtoNode(idSource, ownTopology));
+            IEnumerable<Topology.Link> path;
+            if (predecessorObserver.TryGetPath(this.IDtoNode(idDestination, ownTopology), out path))
+                return path;
+            else return null;  
         }
 
         private Boolean doIHaveAmptyPorts(String response){
@@ -79,7 +81,7 @@ namespace AtmSim
 
         }
 
-        public int askLRMs(){
+        public int askLRMs( IEnumerable<Topology.Link> path){
                        
             foreach (var e in path)
             {
