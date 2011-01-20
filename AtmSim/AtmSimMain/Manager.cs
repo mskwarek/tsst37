@@ -47,7 +47,6 @@ namespace AtmSim
         }
 
         private Dictionary<int, Node> nodes = new Dictionary<int, Node>(); // mapa numerów id na metadane węzłów
-        private List<TaggedEdge<int, string>> links = new List<TaggedEdge<int, string>>();
         private Topology topology = new Topology(); // topologia sieci
         public Topology Topology
         { get { return topology; } }
@@ -66,16 +65,6 @@ namespace AtmSim
             }
         }
 
-        //public void AddNode(string name, IAgent node)
-        //{
-        //    nodes1.Add(name, node);
-        //}
-
-        //public void AddLink(string sourceName, string destinationName)
-        //{
-        //    links1.Add(new Edge<string>(sourceName, destinationName));
-        //}
-
         public void Reset()
         {
             foreach (Node node in nodes.Values)
@@ -83,7 +72,6 @@ namespace AtmSim
                 node.Socket.Close();
             }
             nodes.Clear();
-            links.Clear();
             topology.Clear();
         }
 
@@ -281,7 +269,6 @@ namespace AtmSim
                 string port = Get(link.EndNode, "PortsIn." + link.EndPort + "._port");
                 Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
                 Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
-                links.Add(new TaggedEdge<int, string>(link.StartNode, link.EndNode, link.StartPort + ":" + link.EndPort));
                 topology.AddEdge(new Topology.Link(
                    nodes[link.StartNode].tnode, nodes[link.EndNode].tnode,
                    link.StartPort, link.EndPort));
