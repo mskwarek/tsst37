@@ -11,7 +11,7 @@ namespace AtmSim
     class RoutingController
     {
 
-       private Manager manager;
+        private Manager manager;
         public RoutingController(Manager manager) 
         {
             this.manager = manager;
@@ -22,21 +22,23 @@ namespace AtmSim
         }
 
 
-         public void setupConnection(int src, int trg){
-             Topology ownTopology = manager.Topology;//recreating graf for new connection
-             IEnumerable<Topology.Link> path;
+         public void setupConnection(int src, int trg)
+         {
+            Topology ownTopology = manager.Topology;//recreating graf for new connection
+            IEnumerable<Topology.Link> path;
             int index=-1;
-             while(ownTopology.EdgeCount!=0){
-                 path = this.findBestPath(src, trg, ownTopology);
-                 if (path!=null)
-                 {
-                     index = this.askLRMs(path);
-                     if (index < 0) //if true we find the best path
-                         break;
-                 }
-                 else break; //it is imposible to make path
-                  ownTopology.RemoveEdge(ownTopology.Edges.ElementAt(index));   //delete edge that is full
-             }
+            while(ownTopology.EdgeCount!=0)
+            {
+                path = this.findBestPath(src, trg, ownTopology);
+                if (path!=null)
+                {
+                    index = this.askLRMs(path);
+                    if (index < 0) //if true we find the best path
+                        break;
+                }
+                else break; //it is imposible to make path
+                ownTopology.RemoveEdge(ownTopology.Edges.ElementAt(index));   //delete edge that is full
+            }
 
           //recreating graf for new connection
              //TODO:

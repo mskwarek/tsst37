@@ -136,6 +136,11 @@ namespace AtmSim
             return map.ContainsKey(id);
         }
 
+        public bool ContainsValue(RoutingEntry e)
+        {
+            return table.ContainsValue(e);
+        }
+
         public Dictionary<RoutingEntry,RoutingEntry>.Enumerator GetEnumerator()
         {
             return table.GetEnumerator();

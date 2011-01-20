@@ -101,7 +101,7 @@ namespace AtmSim.Components
                     response += " " + node.Name;
                 else if (param[0] == "PortsIn")
                 {
-                    if (param.Length != 3)
+                    if (param.Length != 3 || param.Length != 5)
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
@@ -114,11 +114,21 @@ namespace AtmSim.Components
                         response += " " + node.PortsIn[n].Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortsIn[n].TcpPort;
+                    else if (param[2] == "Available")
+                    {
+                        try
+                        {
+                            int vpi = Int32.Parse(param[3]);
+                            int vci = Int32.Parse(param[4]);
+                            response += " " + CheckPortIn(n, vpi, vci);
+                        }
+                        catch (ArgumentNullException) { return response; }
+                    }
                     else return response;
                 }
                 else if (param[0] == "PortsOut")
                 {
-                    if (param.Length != 3)
+                    if (param.Length != 3 || param.Length != 5)
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
@@ -131,6 +141,16 @@ namespace AtmSim.Components
                         response += " " + node.PortsOut[n].Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortsOut[n].TcpPort;
+                    else if (param[2] == "Available")
+                    {
+                        try
+                        {
+                            int vpi = Int32.Parse(param[3]);
+                            int vci = Int32.Parse(param[4]);
+                            response += " " + CheckPortOut(n, vpi, vci);
+                        }
+                        catch (ArgumentNullException) { return response; }
+                    }
                     else return response;
                 }
             }
@@ -187,7 +207,7 @@ namespace AtmSim.Components
                         {
                             node.PortsOut[n].TcpPort = Int32.Parse(command[2]);
                         }
-                        catch (ArgumentNullException) { return ""; }
+                        catch (ArgumentNullException) { return response; }
                         response += " " + node.PortsOut[n].TcpPort;
                     }
                     else return response;
@@ -230,6 +250,27 @@ namespace AtmSim.Components
             {
                 if (command.Length != 2)
                     return response;
+                try
+                {
+                    int c = Int32.Parse(command[1]);
+                    if (node.Matrix.RoutingTable.Remove(c))
+                        response += " ok";
+                    else
+                        response += " fail";
+                }
+                catch (ArgumentNullException)
+                {
+                    response += "rtdelresp " + command[1];
+                    if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
+                        response += " ok";
+                    else
+                        response += " fail";
+                }
+            }
+            else if (command[0] == "rtcdel")
+            {
+                if (command.Length != 2)
+                    return response;
                 response += "rtdelresp " + command[1];
                 if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
                     response += " ok";
@@ -237,6 +278,22 @@ namespace AtmSim.Components
                     response += " fail";
             }
             return response;
+        }
+
+        private bool CheckPortIn(int port, int vpi, int vci)
+        {
+            if (node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci)))
+                return true;
+            else
+                return false;
+        }
+
+        private bool CheckPortOut(int port, int vpi, int vci)
+        {
+            if (node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci)))
+                return true;
+            else
+                return false;
         }
     }
 }
