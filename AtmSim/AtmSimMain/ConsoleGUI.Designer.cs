@@ -32,17 +32,17 @@
             this.inputTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // OutputTextBox
+            // outputTextBox
             // 
             this.outputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.outputTextBox.Location = new System.Drawing.Point(12, 12);
             this.outputTextBox.Multiline = true;
-            this.outputTextBox.Name = "OutputTextBox";
+            this.outputTextBox.Name = "outputTextBox";
             this.outputTextBox.ReadOnly = true;
             this.outputTextBox.Size = new System.Drawing.Size(260, 216);
-            this.outputTextBox.TabIndex = 0;
+            this.outputTextBox.TabIndex = 1;
             // 
             // inputTextBox
             // 
@@ -51,9 +51,8 @@
             this.inputTextBox.Location = new System.Drawing.Point(12, 234);
             this.inputTextBox.Name = "inputTextBox";
             this.inputTextBox.Size = new System.Drawing.Size(260, 20);
-            this.inputTextBox.TabIndex = 1;
-            //this.inputTextBox.TextChanged += new System.EventHandler(this.inputTextBox_TextChanged);
-            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(inputTextBox_Enter);
+            this.inputTextBox.TabIndex = 0;
+            this.inputTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.inputTextBox_Enter);
             // 
             // ConsoleGUI
             // 
