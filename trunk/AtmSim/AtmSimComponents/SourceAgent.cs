@@ -86,7 +86,7 @@ namespace AtmSim.Components
                     response += " " + node.Name;
                 else if (param[0] == "PortsOut")
                 {
-                    if (param.Length != 3)
+                    if (param.Length != 3 && param.Length != 5)
                         return response;
                     if (param[2] == "Open")
                         response += " " + node.PortOut.Open;
@@ -94,7 +94,17 @@ namespace AtmSim.Components
                         response += " " + node.PortOut.Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortOut.TcpPort;
-                    else return response;
+                    else if (param[2] == "Available")
+                    {
+                        try
+                        {
+                            int n = Int32.Parse(param[1]);
+                            int vpi = Int32.Parse(param[3]);
+                            int vci = Int32.Parse(param[4]);
+                            response += " " + CheckPortOut(n, vpi, vci);
+                        }
+                        catch (ArgumentNullException) { return response; }
+                    }
                 }
             }
             else if (command[0] == "set")
@@ -131,25 +141,49 @@ namespace AtmSim.Components
                         catch (ArgumentNullException) { return ""; }
                         response += " " + node.PortOut.TcpPort;
                     }
-                    else return response;
                 }
             }
             else if (command[0] == "rtadd")
             {
-                if (command.Length != 3)
-                    return response;
-                response += "rtaddresp " + command[1] + " " + command[2];
-                try
+                response += "rtaddresp";
+                if (command.Length == 3)
                 {
-                    node.Matrix.Add(command[1], new RoutingEntry(command[2]));
+                    response += command[1] + " " + command[2];
+                    try
+                    {
+                        RoutingEntry outcoming = new RoutingEntry(command[2]);
+                        if (1 > outcoming.Port)
+                        {
+                            node.Matrix.Add(command[1], outcoming);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                    }
                 }
-                catch (ArgumentException)
+                else if (command.Length == 4)
                 {
-                    response += " fail";
-                    return response;
+                    response += command[1] + " " + command[2] + " " + command[3];
+                    try
+                    {
+                        RoutingEntry outcoming = new RoutingEntry(command[2]);
+                        if (1 > outcoming.Port)
+                        {
+                            node.Matrix.Add(command[3], outcoming);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                    }
                 }
-                response += " ok";
-
             }
             else if (command[0] == "rtdel")
             {
@@ -161,6 +195,8 @@ namespace AtmSim.Components
                 else
                     response += " fail";
             }
+            else
+                response = command[0] + "resp";
             return response;
         }
 
@@ -174,5 +210,11 @@ namespace AtmSim.Components
             }
             return table;
         }
+
+        private bool CheckPortOut(int port, int vpi, int vci)
+        {
+            return !node.Matrix.ContainsValue(new RoutingEntry(port, vpi, vci));
+        }
+
     }
 }

@@ -124,7 +124,6 @@ namespace AtmSim.Components
                         }
                         catch (ArgumentNullException) { return response; }
                     }
-                    else return response;
                 }
                 else if (param[0] == "PortsOut")
                 {
@@ -151,7 +150,6 @@ namespace AtmSim.Components
                         }
                         catch (ArgumentNullException) { return response; }
                     }
-                    else return response;
                 }
             }
             else if (command[0] == "set")
@@ -279,36 +277,19 @@ namespace AtmSim.Components
                         response += " fail";
                 }
             }
-            else if (command[0] == "rtcdel")
-            {
-                response += "rtdelresp ";
-                if (command.Length != 2)
-                    return response;
-                response += command[1];
-                if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
-                    response += " ok";
-                else
-                    response += " fail";
-            }
             else
-                response = command[0] + "resp none";
+                response = command[0] + "resp";
             return response;
         }
 
         private bool CheckPortIn(int port, int vpi, int vci)
         {
-            if (node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci)))
-                return false;
-            else
-                return true;
+            return !node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci));
         }
 
         private bool CheckPortOut(int port, int vpi, int vci)
         {
-            if (node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci)))
-                return false;
-            else
-                return true;
+            return !node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci));
         }
     }
 }
