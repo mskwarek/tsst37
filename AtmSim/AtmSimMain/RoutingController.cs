@@ -20,7 +20,7 @@ namespace AtmSim
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-           this.setupConnection(4, 5, 1);  
+          this.setupConnection(4, 5, 1);  
         }
 
 
@@ -65,6 +65,8 @@ namespace AtmSim
                  else break; //it is imposible to make path
                   ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));   //delete edge that is full
              }
+
+             if(index < 0)    //index =-1 oznacza ze udalo sie zestawic polaczenie
              this.setupNodes(ss);
           //recreating graf for new connection
              //TODO:
@@ -148,7 +150,7 @@ namespace AtmSim
             string value;
             int index = 0;
             foreach (var e in ss.path) {
-               label = e.SourcePort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[0];
+                label = e.SourcePort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[0];
                 value =e.TargetPort +":"+ ss.vcivpiList.ElementAt(index).Split('.')[1];
                     this.addRouting(e.Source.Id, label, value, ss.connectN);   //to change
 
