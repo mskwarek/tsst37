@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AtmSim
 {
-    public class RoutingEntry
+    public class RoutingEntry : System.IEquatable<RoutingEntry>
     {
         private int port;
         private int vpi;
@@ -15,6 +15,9 @@ namespace AtmSim
         public int Vpi { get { return vpi; } set { vpi = value; } }
         public bool NoVci { get { return novci; } set { novci = value; } }
         public int Vci { get { return vci; } set { vci = value; } }
+
+        public static IEqualityComparer<RoutingEntry> Default
+        { get { return (IEqualityComparer<RoutingEntry>)(new EqualityComparer()); } }
 
         public RoutingEntry(RoutingEntry entry)
         {
@@ -31,6 +34,7 @@ namespace AtmSim
         public RoutingEntry(string entry)
         {
             string[] pvv = entry.Split(';', ':', ',', '.');
+            if (pvv.Length != 3) throw new ArgumentException();
             try
             {
                 this.port = int.Parse(pvv[0]);
@@ -45,6 +49,7 @@ namespace AtmSim
             }
             catch (System.FormatException)
             {
+                throw new ArgumentException();
             }
         }
 
@@ -54,6 +59,22 @@ namespace AtmSim
                 return this.port.ToString() + ";" + this.vpi.ToString() + ";-";
             else
                 return this.port.ToString() + ";" + this.vpi.ToString() + ";" + this.vci.ToString();
+        }
+
+        public bool Equals(RoutingEntry other)
+        {
+            if (this.NoVci || other.NoVci)
+            {
+                if (this.Port == other.Port && this.Vpi == other.Vpi)
+                    return true;
+                else
+                    return false;
+            }
+            else if (this.Port == other.Port && this.Vpi == other.Vpi && this.Vci == other.Vci)
+                return true;
+            else
+                return false;
+
         }
 
         public class EqualityComparer : IEqualityComparer<RoutingEntry>
@@ -103,20 +124,26 @@ namespace AtmSim
 
         public void Add(RoutingEntry e1, RoutingEntry e2)
         {
+            if (table.ContainsValue(e2))
+                throw new ArgumentException();
             table.Add(e1, e2);
         }
 
         public void Add(RoutingEntry e1, RoutingEntry e2, int id)
         {
+            if (table.ContainsValue(e2))
+                throw new ArgumentException();
             table.Add(e1, e2);
             map.Add(id, e1);
         }
 
         public bool Remove(RoutingEntry e)
         {
-            if (map.ContainsValue(e))
+            bool a = map.ContainsValue(e);
+            if (a)
                 return false;
-            return table.Remove(e);
+            else
+                return table.Remove(e);
         }
 
         public bool Remove(int id)
