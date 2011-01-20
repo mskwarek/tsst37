@@ -13,14 +13,16 @@ namespace AtmSim
         {
             public int Id = 0;
             public string Name = "";
+            public string Type = "";
 
             public Node()
             { }
 
-            public Node(int id, string name)
+            public Node(int id, string name, string type)
             {
                 Id = id;
                 Name = name;
+                Type = type;
             }
 
             public override string ToString()

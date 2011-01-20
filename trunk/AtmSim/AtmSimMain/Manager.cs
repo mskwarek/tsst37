@@ -31,6 +31,11 @@ namespace AtmSim
                 get { return tnode.Name; }
                 set { tnode.Name = value; }
             }
+            public string Type
+            {
+                get { return tnode.Type; }
+                set { tnode.Type = value; }
+            }
             public Socket Socket;
             public Topology.Node tnode;
         }
@@ -94,6 +99,7 @@ namespace AtmSim
             {
                 idStr = Get(node.Socket, "ID");
                 node.Name = Get(node.Socket, "Name");
+                node.Type = Get(node.Socket, "Type");
             }
             catch (NodeUnaccessibleException)
             {
