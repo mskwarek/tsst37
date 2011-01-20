@@ -118,13 +118,13 @@ namespace AtmSim
         public int askLRMs(SetupStore ss){
 
 
-            string start = "";
-            string end="";
+            //string start = "";
+            //string end="";
             string VpiVci = "";
             foreach (var e in ss.path)
             {
                 
-                 if (e.Source.Name.Substring(0, 6) == "Source")
+                 /*if (e.Source.Name.Substring(0, 6) == "Source")
                  { start = rand() + ":" + rand(); end = "--"; }
                  if (e.Source.Name.Substring(0, 6) == "Switch")
                  { start =  rand() + ":" + rand(); }
@@ -132,13 +132,15 @@ namespace AtmSim
                  { end =  rand() + ":" + rand(); start = "--"; }
                      VpiVci = end +"."+ start;
                     end = start;
-                    ss.vcivpiList.Add(VpiVci);
-
-
-                   if (!doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." +e.SourcePort +".Available."+VpiVci))) //to change
-                     return (ss.path).IndexOf(e);
-                   if (!doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))) //to change
-                     return (ss.path).IndexOf(e);
+                    ss.vcivpiList.Add(VpiVci);*/
+                do
+                {
+                    VpiVci = rand() + "." + rand();
+                } while (
+                    !doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.SourcePort + ".Available." + VpiVci)) ||
+                    !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))
+                    );
+                ss.vcivpiList.Add(VpiVci);
             }
 
             return -1; //no problems

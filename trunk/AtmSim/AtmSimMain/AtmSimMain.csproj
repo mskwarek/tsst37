@@ -75,6 +75,7 @@
     <Compile Include="AddEntryPrompt.Designer.cs">
       <DependentUpon>AddEntryPrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="CallController.cs" />
     <Compile Include="ConsoleGUI.cs">
       <SubType>Form</SubType>
     </Compile>
