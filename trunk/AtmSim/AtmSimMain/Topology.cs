@@ -31,11 +31,13 @@ namespace AtmSim
 
         public class Link : Edge<Node>
         {
-            public string Tag { get; private set; }
-            public Link(string tag, Node source, Node target)
+            public int SourcePort;
+            public int TargetPort;
+            public Link(Node source, Node target, int sourcePort, int targetPort)
                 : base(source, target)
             {
-                Tag = tag;
+                this.SourcePort = sourcePort;
+                this.TargetPort = targetPort;
             }
         }
 
