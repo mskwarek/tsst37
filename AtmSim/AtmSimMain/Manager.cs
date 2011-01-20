@@ -130,7 +130,7 @@ namespace AtmSim
             catch (SocketException) { throw new NodeUnaccessibleException(); }
         }
 
-        private string Query(int id, string query)
+        public string Query(int id, string query)
         {
             if (nodes.ContainsKey(id))
             {

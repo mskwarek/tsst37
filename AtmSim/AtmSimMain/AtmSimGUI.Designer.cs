@@ -44,6 +44,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.button1 = new System.Windows.Forms.Button();
+            this.cmdButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,14 +75,14 @@
             // netNewToolStripMenuItem
             // 
             this.netNewToolStripMenuItem.Name = "netNewToolStripMenuItem";
-            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netNewToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.netNewToolStripMenuItem.Text = "&Nowa";
             this.netNewToolStripMenuItem.Click += new System.EventHandler(this.netNewToolStripMenuItem_Click);
             // 
             // netTopologyToolStripMenuItem
             // 
             this.netTopologyToolStripMenuItem.Name = "netTopologyToolStripMenuItem";
-            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
             // 
@@ -148,7 +149,7 @@
             this.logButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.logButton.Location = new System.Drawing.Point(93, 277);
             this.logButton.Name = "logButton";
-            this.logButton.Size = new System.Drawing.Size(75, 23);
+            this.logButton.Size = new System.Drawing.Size(35, 23);
             this.logButton.TabIndex = 4;
             this.logButton.Text = "Log";
             this.logButton.UseVisualStyleBackColor = true;
@@ -172,19 +173,30 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(174, 277);
+            this.button1.Location = new System.Drawing.Point(175, 277);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 23);
+            this.button1.Size = new System.Drawing.Size(31, 23);
             this.button1.TabIndex = 7;
             this.button1.Text = "R";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // cmdButton
+            // 
+            this.cmdButton.Location = new System.Drawing.Point(134, 277);
+            this.cmdButton.Name = "cmdButton";
+            this.cmdButton.Size = new System.Drawing.Size(35, 23);
+            this.cmdButton.TabIndex = 8;
+            this.cmdButton.Text = "cmd";
+            this.cmdButton.UseVisualStyleBackColor = true;
+            this.cmdButton.Click += new System.EventHandler(this.cmdButton_Click);
             // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 312);
+            this.Controls.Add(this.cmdButton);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.logButton);
@@ -220,6 +232,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem mToolStripMenuItem;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button cmdButton;
     }
 }
 
