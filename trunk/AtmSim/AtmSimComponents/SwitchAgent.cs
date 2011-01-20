@@ -218,7 +218,7 @@ namespace AtmSim.Components
                     try
                     {
                         RoutingEntry incoming = new RoutingEntry(command[1]);
-                        RoutingEntry outcoming = new RoutingEntry(command[1]);
+                        RoutingEntry outcoming = new RoutingEntry(command[2]);
                         if (node.PortsIn.Length > incoming.Port && node.PortsOut.Length > outcoming.Port)
                         {
                             node.Matrix.RoutingTable.Add(incoming, outcoming);
@@ -239,7 +239,7 @@ namespace AtmSim.Components
                     {
                         int id = Int32.Parse(command[3]);
                         RoutingEntry incoming = new RoutingEntry(command[1]);
-                        RoutingEntry outcoming = new RoutingEntry(command[1]);
+                        RoutingEntry outcoming = new RoutingEntry(command[2]);
                         if (node.PortsIn.Length > incoming.Port && node.PortsOut.Length > outcoming.Port)
                         {
                             node.Matrix.RoutingTable.Add(incoming, outcoming, id);
@@ -268,9 +268,8 @@ namespace AtmSim.Components
                     else
                         response += " fail";
                 }
-                catch (ArgumentNullException)
+                catch (FormatException)
                 {
-                    response += "rtdelresp " + command[1];
                     if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
                         response += " ok";
                     else

@@ -86,7 +86,7 @@ namespace AtmSim.Components
                     response += " " + node.Name;
                 else if (param[0] == "PortsIn")
                 {
-                    if (param.Length != 3)
+                    if (param.Length != 3 && param.Length != 5)
                         return response;
                     if (param[2] == "Open")
                         response += " " + node.PortIn.Open;
@@ -94,7 +94,17 @@ namespace AtmSim.Components
                         response += " " + node.PortIn.Connected;
                     else if (param[2] == "_port")
                         response += " " + node.PortIn.TcpPort;
-                    else return response;
+                    else if (param[2] == "Available")
+                    {
+                        try
+                        {
+                            int n = Int32.Parse(param[1]);
+                            int vpi = Int32.Parse(param[3]);
+                            int vci = Int32.Parse(param[4]);
+                            response += " " + CheckPortIn(n, vpi, vci);
+                        }
+                        catch (ArgumentNullException) { return response; }
+                    }
                 }
             }
             else if (command[0] == "set")
@@ -120,27 +130,30 @@ namespace AtmSim.Components
                         response += " " + node.PortIn.Connected; // niezmienne
                     else if (param[2] == "_port")
                         response += " " + node.PortIn.TcpPort; // niezmienne
-                    else return response;
                 }
-                return response;
-
             }
             else if (command[0] == "rtadd")
             {
-                if (command.Length != 3)
-                    return response;
-                response += "rtaddresp " + command[1] + " " + command[2];
-                try
+                response += "rtaddresp ";
+                if (command.Length == 3)
                 {
-                    node.Receiver.Sources.Add(new RoutingEntry(command[1]), command[2]);
+                    response += command[1] + " " + command[2];
+                    try
+                    {
+                        RoutingEntry incoming = new RoutingEntry(command[1]);
+                        if (1 > incoming.Port)
+                        {
+                            node.Receiver.Sources.Add(incoming, command[2]);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                    }
                 }
-                catch (ArgumentException)
-                {
-                    response += " fail";
-                    return response;
-                }
-                response += " ok";
-
             }
             else if (command[0] == "rtdel")
             {
@@ -152,6 +165,8 @@ namespace AtmSim.Components
                 else
                     response += " fail";
             }
+            else
+                response = command[0] + "resp";
             return response;
         }
 
@@ -165,5 +180,9 @@ namespace AtmSim.Components
             return table;
         }
 
+        private bool CheckPortIn(int port, int vpi, int vci)
+        {
+            return !node.Receiver.Sources.ContainsKey(new RoutingEntry(port, vpi, vci));
+        }
     }
 }

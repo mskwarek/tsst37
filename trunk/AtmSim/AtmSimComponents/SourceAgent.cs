@@ -145,7 +145,7 @@ namespace AtmSim.Components
             }
             else if (command[0] == "rtadd")
             {
-                response += "rtaddresp";
+                response += "rtaddresp ";
                 if (command.Length == 3)
                 {
                     response += command[1] + " " + command[2];
