@@ -107,5 +107,11 @@ namespace AtmSim
             manager.AddRouting(5, "0:1:1", "B");
             manager.AddRouting(5, "0:1:2", "A");            
         }
+
+        private void cmdButton_Click(object sender, EventArgs e)
+        {
+            ConsoleGUI consoleGUI = new ConsoleGUI(manager, SelectedId);
+            consoleGUI.Show();
+        }
     }
 }

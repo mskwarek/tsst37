@@ -75,6 +75,12 @@
     <Compile Include="AddEntryPrompt.Designer.cs">
       <DependentUpon>AddEntryPrompt.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConsoleGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsoleGUI.Designer.cs">
+      <DependentUpon>ConsoleGUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Loader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConfigGUI.resx">
       <DependentUpon>ConfigGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConsoleGUI.resx">
+      <DependentUpon>ConsoleGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Loader.resx">
       <DependentUpon>Loader.cs</DependentUpon>

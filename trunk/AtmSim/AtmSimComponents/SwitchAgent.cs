@@ -75,7 +75,7 @@ namespace AtmSim.Components
             }
             else if (command[0] == "get")
             {
-                if (command[1] == "log" && command.Length == 3)
+                if (command.Length == 3 && command[1] == "log")
                 {
                     int n;
                     try { n = Int32.Parse(command[2]); }
@@ -86,7 +86,7 @@ namespace AtmSim.Components
                         return Serial.SerializeObject(new Log(node.Log, n));
                 }
                 if (command.Length != 2)
-                    return response;
+                    return "getresp null";
                 if (command[1] == "config")
                     return Serial.SerializeObject(config);
                 if (command[1] == "routing")
@@ -101,7 +101,7 @@ namespace AtmSim.Components
                     response += " " + node.Name;
                 else if (param[0] == "PortsIn")
                 {
-                    if (param.Length != 3 || param.Length != 5)
+                    if (param.Length != 3 && param.Length != 5)
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
@@ -128,7 +128,7 @@ namespace AtmSim.Components
                 }
                 else if (param[0] == "PortsOut")
                 {
-                    if (param.Length != 3 || param.Length != 5)
+                    if (param.Length != 3 && param.Length != 5)
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
@@ -283,17 +283,17 @@ namespace AtmSim.Components
         private bool CheckPortIn(int port, int vpi, int vci)
         {
             if (node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci)))
-                return true;
-            else
                 return false;
+            else
+                return true;
         }
 
         private bool CheckPortOut(int port, int vpi, int vci)
         {
             if (node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci)))
-                return true;
-            else
                 return false;
+            else
+                return true;
         }
     }
 }
