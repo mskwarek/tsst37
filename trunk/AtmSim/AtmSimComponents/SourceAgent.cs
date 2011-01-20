@@ -64,7 +64,7 @@ namespace AtmSim.Components
                 {
                     int n;
                     try { n = Int32.Parse(command[2]); }
-                    catch (ArgumentNullException) { n = 0; }
+                    catch (ArgumentException) { n = 0; }
                     if (n == 0)
                         return Serial.SerializeObject(node.Log);
                     else
@@ -103,7 +103,7 @@ namespace AtmSim.Components
                             int vci = Int32.Parse(param[4]);
                             response += " " + CheckPortOut(n, vpi, vci);
                         }
-                        catch (ArgumentNullException) { return response; }
+                        catch (ArgumentException) { return response; }
                     }
                 }
             }
@@ -138,7 +138,7 @@ namespace AtmSim.Components
                         {
                             node.PortOut.TcpPort = Int32.Parse(command[2]);
                         }
-                        catch (ArgumentNullException) { return ""; }
+                        catch (ArgumentException) { return ""; }
                         response += " " + node.PortOut.TcpPort;
                     }
                 }

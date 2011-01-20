@@ -64,7 +64,7 @@ namespace AtmSim.Components
                 {
                     int n;
                     try { n = Int32.Parse(command[2]); }
-                    catch (ArgumentNullException) { n = 0; }
+                    catch (FormatException) { n = 0; }
                     if (n == 0)
                         return Serial.SerializeObject(node.Log);
                     else
@@ -103,7 +103,7 @@ namespace AtmSim.Components
                             int vci = Int32.Parse(param[4]);
                             response += " " + CheckPortIn(n, vpi, vci);
                         }
-                        catch (ArgumentNullException) { return response; }
+                        catch (FormatException) { return response; }
                     }
                 }
             }
@@ -149,21 +149,24 @@ namespace AtmSim.Components
                         else
                             response += " fail";
                     }
-                    catch (ArgumentException)
-                    {
-                        response += " fail";
-                    }
+                    catch (FormatException) { response += " fail"; }
+                    catch (ArgumentException) { response += " fail"; }
                 }
             }
             else if (command[0] == "rtdel")
             {
+                response += "rtdelresp ";
                 if (command.Length != 2)
                     return response;
-                response += "rtdelresp " + command[1];
-                if (node.Receiver.Sources.Remove(new RoutingEntry(command[1])))
-                    response += " ok";
-                else
-                    response += " fail";
+                response += command[1];
+                try
+                {
+                    if (node.Receiver.Sources.Remove(new RoutingEntry(command[1])))
+                        response += " ok";
+                    else
+                        response += " fail";
+                }
+                catch (FormatException) { response += " fail"; }
             }
             else
                 response = command[0] + "resp";

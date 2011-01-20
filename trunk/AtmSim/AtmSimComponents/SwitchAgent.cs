@@ -79,7 +79,7 @@ namespace AtmSim.Components
                 {
                     int n;
                     try { n = Int32.Parse(command[2]); }
-                    catch (ArgumentNullException) { n = 0; }
+                    catch (FormatException) { n = 0; }
                     if (n == 0)
                         return Serial.SerializeObject(node.Log);
                     else
@@ -105,7 +105,7 @@ namespace AtmSim.Components
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return response; }
+                    catch (FormatException) { return response; }
                     if (n >= node.PortsIn.Length)
                         return response;
                     if (param[2] == "Open")
@@ -122,7 +122,7 @@ namespace AtmSim.Components
                             int vci = Int32.Parse(param[4]);
                             response += " " + CheckPortIn(n, vpi, vci);
                         }
-                        catch (ArgumentNullException) { return response; }
+                        catch (FormatException) { return response; }
                     }
                 }
                 else if (param[0] == "PortsOut")
@@ -131,7 +131,7 @@ namespace AtmSim.Components
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return response; }
+                    catch (FormatException) { return response; }
                     if (n >= node.PortsOut.Length)
                         return response;
                     if (param[2] == "Open")
@@ -148,7 +148,7 @@ namespace AtmSim.Components
                             int vci = Int32.Parse(param[4]);
                             response += " " + CheckPortOut(n, vpi, vci);
                         }
-                        catch (ArgumentNullException) { return response; }
+                        catch (FormatException) { return response; }
                     }
                 }
             }
@@ -171,7 +171,7 @@ namespace AtmSim.Components
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return response; }
+                    catch (FormatException) { return response; }
                     if (n >= node.PortsIn.Length)
                         return response;
                     if (param[2] == "Open")
@@ -187,7 +187,7 @@ namespace AtmSim.Components
                         return response;
                     int n;
                     try { n = Int32.Parse(param[1]); }
-                    catch (ArgumentNullException) { return response; }
+                    catch (FormatException) { return response; }
                     if (n >= node.PortsOut.Length)
                         return response;
                     if (param[2] == "Open")
@@ -204,7 +204,7 @@ namespace AtmSim.Components
                         {
                             node.PortsOut[n].TcpPort = Int32.Parse(command[2]);
                         }
-                        catch (ArgumentNullException) { return response; }
+                        catch (FormatException) { return response; }
                         response += " " + node.PortsOut[n].TcpPort;
                     }
                 }
@@ -227,10 +227,8 @@ namespace AtmSim.Components
                         else
                             response += " fail";
                     }
-                    catch (ArgumentException)
-                    {
-                        response += " fail";
-                    }
+                    catch (FormatException) { response += " fail"; }
+                    catch (ArgumentException) { response += " fail"; }
                 }
                 else if (command.Length == 4)
                 {
@@ -248,10 +246,8 @@ namespace AtmSim.Components
                         else
                             response += " fail";
                     }
-                    catch (ArgumentException)
-                    {
-                        response += " fail";
-                    }
+                    catch (FormatException) { response += " fail"; }
+                    catch (ArgumentException) { response += " fail"; }
                 }
             }
             else if (command[0] == "rtdel")
@@ -270,10 +266,14 @@ namespace AtmSim.Components
                 }
                 catch (FormatException)
                 {
-                    if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
-                        response += " ok";
-                    else
-                        response += " fail";
+                    try
+                    {
+                        if (node.Matrix.RoutingTable.Remove(new RoutingEntry(command[1])))
+                            response += " ok";
+                        else
+                            response += " fail";
+                    }
+                    catch (FormatException) { response += " fail"; }
                 }
             }
             else
