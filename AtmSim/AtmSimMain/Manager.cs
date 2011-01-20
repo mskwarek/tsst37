@@ -246,6 +246,16 @@ namespace AtmSim
                 return false;
         }
 
+        public bool AddRouting(int nodeId, string label, string value, int connectionId)
+        {
+            string response = Query(nodeId, "rtadd " + label + " " + value + " " + connectionId);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 5 && tokens[4] == "ok")
+                return true;
+            else
+                return false;
+        }
+
         public bool RemoveRouting(int id, string label)
         {
             string response = Query(id, "rtdel " + label);
@@ -263,8 +273,9 @@ namespace AtmSim
                 Set(link.StartNode, "PortsOut." + link.StartPort + "._port", port);
                 Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
                 links.Add(new TaggedEdge<int, string>(link.StartNode, link.EndNode, link.StartPort + ":" + link.EndPort));
-                topology.AddEdge(new Topology.Link(link.StartPort + ":" + link.EndPort,
-                   nodes[link.StartNode].tnode, nodes[link.EndNode].tnode));
+                topology.AddEdge(new Topology.Link(
+                   nodes[link.StartNode].tnode, nodes[link.EndNode].tnode,
+                   link.StartPort, link.EndPort));
             }
         }
 
