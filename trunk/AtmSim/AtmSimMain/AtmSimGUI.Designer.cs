@@ -123,6 +123,7 @@
             this.elementListBox.Size = new System.Drawing.Size(260, 225);
             this.elementListBox.TabIndex = 1;
             this.elementListBox.SelectedIndexChanged += new System.EventHandler(this.elementListBox_SelectedIndexChanged);
+            this.elementListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(elementListBox_MouseDoubleClick);
             // 
             // elementLabel
             // 

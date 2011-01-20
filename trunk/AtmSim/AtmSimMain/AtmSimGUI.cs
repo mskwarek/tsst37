@@ -113,5 +113,10 @@ namespace AtmSim
             ConsoleGUI consoleGUI = new ConsoleGUI(manager, SelectedId);
             consoleGUI.Show();
         }
+
+        private void elementListBox_MouseDoubleClick(object sender, EventArgs e)
+        {
+            cmdButton_Click(sender, e);
+        }
     }
 }
