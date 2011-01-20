@@ -12,34 +12,56 @@ namespace AtmSim
     {
 
         private Manager manager;
+        private String strDebug="";
         public RoutingController(Manager manager) 
         {
             this.manager = manager;
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-           //this.setupConnection(4, 5);  
+           this.setupConnection(4, 5, 1);  
         }
 
 
-         public void setupConnection(int src, int trg)
-         {
-            Topology ownTopology = manager.Topology;//recreating graf for new connection
-            IEnumerable<Topology.Link> path;
-            int index=-1;
-            while(ownTopology.EdgeCount!=0)
-            {
-                path = this.findBestPath(src, trg, ownTopology);
-                if (path!=null)
-                {
-                    index = this.askLRMs(path);
-                    if (index < 0) //if true we find the best path
-                        break;
-                }
-                else break; //it is imposible to make path
-                ownTopology.RemoveEdge(ownTopology.Edges.ElementAt(index));   //delete edge that is full
-            }
 
+        public class SetupStore
+        {
+            public int source { get; set; }
+            public int target { get; set;}
+            public Topology ownTopology { get; set; }
+            public List<Topology.Link> path { get; set; }
+            public int connectN{ get; set; }
+            public SetupStore(int source, int target, Topology ownTopology, int connectN) {
+                this.source = source;
+                this.target = target;
+                this.ownTopology = ownTopology;
+                this.connectN = connectN;
+                path = new List<Topology.Link>();
+            }
+            public SetupStore() { }
+        }
+
+
+       
+
+         public void setupConnection(int src, int trg,int connectN){
+             Topology ownTopology = manager.Topology;//recreating graf for new connection
+             SetupStore ss = new SetupStore(src, trg, ownTopology, connectN);
+           //  IEnumerable<Topology.Link> path;
+          
+            int index=-1;
+             while(ss.ownTopology.EdgeCount!=0){
+                 //ss.path = this.findBestPath(ss);
+                 if (this.findBestPath(ss))
+                 {
+                     index = this.askLRMs(ss);
+                     if (index < 0) //if true we find the best path
+                         break;
+                 }
+                 else break; //it is imposible to make path
+                  ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));   //delete edge that is full
+             }
+             
           //recreating graf for new connection
              //TODO:
              //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenia
@@ -56,49 +78,70 @@ namespace AtmSim
 
         }
 
-         private IEnumerable<Topology.Link> findBestPath(int idSource, int idDestination, Topology ownTopology)
+         private Boolean findBestPath(SetupStore ss)
         {
             Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
 
             // We want to use Dijkstra on this graph
-            var dijkstra = new DijkstraShortestPathAlgorithm<Topology.Node, Topology.Link>(ownTopology, edgeCost);
+            var dijkstra = new DijkstraShortestPathAlgorithm<Topology.Node, Topology.Link>(ss.ownTopology, edgeCost);
 
             // Attach a Vertex Predecessor Recorder Observer to give us the paths
             var predecessorObserver = new VertexPredecessorRecorderObserver<Topology.Node, Topology.Link>();
             predecessorObserver.Attach(dijkstra);
-            dijkstra.Compute(this.IDtoNode(idSource, ownTopology));
+            dijkstra.Compute(this.IDtoNode(ss.source, ss.ownTopology));
             IEnumerable<Topology.Link> path;
-            if (predecessorObserver.TryGetPath(this.IDtoNode(idDestination, ownTopology), out path))
-                return path;
-            else return null;  
+            //List<Topology.Link> ddd = new List<Topology.Link>();
+            if (predecessorObserver.TryGetPath(this.IDtoNode(ss.target, ss.ownTopology), out path))
+            { 
+                ss.path.AddRange(path);
+                return true;
+            }
+            else return false;  
         }
 
         private Boolean doIHaveAmptyPorts(String response){
 
             switch (response) {
-                case "Yes": return true;
-                case "No": return false;
+                case "true": return true;
+                case "false": return false;
                 default: return false;
             }
-
+           
         }
 
-        public int askLRMs( IEnumerable<Topology.Link> path){
-                       
-            foreach (var e in path)
+        public int askLRMs(SetupStore ss){
+                      // ss.path.
+
+            foreach (var e in ss.path)
             {
-              if( true)                               //for debuging
-                  return path.ToList().IndexOf(e);   //
-            //    if(! doIHaveAmptyPorts( manager.Get(e.Source, "Do you have ampty port IN from ID.source")))
-            //    return path.ToList().IndexOf(e);
-            //    if(! doIHaveAmptyPorts( manager.Get(e.Target.Id, "Do you have ampty port IN from ID.source")))
-            //    return path.ToList().IndexOf(e);
+                   if (!doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." +e.Source +".Available.Vpi.Vci")))
+                   return (ss.path).IndexOf(e);
+                   if (!doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available.Vpi.Vci")))
+                 return (ss.path).IndexOf(e);
             }
 
             return -1; //no problems
         }
 
 
+        private void setupNodes(IEnumerable<Topology.Link> path, int connectN)
+        {    
+            
+            foreach (var e in path)
+            { 
+           //  if(e.Source.Name=="switch")
+                // path.ElementAt()
+            
+            }
+        }
 
+
+        private String Get(int id,  String str) //debugging
+        {
+            return "true";
+        }
+
+
+        private void addRouting(int id, String lable, String value, int idNumber){} //debugging
     }
 }
