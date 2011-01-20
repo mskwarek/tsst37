@@ -265,6 +265,15 @@ namespace AtmSim
             return false;
         }
 
+        public bool RemoveRouting(int nodeId, int connectionId)
+        {
+            string response = Query(nodeId, "rtdel " + connectionId);
+            string[] tokens = response.Split(' ');
+            if (tokens.Length == 3 && tokens[2] == "ok")
+                return true;
+            return false;
+        }
+
         public void AddLink(Config.Link link)
         {
             if (nodes.ContainsKey(link.StartNode) && nodes.ContainsKey(link.EndNode))
@@ -279,21 +288,5 @@ namespace AtmSim
             }
         }
 
-        // przestarzałe
-        public BidirectionalGraph<int, Edge<int>> GetTopology()
-        {
-            BidirectionalGraph<int, Edge<int>> g =
-                new BidirectionalGraph<int, Edge<int>>();
-            //foreach (Node node in nodes.Values)
-            //    g.AddVertex(node.id);
-            foreach (TaggedEdge<int, string> edge in links)
-                g.AddVerticesAndEdge(new Edge<int>(edge.Source, edge.Target));
-            return g;
-        }
-
-        public List<TaggedEdge<int, string>> GetLinks()
-        {
-            return links;
-        }
     }
 }
