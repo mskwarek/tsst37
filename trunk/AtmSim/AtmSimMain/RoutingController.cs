@@ -20,7 +20,7 @@ namespace AtmSim
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-        //  this.setupConnection(4, 5, 1);  
+        
         }
 
 
@@ -33,47 +33,67 @@ namespace AtmSim
             public List<Topology.Link> path { get; set; }
             public List<string> vcivpiList { get; set; }
             public int connectN{ get; set; }
-            public SetupStore(int source, int target, Topology ownTopology, int connectN) {
+            public int requieredCapacity { get; set; }
+            public SetupStore(int source, int target, Topology ownTopology, int connectN, int requieredCapacity)
+            {
                 this.source = source;
                 this.target = target;
                 this.ownTopology = ownTopology;
                 this.connectN = connectN;
                 path = new List<Topology.Link>();
                 vcivpiList = new List<string>();
+                this.requieredCapacity = requieredCapacity;
                
             }
             public SetupStore() { }
         }
 
 
-       
 
-         public NetworkConnection setupConnection(int src, int trg,int connectN){
-             Topology ownTopology = manager.Topology;//recreating graf for new connection
-             SetupStore ss = new SetupStore(src, trg, ownTopology, connectN);
-           //  IEnumerable<Topology.Link> path;
-          
-            int index=-1;
-             while(ss.ownTopology.EdgeCount!=0){
-                 //ss.path = this.findBestPath(ss);
-                 if (this.findBestPath(ss))
+
+        public NetworkConnection setupConnection(int src, int trg, int connectN, int requieredCapacity)
+        {
+            Topology ownTopology = manager.Topology; //TODO make clone method
+             SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
+             if(ss.ownTopology.EdgeCount!=0){
+                 if (this.findBestPath(ss))  //if true w
                  {
-                     index = askLRMs(ss);
-                     if (index < 0) //if true we find the best path
-                         break;
+                     this.askLRMs(ss); //creating list vcivpi
                  }
-                 else break; //it is imposible to make path
-                  ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));   //delete edge that is full
+
+                 return this.parseToNetworConnection(ss);
+             
+                 //networkConnection.
+                
              }
 
-           //  if(index < 0)    //index =-1 oznacza ze udalo sie zestawic polaczenie
-            // this.setupNodes(ss);
-          //recreating graf for new connection
-             //TODO:
-             //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenial;
+            
              return null;
          }
 
+
+        private NetworkConnection parseToNetworConnection(SetupStore ss)
+        { NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
+          //  List<LinkConnection> links = new List<LinkConnection>();
+            LinkConnection link; 
+          //  foreach (Topology.Link e in ss.path; string s in ss.vcivpiList) {
+          //      link = new LinkConnection();
+              //  link.SourceId
+             for(int i = 0 ; i < ss.path.Count; i++)
+             {
+               link = new LinkConnection();
+               link.SourceId = ss.path[i].Source.Id;
+               link.TargetId = ss.path[i].Target.Id;
+               link.SourceRouting = ss.path[i].SourcePort + ":" + ss.vcivpiList[i];
+               link.TargetRouting = ss.path[i].TargetPort + ":" + ss.vcivpiList[i];
+               networkConnection.Path.Add(link);
+             
+             }
+             return networkConnection;
+            
+            }
+        
+        
 
 
          private Topology.Node IDtoNode(int id, Topology ownTopology)
@@ -89,10 +109,22 @@ namespace AtmSim
         {
           //  Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
             Dictionary<Topology.Link, double> edgeCost = new Dictionary<Topology.Link, double>(ss.ownTopology.EdgeCount);
-
-            foreach (var e in ss.ownTopology.Edges)
+        
+            int index = 0;
+            int max = ss.ownTopology.EdgeCount;
+            while (index < max)
+            {       //free capisity < requierd
+                if (ss.ownTopology.Edges.ElementAt(index).Capacity < ss.requieredCapacity)
+                {
+                    ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));
+                    max = ss.ownTopology.EdgeCount;
+                } else
+                index++;
+            }
+           foreach (var e in ss.ownTopology.Edges)
             {
                 edgeCost.Add(e, e.Capacity);
+     
             }
 
 
@@ -123,7 +155,7 @@ namespace AtmSim
            
         }
 
-        public int askLRMs(SetupStore ss){
+        public void askLRMs(SetupStore ss){
 
 
             string VpiVci = "";
@@ -140,29 +172,10 @@ namespace AtmSim
                 ss.vcivpiList.Add(VpiVci);
 
             }
-            return -1; //no problems
+            //no problems
         }
 
-        private void setupNodes(SetupStore ss)
-        {
-            string label;
-            string value;
-            int index = 0;
-            foreach (var e in ss.path) {
-                label =  ss.vcivpiList.ElementAt(index).Split('.')[0];
-                value =  ss.vcivpiList.ElementAt(index).Split('.')[1];
-                    this.addRouting(e.Source.Id, label, value, ss.connectN);   //to change
-
-                if (index == ss.path.Capacity - 1)
-                {
-                    label = ss.vcivpiList.ElementAt(index).Split('.')[0];
-                    value = ss.vcivpiList.ElementAt(index).Split('.')[1];
-                    this.addRouting(e.Source.Id, label, value, ss.connectN);  //to change
-                }
-                index++;
-            }
-           
-        }
+    
 
         private String Get(int id,  String str) //debugging
         {
