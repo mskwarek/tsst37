@@ -75,8 +75,10 @@ namespace AtmSim
                     var called = Directory[query[2]];
                     int callingId = client.Id;
                     int calledId = called.Id;
-                    rc.setupConnection(callingId, calledId, 1);
+                    NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId());
                     // called.Socket.BeginSend("call_pending");
+                    manager.AddConnection(connection);
+                    manager.Connect(connection.Id);
                 }
             }
             else if (query[0] == "call_accept")
@@ -87,7 +89,10 @@ namespace AtmSim
             else if (query[0] == "call_teardown")
                 // format wiadomości: call_teardown {call_id}
             {
-
+                int connectionId = Int32.Parse(query[1]);
+                if (client.Id == manager.Connections[connectionId].Source     // połączenie może rozłączyć jedynie
+                    || client.Id == manager.Connections[connectionId].Target) // węzeł korzystający z niego
+                    manager.Disconnect(connectionId);
             }
         }
     }
