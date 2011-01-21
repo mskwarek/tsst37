@@ -16,7 +16,7 @@ namespace AtmSim
             public Socket Socket;
             public byte[] Buffer = new byte[4086];
         }
-        private Dictionary<string, DirectoryEntry> Directory;
+        private Dictionary<string, DirectoryEntry> Directory = new Dictionary<string,DirectoryEntry>();
         private Manager manager;
         private RoutingController rc;
         private Socket socket;
@@ -48,25 +48,34 @@ namespace AtmSim
             client.Socket = this.socket.EndAccept(asyn);
             int received = client.Socket.Receive(client.Buffer);
             string[] login = (Encoding.ASCII.GetString(client.Buffer, 0, received)).Split(' ');
-            client.Name = login[0];
-            client.Id = Int32.Parse(login[1]);
-            Directory.Add(login[0], client);
-            client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
+            if (login.Length == 3 && login[0] == "login")
+            {
+                client.Name = login[1];
+                client.Id = Int32.Parse(login[2]);
+                Directory.Add(login[1], client);
+                client.Socket.Send(Encoding.ASCII.GetBytes("ok"));
+                client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
+            }
+            else
+            {
+                client.Socket.Send(Encoding.ASCII.GetBytes("rejected"));
+                client.Socket.Close();
+            }
             this.socket.BeginAccept(OnClientConnect, this.socket);
         }
 
         private void OnDataReceived(IAsyncResult asyn)
         {
             DirectoryEntry client = (DirectoryEntry)asyn;
-            int recv = client.Socket.EndReceive(asyn);
-            string request = Encoding.ASCII.GetString(client.Buffer, 0, recv);
-            ProcessQuery(request, client);
+            int r = client.Socket.EndReceive(asyn);
+            string recv = Encoding.ASCII.GetString(client.Buffer, 0, r);
+            ProcessQuery(recv, client);
             client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
         }
 
-        private void ProcessQuery(string request, DirectoryEntry client)
+        private void ProcessQuery(string recv, DirectoryEntry client)
         {
-            string[] query = request.Split(' ');
+            string[] query = recv.Split(' ');
             if (query[0] == "call_request")
                 // format wiadomości: call_request {calling_name} {called_name}
             {
@@ -79,10 +88,12 @@ namespace AtmSim
                     // called.Socket.BeginSend("call_pending");
                     manager.AddConnection(connection);
                     manager.Connect(connection.Id);
+                    client.Socket.Send(Encoding.ASCII.GetBytes(
+                        String.Format("call_accepted {0} {1}", connection.Id, called.Name)));
                 }
             }
-            else if (query[0] == "call_accept")
-                // format wiadomości: call_accept {call_id}
+            else if (query[0] == "call_accepted")
+                // format wiadomości: call_accepted {call_id}
             {
 
             }
