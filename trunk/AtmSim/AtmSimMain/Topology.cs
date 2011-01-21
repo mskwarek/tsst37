@@ -35,11 +35,14 @@ namespace AtmSim
         {
             public int SourcePort;
             public int TargetPort;
-            public Link(Node source, Node target, int sourcePort, int targetPort)
+            public int Capacity;
+            public int MaxCapacity;
+            public Link(Node source, Node target, int sourcePort, int targetPort, int capacity)
                 : base(source, target)
             {
                 this.SourcePort = sourcePort;
                 this.TargetPort = targetPort;
+                this.Capacity = this.MaxCapacity = capacity;
             }
         }
 
