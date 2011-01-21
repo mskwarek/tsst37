@@ -104,6 +104,7 @@
       <DependentUpon>ConfigGUI.cs</DependentUpon>
     </Compile>
     <Compile Include="RoutingController.cs" />
+    <Compile Include="RoutingGraph.cs" />
     <Compile Include="Topology.cs" />
     <Compile Include="TopologyView.xaml.cs">
       <DependentUpon>TopologyView.xaml</DependentUpon>
