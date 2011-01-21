@@ -6,27 +6,27 @@ using QuickGraph;
 
 namespace AtmSim
 {
-    public class RoutingGraph : BidirectionalGraph<RoutingGraph.Vertex, RoutingGraph.Edge>
+    public class RoutingGraph : BidirectionalGraph<RoutingGraph.Node, RoutingGraph.Link>
     {
-        public class Vertex
+        public class Node
         {
-            public Topology.Node Node { get; private set; }
-            public int Id { get { return Node.Id; } }
+            public Topology.Node tNode { get; private set; }
+            public int Id { get { return tNode.Id; } }
 
-            public Vertex(Topology.Node node)
+            public Node(Topology.Node node)
             {
-                Node = node;
+                tNode = node;
             }
         }
 
-        public class Edge : Edge<Vertex>
+        public class Link : Edge<Node>
         {
-            public Topology.Link Link { get; private set; }
-            public int Capacity { get { return Link.Capacity; } }
-            public Edge(Vertex source, Vertex target, Topology.Link link)
+            public Topology.Link tLink { get; private set; }
+            public int Capacity { get { return tLink.Capacity; } }
+            public Link(Node source, Node target, Topology.Link link)
                 : base(source, target)
             {
-                Link = link;
+                tLink = link;
             }
         }
 
@@ -42,12 +42,12 @@ namespace AtmSim
         public static RoutingGraph MapTopology(Topology topology, int minCapacity)
         {
             RoutingGraph graph = new RoutingGraph();
-            Dictionary<Topology.Node, Vertex> vertices = new Dictionary<Topology.Node,Vertex>();
+            Dictionary<Topology.Node, Node> vertices = new Dictionary<Topology.Node,Node>();
             foreach (Topology.Node node in topology.Vertices)
-                graph.AddVertex(new Vertex(node));
+                graph.AddVertex(new Node(node));
             foreach (Topology.Link link in topology.Edges)
                 if (link.Capacity >= minCapacity)
-                    graph.AddEdge(new Edge(vertices[link.Source], vertices[link.Target], link));
+                    graph.AddEdge(new Link(vertices[link.Source], vertices[link.Target], link));
             return graph;
         }
     }
