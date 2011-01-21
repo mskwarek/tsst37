@@ -43,7 +43,7 @@ namespace AtmSim.Components
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, socket);
         }
 
-        public void BeginCall(string name)
+        public void BeginCall(string name, int size)
         {
             socket.Send(Encoding.ASCII.GetBytes(
                 String.Format("call_request {0} {1}", this.name, name)));

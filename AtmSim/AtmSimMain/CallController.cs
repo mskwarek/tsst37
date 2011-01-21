@@ -101,6 +101,12 @@ namespace AtmSim
             if (query[0] == "call_request")
                 // format wiadomości: call_request {calling_name} {called_name} {capacity}
             {
+                if (query.Length != 4)
+                {
+                    client.Socket.Send(Encoding.ASCII.GetBytes(
+                        String.Format("call_rejected invalid_query {0}", query[2])));
+                    return;
+                }
                 if (query[1] == client.Name)
                 {
                     if (Directory.ContainsKey(query[2]))
@@ -108,7 +114,16 @@ namespace AtmSim
                         var called = Directory[query[2]];
                         int callingId = client.Id;
                         int calledId = called.Id;
-                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), 5);
+                        int cap;
+                        try { cap = Int32.Parse(query[3]); }
+                        catch (FormatException)
+                        {
+                            client.Socket.Send(Encoding.ASCII.GetBytes(
+                                String.Format("call_rejected invalid_query {0}", query[2])));
+                            return;
+                        }
+
+                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), cap);
                         if (connection == null)
                             client.Socket.Send(Encoding.ASCII.GetBytes(
                                 String.Format("call_rejected no_resources {0}", query[2])));
