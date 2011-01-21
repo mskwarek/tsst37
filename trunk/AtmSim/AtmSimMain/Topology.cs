@@ -67,11 +67,24 @@ namespace AtmSim
         new public string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
         new public string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
         public List<Topology.Link> path;
+
         public VirtualPath(Topology.Node source, Topology.Node target, int sourcePort, int targetPort, int sourceVpi, int targetVpi, int capacity)
             : base(source, target, sourcePort, targetPort, capacity)
         {
             this.SourceVpi = sourceVpi;
             this.TargetVpi = targetVpi;
+        }
+
+        new public int Capacity
+        {
+            get
+            {
+                int cap = Int32.MaxValue;
+                foreach (var link in path)
+                    if (link.Capacity < cap)
+                        cap = link.Capacity;
+                return cap;
+            }
         }
     }
 }

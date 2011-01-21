@@ -18,6 +18,7 @@ namespace AtmSim
         private bool refloop = true;
         public SourceForm(Config.Node cNode, int mPort, int cPort)
         {
+            this.Text = cNode.Name;
             source = new Components.Source(cNode, mPort);
             caller = new Components.Caller(cNode.Name, cPort);
             InitializeComponent();
