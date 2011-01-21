@@ -38,6 +38,8 @@
             this.connectButton = new System.Windows.Forms.Button();
             this.callerMessageTextBox = new System.Windows.Forms.Label();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.capNumeric = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.capNumeric)).BeginInit();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -105,7 +107,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.targetTextBox.Location = new System.Drawing.Point(12, 12);
             this.targetTextBox.Name = "targetTextBox";
-            this.targetTextBox.Size = new System.Drawing.Size(151, 20);
+            this.targetTextBox.Size = new System.Drawing.Size(115, 20);
             this.targetTextBox.TabIndex = 8;
             // 
             // connectButton
@@ -137,11 +139,24 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
+            // capNumeric
+            // 
+            this.capNumeric.Location = new System.Drawing.Point(133, 12);
+            this.capNumeric.Name = "capNumeric";
+            this.capNumeric.Size = new System.Drawing.Size(44, 20);
+            this.capNumeric.TabIndex = 12;
+            this.capNumeric.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
             // SourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 142);
+            this.Controls.Add(this.capNumeric);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.callerMessageTextBox);
             this.Controls.Add(this.connectButton);
@@ -155,6 +170,7 @@
             this.Name = "SourceForm";
             this.Text = "Source";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SourceForm_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.capNumeric)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,5 +188,6 @@
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Label callerMessageTextBox;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.NumericUpDown capNumeric;
     }
 }

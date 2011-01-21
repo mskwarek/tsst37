@@ -50,7 +50,7 @@ namespace AtmSim
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            caller.BeginCall(targetTextBox.Text);
+            caller.BeginCall(targetTextBox.Text, Convert.ToInt32(capNumeric.Value));
         }
 
         private void SourceForm_FormClosing(object sender, EventArgs e)
