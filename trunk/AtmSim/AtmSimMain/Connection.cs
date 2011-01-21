@@ -50,9 +50,4 @@ namespace AtmSim
             Path = new List<LinkConnection>();
         }
     }
-
-    public class VirtualPath : LinkConnection
-    {
-        
-    }
 }
