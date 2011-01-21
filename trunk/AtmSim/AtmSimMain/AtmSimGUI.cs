@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace AtmSim
 {
@@ -27,15 +28,31 @@ namespace AtmSim
             }
         }
         private Manager manager = new Manager();
-        private CallController callController;
+
+        private Thread refresher;
+        private bool refloop = true;
 
         public AtmSimGUI()
         {
             manager.Init();
-            callController = new CallController(manager);
-            manager.CCPort = callController.Port;
             InitializeComponent();
             mToolStripMenuItem.Text = "M: " + manager.Port;
+            refresher = new Thread(RefreshThread);
+            refresher.Start();
+        }
+
+        private void RefreshThread()
+        {
+            while (refloop)
+            {
+                Thread.Sleep(5000);
+                RefreshList();
+            }
+        }
+
+        private void AtmSimGUI_FormClosing(object sender, EventArgs e)
+        {
+            refloop = false;
         }
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -88,41 +105,44 @@ namespace AtmSim
             RefreshList();
         }
 
+        private delegate void RefreshDelegate();
         private void RefreshList()
         {
-            if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
+            if (tabControl.InvokeRequired)
             {
-                elementsListBox.Items.Clear();
-                foreach (string item in manager.GetElements())
-                    elementsListBox.Items.Add(item);
+                this.Invoke(new RefreshDelegate(RefreshList));
             }
-            if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
+            else
             {
-                connectionsListBox.Items.Clear();
-                foreach (string item in manager.GetConnections())
-                    connectionsListBox.Items.Add(item);
+                if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
+                {
+                    string selected = "";
+                    if (elementsListBox.SelectedIndex >= 0)
+                        selected = (string)elementsListBox.Items[elementsListBox.SelectedIndex];
+                    elementsListBox.Items.Clear();
+                    foreach (string item in manager.GetElements())
+                        elementsListBox.Items.Add(item);
+                    if (elementsListBox.Items.Contains(selected))
+                        elementsListBox.SelectedIndex = elementsListBox.Items.IndexOf(selected);
+                }
+                if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
+                {
+                    string selected = "";
+                    if (connectionsListBox.SelectedIndex >= 0)
+                        selected = (string)connectionsListBox.Items[connectionsListBox.SelectedIndex];
+                    connectionsListBox.Items.Clear();
+                    foreach (string item in manager.GetConnections())
+                        connectionsListBox.Items.Add(item);
+                    if (connectionsListBox.Items.Contains(selected))
+                        connectionsListBox.SelectedIndex = connectionsListBox.Items.IndexOf(selected);
+                }
+                if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
+                {
+                    pathsListBox.Items.Clear();
+                    /*foreach (string item in manager.GetPaths())
+                        pathsListBox.Items.Add(item);*/
+                }
             }
-            if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
-            {
-                pathsListBox.Items.Clear();
-                /*foreach (string item in manager.GetPaths())
-                    pathsListBox.Items.Add(item);*/
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            manager.AddRouting(1, "0:3:-", "1:2:-");
-            manager.AddRouting(2, "2:1:2", "0:3:2");
-            manager.AddRouting(2, "2:2:1", "0:3:1");
-            manager.AddRouting(2, "1:1:3", "0:3:3");
-            manager.AddRouting(3, "0:2:1", "0:1:3");
-            manager.AddRouting(3, "0:2:2", "1:1:2");
-            manager.AddRouting(3, "0:2:3", "1:1:1");
-            manager.AddRouting(4, "A", "0:1;2");
-            manager.AddRouting(4, "B", "0:2:1");
-            manager.AddRouting(5, "0:1:1", "B");
-            manager.AddRouting(5, "0:1:2", "A");            
         }
 
         private void cmdButton_Click(object sender, EventArgs e)
@@ -136,8 +156,27 @@ namespace AtmSim
             cmdButton_Click(sender, e);
         }
 
-        private void tabControl_TabIndexChanged(object sender, EventArgs e)
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
+            {
+                configButton.Enabled = true;
+                logButton.Enabled = true;
+                cmdButton.Enabled = true;
+            }
+            if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
+            {
+                configButton.Enabled = true;
+                logButton.Enabled = false;
+                cmdButton.Enabled = false;
+            }
+            if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
+            {
+                configButton.Enabled = true;
+                logButton.Enabled = false;
+                cmdButton.Enabled = false;
+            }
+            Refresh();
             RefreshList();
         }
     }

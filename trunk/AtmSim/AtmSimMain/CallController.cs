@@ -158,7 +158,7 @@ namespace AtmSim
                 int connectionId = Int32.Parse(query[1]);
                 if (client.Id == manager.Connections[connectionId].Source     // połączenie może rozłączyć jedynie
                     || client.Id == manager.Connections[connectionId].Target) // węzeł korzystający z niego
-                    CallTeardown(manager.Connections[connectionId]);
+                    CallTeardown(manager.Connections[connectionId], client.Name);
             }
         }
 
@@ -173,14 +173,14 @@ namespace AtmSim
             return connection;
         }
 
-        public void CallTeardown(NetworkConnection connection)
+        public void CallTeardown(NetworkConnection connection, string reason)
         {
             string src = manager.Get(connection.Source, "Name");
             string trg = manager.Get(connection.Target, "Name");
             Directory[src].Socket.Send(Encoding.ASCII.GetBytes(
-                "call_teardown " + connection.Id));
+                "call_teardown " + connection.Id + " " + reason));
             Directory[trg].Socket.Send(Encoding.ASCII.GetBytes(
-                "call_teardown " + connection.Id));
+                "call_teardown " + connection.Id + " " + reason));
             manager.Disconnect(connection.Id);
         }
     }

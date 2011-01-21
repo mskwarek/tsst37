@@ -33,10 +33,12 @@ namespace AtmSim
 
         public class Link : Edge<Node>
         {
-            public int SourcePort;
-            public int TargetPort;
+            public int SourcePort { get; private set; }
+            public int TargetPort { get; private set; }
             public int Capacity;
-            public int MaxCapacity;
+            public int MaxCapacity { get; private set; }
+            public string SourceRouting { get { return SourcePort + "::"; } }
+            public string TargetRouting { get { return TargetPort + "::"; } }
             public Link(Node source, Node target, int sourcePort, int targetPort, int capacity)
                 : base(source, target)
             {
@@ -44,6 +46,8 @@ namespace AtmSim
                 this.TargetPort = targetPort;
                 this.Capacity = this.MaxCapacity = capacity;
             }
+
+
         }
 
         public Topology()
@@ -56,9 +60,18 @@ namespace AtmSim
             : base(allowParallelEdges, vertexCapacity) { }
     }
 
-    public class VirtualPath// : Topology.Link
+    public class VirtualPath : Topology.Link
     {
-        public int SourceVpi;
-        public int TargetVpi;
+        public int SourceVpi { get; private set; }
+        public int TargetVpi { get; private set; }
+        new public string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
+        new public string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
+        public List<Topology.Link> path;
+        public VirtualPath(Topology.Node source, Topology.Node target, int sourcePort, int targetPort, int sourceVpi, int targetVpi, int capacity)
+            : base(source, target, sourcePort, targetPort, capacity)
+        {
+            this.SourceVpi = sourceVpi;
+            this.TargetVpi = targetVpi;
+        }
     }
 }
