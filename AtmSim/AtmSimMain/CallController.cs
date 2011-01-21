@@ -110,9 +110,9 @@ namespace AtmSim
                         //NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId());
                         ////called.Socket.BeginSend("call_pending");
                         //manager.AddConnection(connection);
-                        //manager.Connect(connection.Id);
-                        client.Socket.Send(Encoding.ASCII.GetBytes(
-                            String.Format("call_accepted {0} {1}", manager.GetConnectionId(), called.Name)));
+                        int id = manager.GetConnectionId();
+                        called.Socket.Send(Encoding.ASCII.GetBytes(
+                            String.Format("call_pending {0} {1}", id, client.Name)));
                     }
                     else
                     {
@@ -122,9 +122,15 @@ namespace AtmSim
                 }
             }
             else if (query[0] == "call_accepted")
-                // format wiadomości: call_accepted {call_id}
+                // format wiadomości: call_accepted {call_id} {calling_name}
             {
-
+                int id = Int32.Parse(query[1]);
+                //manager.Connect(Id);
+                var caller = Directory[query[2]];
+                caller.Socket.Send(Encoding.ASCII.GetBytes(
+                    String.Format("call_finished {0} {1}", id, client.Name)));
+                client.Socket.Send(Encoding.ASCII.GetBytes(
+                    String.Format("call_finished {0} {1}", id, caller.Name)));
             }
             else if (query[0] == "call_teardown")
                 // format wiadomości: call_teardown {call_id}

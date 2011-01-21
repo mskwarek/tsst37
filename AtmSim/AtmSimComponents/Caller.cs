@@ -69,15 +69,23 @@ namespace AtmSim.Components
         private void Process(string recv)
         {
             string[] query = recv.Split(' ');
-            if (query[0] == "call_accepted")
+            if (query[0] == "call_finished")
             {
                 int id = Int32.Parse(query[1]);
                 Connections.Add(id, query[2]);
                 this.Message = "Połączono z " + query[2] + ".";
             }
+
             else if (query[0] == "call_rejected")
             {
                 this.Message = "Nie ma takiego numeru!";
+            }
+
+            else if (query[0] == "call_pending")
+            {
+                this.Message = "Nowe połączenie z " + query[2] + ".";
+                socket.Send(Encoding.ASCII.GetBytes(
+                    String.Format("call_accepted {0} {1}", query[1], query[2])));
             }
         }
     }
