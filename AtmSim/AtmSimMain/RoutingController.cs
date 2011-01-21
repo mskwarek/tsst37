@@ -20,7 +20,7 @@ namespace AtmSim
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-        
+            this.setupConnection(4, 5, 2, 2);
         }
 
 
@@ -29,18 +29,18 @@ namespace AtmSim
         {
             public int source { get; set; }
             public int target { get; set;}
-            public Topology ownTopology { get; set; }
-            public List<Topology.Link> path { get; set; }
+            public RoutingGraph ownTopology { get; set; }
+            public List<RoutingGraph.Link> path { get; set; }
             public List<string> vcivpiList { get; set; }
             public int connectN{ get; set; }
             public int requieredCapacity { get; set; }
-            public SetupStore(int source, int target, Topology ownTopology, int connectN, int requieredCapacity)
+            public SetupStore(int source, int target, RoutingGraph ownTopology, int connectN, int requieredCapacity)
             {
                 this.source = source;
                 this.target = target;
                 this.ownTopology = ownTopology;
                 this.connectN = connectN;
-                path = new List<Topology.Link>();
+                path = new List<RoutingGraph.Link>();
                 vcivpiList = new List<string>();
                 this.requieredCapacity = requieredCapacity;
                
@@ -53,7 +53,7 @@ namespace AtmSim
 
         public NetworkConnection setupConnection(int src, int trg, int connectN, int requieredCapacity)
         {
-            Topology ownTopology = manager.Topology; //TODO make clone method
+            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, requieredCapacity); //TODO make clone method
              SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
              if(ss.ownTopology.EdgeCount!=0){
                  if (this.findBestPath(ss))  //if true w
@@ -76,30 +76,29 @@ namespace AtmSim
         { NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
           //  List<LinkConnection> links = new List<LinkConnection>();
             LinkConnection link; 
-          //  foreach (Topology.Link e in ss.path; string s in ss.vcivpiList) {
-          //      link = new LinkConnection();
-              //  link.SourceId
+      
              for(int i = 0 ; i < ss.path.Count; i++)
              {
                link = new LinkConnection();
                link.SourceId = ss.path[i].Source.Id;
                link.TargetId = ss.path[i].Target.Id;
-               link.SourceRouting = ss.path[i].SourcePort + ":" + ss.vcivpiList[i];
-               link.TargetRouting = ss.path[i].TargetPort + ":" + ss.vcivpiList[i];
+               link.SourceRouting = ss.path[i].tLink.SourcePort + ":" + ss.vcivpiList[i];
+               link.TargetRouting = ss.path[i].tLink.TargetPort + ":" + ss.vcivpiList[i];
                networkConnection.Path.Add(link);
              
              }
              return networkConnection;
             
             }
-        
-        
 
 
-         private Topology.Node IDtoNode(int id, Topology ownTopology)
-         { 
- 
-            return ownTopology.Vertices.ToList().Find(delegate(Topology.Node no) { 
+
+
+        private RoutingGraph.Node IDtoNode(int id, RoutingGraph ownTopology)
+         {
+
+             return ownTopology.Vertices.ToList().Find(delegate(RoutingGraph.Node no)
+             { 
                 return no.Id == id; 
             });
 
@@ -108,7 +107,7 @@ namespace AtmSim
          private Boolean findBestPath(SetupStore ss)
         {
           //  Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
-            Dictionary<Topology.Link, double> edgeCost = new Dictionary<Topology.Link, double>(ss.ownTopology.EdgeCount);
+            Dictionary<RoutingGraph.Link, double> edgeCost = new Dictionary<RoutingGraph.Link, double>(ss.ownTopology.EdgeCount);
         
             int index = 0;
             int max = ss.ownTopology.EdgeCount;
@@ -129,13 +128,13 @@ namespace AtmSim
 
 
             // We want to use Dijkstra on this graph
-            var dijkstra = new DijkstraShortestPathAlgorithm<Topology.Node, Topology.Link>(ss.ownTopology, e => edgeCost[e]);
+           var dijkstra = new DijkstraShortestPathAlgorithm<RoutingGraph.Node, RoutingGraph.Link>(ss.ownTopology, e => edgeCost[e]);
          
             // Attach a Vertex Predecessor Recorder Observer to give us the paths
-            var predecessorObserver = new VertexPredecessorRecorderObserver<Topology.Node, Topology.Link>();
+            var predecessorObserver = new VertexPredecessorRecorderObserver<RoutingGraph.Node, RoutingGraph.Link>();
             predecessorObserver.Attach(dijkstra);
             dijkstra.Compute(this.IDtoNode(ss.source, ss.ownTopology));
-            IEnumerable<Topology.Link> path;
+            IEnumerable<RoutingGraph.Link> path;
             //List<Topology.Link> ddd = new List<Topology.Link>();
             if (predecessorObserver.TryGetPath(this.IDtoNode(ss.target, ss.ownTopology), out path))
             { 
@@ -166,8 +165,8 @@ namespace AtmSim
                 {
                     VpiVci = rand() + "." + rand();
                 } while (
-                    !doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.SourcePort + ".Available." + VpiVci)) ||
-                    !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))
+                    !doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.tLink.SourcePort + ".Available." + VpiVci)) ||
+                    !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.tLink.TargetPort + ".Available." + VpiVci))
                     );
                 ss.vcivpiList.Add(VpiVci);
 
