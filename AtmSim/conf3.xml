@@ -168,13 +168,13 @@
 			<Capacity>20</Capacity>
 		</Link>	
 		<Link>
-			<StartNode>4</StartNode><StartPort>3</StartPort>
-			<EndNode>3</EndNode><EndPort>3</EndPort>
+			<StartNode>4</StartNode><StartPort>2</StartPort>
+			<EndNode>3</EndNode><EndPort>2</EndPort>
 			<Capacity>20</Capacity>
 		</Link>		
 		<Link>
-			<StartNode>3</StartNode><StartPort>3</StartPort>
-			<EndNode>4</EndNode><EndPort>3</EndPort>
+			<StartNode>3</StartNode><StartPort>2</StartPort>
+			<EndNode>4</EndNode><EndPort>2</EndPort>
 			<Capacity>20</Capacity>
 		</Link>	
 		<Link>
@@ -202,24 +202,24 @@
 			<EndNode>4</EndNode><EndPort>1</EndPort>
 			<Capacity>20</Capacity>
 		</Link>	
-				<Link>
+			<Link>
 			<StartNode>7</StartNode><StartPort>0</StartPort>
-			<EndNode>1</EndNode><EndPort>3</EndPort>
+			<EndNode>1</EndNode><EndPort>2</EndPort>
 			<Capacity>20</Capacity>
 		</Link>		
 		<Link>
-			<StartNode>1</StartNode><StartPort>3</StartPort>
+			<StartNode>1</StartNode><StartPort>2</StartPort>
 			<EndNode>8</EndNode><EndPort>0</EndPort>
 			<Capacity>20</Capacity>
 		</Link>	
 		<Link>
-			<StartNode>9</StartNode><StartPort>3</StartPort>
-			<EndNode>6</EndNode><EndPort>0</EndPort>
+			<StartNode>9</StartNode><StartPort>0</StartPort>
+			<EndNode>6</EndNode><EndPort>2</EndPort>
 			<Capacity>20</Capacity>
 		</Link>
 		<Link>
-			<StartNode>6</StartNode><StartPort>0</StartPort>
-			<EndNode>10</EndNode><EndPort>3</EndPort>
+			<StartNode>6</StartNode><StartPort>2</StartPort>
+			<EndNode>10</EndNode><EndPort>0</EndPort>
 			<Capacity>20</Capacity>
 		</Link>	
 	</Links>
