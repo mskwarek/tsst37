@@ -14,8 +14,6 @@ namespace AtmSim
         public Topology.Link Link;
     }
 
-    
-
     public class NetworkConnection
     {
         public int Id { get; private set; }
@@ -51,5 +49,10 @@ namespace AtmSim
             Id = id; 
             Path = new List<LinkConnection>();
         }
+    }
+
+    public class VirtualPath : LinkConnection
+    {
+        
     }
 }

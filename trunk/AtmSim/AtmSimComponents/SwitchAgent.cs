@@ -119,7 +119,11 @@ namespace AtmSim.Components
                         try
                         {
                             int vpi = Int32.Parse(param[3]);
-                            int vci = Int32.Parse(param[4]);
+                            int vci;
+                            if (param[4] == "-")
+                                vci = -1;
+                            else
+                                vci = Int32.Parse(param[4]);
                             response += " " + CheckPortIn(n, vpi, vci);
                         }
                         catch (FormatException) { return response; }
@@ -145,7 +149,11 @@ namespace AtmSim.Components
                         try
                         {
                             int vpi = Int32.Parse(param[3]);
-                            int vci = Int32.Parse(param[4]);
+                            int vci;
+                            if (param[4] == "-")
+                                vci = -1;
+                            else
+                                vci = Int32.Parse(param[4]);
                             response += " " + CheckPortOut(n, vpi, vci);
                         }
                         catch (FormatException) { return response; }
@@ -283,12 +291,18 @@ namespace AtmSim.Components
 
         private bool CheckPortIn(int port, int vpi, int vci)
         {
-            return !node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci));
+            if (vci == -1)
+                return !node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi));
+            else
+                return !node.Matrix.RoutingTable.ContainsKey(new RoutingEntry(port, vpi, vci));
         }
 
         private bool CheckPortOut(int port, int vpi, int vci)
         {
-            return !node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci));
+            if (vci == -1)
+                return !node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi));
+            else
+                return !node.Matrix.RoutingTable.ContainsValue(new RoutingEntry(port, vpi, vci));
         }
     }
 }

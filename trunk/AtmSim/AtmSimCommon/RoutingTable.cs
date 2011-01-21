@@ -17,18 +17,24 @@ namespace AtmSim
         public int Vci { get { return vci; } set { vci = value; } }
 
         public static IEqualityComparer<RoutingEntry> Default
-        { get { return (IEqualityComparer<RoutingEntry>)(new EqualityComparer()); } }
+        { get { return (IEqualityComparer<RoutingEntry>)(new REComparer()); } }
 
         public RoutingEntry(RoutingEntry entry)
         {
             this.port = entry.Port;
             this.vpi = entry.Vpi;
+            this.novci = entry.novci;
             this.vci = entry.Vci;
         }
 
         public RoutingEntry(int port, int vpi, int vci)
         {
             this.port = port; this.vpi = vpi; this.vci = vci;
+        }
+
+        public RoutingEntry(int port, int vpi)
+        {
+            this.port = port; this.vpi = vpi; this.vci = 0; this.novci = true;
         }
 
         public RoutingEntry(string entry)
@@ -70,7 +76,7 @@ namespace AtmSim
 
         }
 
-        public class EqualityComparer : IEqualityComparer<RoutingEntry>
+        public class REComparer : IEqualityComparer<RoutingEntry>
         {
             public bool Equals(RoutingEntry e1, RoutingEntry e2)
             {
@@ -105,13 +111,13 @@ namespace AtmSim
 
         public RoutingTable()// : base(new RoutingEntry.EqualityComparer()) { }
         {
-            table = new Dictionary<RoutingEntry,RoutingEntry>(new RoutingEntry.EqualityComparer());
+            table = new Dictionary<RoutingEntry,RoutingEntry>(new RoutingEntry.REComparer());
             map = new Dictionary<int, RoutingEntry>();
         }
 
         public RoutingTable(RoutingTable routingTable)// : base((Dictionary<RoutingEntry, RoutingEntry>)routingTable, new RoutingEntry.EqualityComparer()) { }
         {
-            table = new Dictionary<RoutingEntry, RoutingEntry>(routingTable.table, new RoutingEntry.EqualityComparer());
+            table = new Dictionary<RoutingEntry, RoutingEntry>(routingTable.table, new RoutingEntry.REComparer());
             map = new Dictionary<int, RoutingEntry>();
         }
 

@@ -28,7 +28,7 @@ namespace AtmSim.Components
         public class SinkReceiver : IFrameReceiver
         {  
             private Sink sink;
-            private Dictionary<RoutingEntry, string> sources = new Dictionary<RoutingEntry, string>(new RoutingEntry.EqualityComparer());
+            private Dictionary<RoutingEntry, string> sources = new Dictionary<RoutingEntry, string>(new RoutingEntry.REComparer());
             public Dictionary<RoutingEntry, string> Sources { get { return sources; } set { sources = value; } }
             public String Buffer;
 
