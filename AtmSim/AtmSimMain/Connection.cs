@@ -13,6 +13,8 @@ namespace AtmSim
         public string TargetRouting; // Port:Vpi:Vci
     }
 
+    
+
     class NetworkConnection
     {
         public int Id { get; private set; }

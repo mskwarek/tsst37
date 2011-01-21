@@ -118,40 +118,17 @@ namespace AtmSim
         public int askLRMs(SetupStore ss){
 
 
-            string start = "";
-            string end="";
             string VpiVci = "";
-            string sourceVpiVci= "";
-            string targetVpiVci = "";
             foreach (var e in ss.path)
             {
-                
-                 if (e.Source.Name.Substring(0, 6) == "Source")
-                 { start =   rand() + ":" + rand(); end = "-:-:-"; }
-                 if (e.Source.Name.Substring(0, 6) == "Switch")
-                 { start =  rand() + ":" + rand(); }
-               //  if (e.Target.Name.Substring(0, 4) == "Sink")
-                // { start = "-:-:-"; VpiVci = end + "." + start; }
-                 
-                     VpiVci =  end + "." + e.SourcePort + ":" + start;
-
-                    ss.vcivpiList.Add(VpiVci);
-                    end = e.TargetPort + ":" + start;
-                    
-
-            }
-            VpiVci = end + "-:-:-";
-            ss.vcivpiList.Add(VpiVci);
-            int i = 0;
-            foreach (var e in ss.path)
-            {
-                sourceVpiVci = ss.vcivpiList[i].Split('.')[1];
-                targetVpiVci = ss.vcivpiList[i + 1].Split('.')[0];
-                if (!doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.SourcePort + ".Available." + sourceVpiVci))) //to change
-                    return (ss.path).IndexOf(e);
-                if (!doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + targetVpiVci))) //to change
-                    return (ss.path).IndexOf(e);
-            i++;
+                do
+                {
+                    VpiVci = rand() + "." + rand();
+                } while (
+                    !doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.SourcePort + ".Available." + VpiVci)) ||
+                    !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))
+                    );
+                ss.vcivpiList.Add(VpiVci);
             }
             return -1; //no problems
         }
