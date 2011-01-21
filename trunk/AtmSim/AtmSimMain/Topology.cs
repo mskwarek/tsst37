@@ -56,7 +56,7 @@ namespace AtmSim
             : base(allowParallelEdges, vertexCapacity) { }
     }
 
-    public class VirtualPath : Topology.Link
+    public class VirtualPath// : Topology.Link
     {
         public int SourceVpi;
         public int TargetVpi;
