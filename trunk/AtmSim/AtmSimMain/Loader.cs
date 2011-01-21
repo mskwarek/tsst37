@@ -47,6 +47,7 @@ namespace AtmSim
                 process.Start();
                 progressBar.Value += (40 / network.Nodes.Count);
                 Refresh();
+                
             }
 
             label.Text = "Oczekiwanie na agentów...";

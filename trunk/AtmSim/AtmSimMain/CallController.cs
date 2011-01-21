@@ -158,8 +158,30 @@ namespace AtmSim
                 int connectionId = Int32.Parse(query[1]);
                 if (client.Id == manager.Connections[connectionId].Source     // połączenie może rozłączyć jedynie
                     || client.Id == manager.Connections[connectionId].Target) // węzeł korzystający z niego
-                    manager.Disconnect(connectionId);
+                    CallTeardown(manager.Connections[connectionId]);
             }
+        }
+
+        public NetworkConnection CallRequest(int sourceId, int targetId, int cap)
+        {
+            NetworkConnection connection = rc.setupConnection(sourceId, targetId, manager.GetConnectionId(), cap);
+            if (connection != null)
+            {
+                manager.AddConnection(connection);
+                manager.Connect(connection.Id);
+            }
+            return connection;
+        }
+
+        public void CallTeardown(NetworkConnection connection)
+        {
+            string src = manager.Get(connection.Source, "Name");
+            string trg = manager.Get(connection.Target, "Name");
+            Directory[src].Socket.Send(Encoding.ASCII.GetBytes(
+                "call_teardown " + connection.Id));
+            Directory[trg].Socket.Send(Encoding.ASCII.GetBytes(
+                "call_teardown " + connection.Id));
+            manager.Disconnect(connection.Id);
         }
     }
 }

@@ -219,6 +219,7 @@ namespace AtmSim.Components
                         response += " " + node.PortsOut[n].TcpPort;
                     }
                 }
+                node.Log.LogMsg(response);
             }
             else if (command[0] == "rtadd")
             {
@@ -260,6 +261,7 @@ namespace AtmSim.Components
                     catch (FormatException) { response += " fail"; }
                     catch (ArgumentException) { response += " fail"; }
                 }
+                node.Log.LogMsg(response);
             }
             else if (command[0] == "rtdel")
             {
@@ -286,6 +288,7 @@ namespace AtmSim.Components
                     }
                     catch (FormatException) { response += " fail"; }
                 }
+                node.Log.LogMsg(response);
             }
             else
                 response = command[0] + "resp";

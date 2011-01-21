@@ -33,7 +33,7 @@ namespace AtmSim.Components
                 if (!target.NoVci)
                     pu.Vci = target.Vci;
                 // Wyslanie ramki na odpowiedni port wyjsciowy
-                node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
+                //node.Log.LogMsg("Ramka: " + source.ToString() + " -> " + target.ToString());
                 node.PortsOut[target.Port].Send(pu);
             }
             else
