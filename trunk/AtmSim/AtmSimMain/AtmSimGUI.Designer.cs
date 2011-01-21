@@ -217,6 +217,7 @@
             this.elementsListBox.Name = "elementsListBox";
             this.elementsListBox.Size = new System.Drawing.Size(252, 264);
             this.elementsListBox.TabIndex = 1;
+            this.elementsListBox.SelectedIndexChanged += new System.EventHandler(elementsListBox_SelectedIndexChanged);
             // 
             // connectionsTabPage
             // 
