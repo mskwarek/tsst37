@@ -5,21 +5,23 @@ using System.Text;
 
 namespace AtmSim
 {
-    class LinkConnection
+    public class LinkConnection
     {
         public int SourceId;
         public int TargetId;
         public string SourceRouting; // Port:Vpi:Vci
         public string TargetRouting; // Port:Vpi:Vci
+        public Topology.Link Link;
     }
 
     
 
-    class NetworkConnection
+    public class NetworkConnection
     {
         public int Id { get; private set; }
+        public int Capacity;
         public List<LinkConnection> Path { get; private set; }
-        public bool Active;
+        public bool Active = false;
 
         public List<int> Nodes
         {

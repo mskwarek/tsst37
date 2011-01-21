@@ -55,7 +55,7 @@ namespace AtmSim
         private Topology topology = new Topology(); // topologia sieci
         public Topology Topology
         { get { return topology; } }
-
+        private Dictionary<int, NetworkConnection> connections = new Dictionary<int, NetworkConnection>();
 
         private Socket socket;
 
@@ -281,5 +281,51 @@ namespace AtmSim
             }
         }
 
+        public void AddConnection(NetworkConnection connection)
+        {
+            connections.Add(connection.Id, connection);
+        }
+
+        public bool Connect(int connectionId)
+        {
+            if (!connections.ContainsKey(connectionId))
+                return false;
+            NetworkConnection connection = connections[connectionId];
+            if (!connections[connectionId].Active)
+            {
+                string label = connection.Id.ToString(); // pierwszy wpis: Id -> re
+                string value = "";
+                foreach (var link in connection.Path)
+                {
+                    value = link.SourceRouting;
+                    if (!AddRouting(link.SourceId, label, value, connection.Id))
+                    {   // to nie powinno się zdarzyć...
+                        Disconnect(connectionId);
+                        return false;
+                    }
+                    link.Link.Capacity -= connection.Capacity;
+                    label = link.TargetRouting;
+                }
+                value = connection.Id.ToString();
+                if (!AddRouting(connection.Target, label, value, connection.Id))
+                {   // ...to także
+                    Disconnect(connectionId);
+                    return false;
+                }
+                connection.Active = true;
+            }
+            return connection.Active;
+        }
+
+        public void Disconnect(int connectionId)
+        {
+            NetworkConnection connection = connections[connectionId];
+            foreach (var link in connection.Path)
+            {
+                if (RemoveRouting(link.SourceId, connection.Id))
+                    link.Link.Capacity += connection.Capacity;
+            }
+            RemoveRouting(connection.Target, connection.Id);
+        }
     }
 }
