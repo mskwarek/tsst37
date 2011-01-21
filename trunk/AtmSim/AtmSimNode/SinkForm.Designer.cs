@@ -77,7 +77,7 @@
             this.Text = "Sink";
             this.ResumeLayout(false);
             this.PerformLayout();
-
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(SinkForm_FormClosing);
         }
 
         #endregion

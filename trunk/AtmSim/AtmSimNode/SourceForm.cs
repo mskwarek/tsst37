@@ -15,6 +15,7 @@ namespace AtmSim
         private Components.Source source;
         private Components.Caller caller;
         private Thread refresher;
+        private bool refloop = true;
         public SourceForm(Config.Node cNode, int mPort, int cPort)
         {
             source = new Components.Source(cNode, mPort);
@@ -27,23 +28,20 @@ namespace AtmSim
 
         private void RefreshContent()
         {
-            while (true)
+            while (refloop)
             {
                 Thread.Sleep(50);
-                foreach (int c in caller.Connections.Keys)
-                {
-                    connectionComboBox.Items.Add(
-                        String.Format("[{0}]->{1}", c, caller.Connections[c]));
-                }
                 callerMessageTextBox.Text = caller.Message;
             }
         }
 
+
         private void sendButton_Click(object sender, EventArgs e)
         {
-            if (source.Matrix.ContainsKey((string)connectionComboBox.SelectedItem) && messageTextBox.Text != "")
+            string target = ((string)connectionComboBox.SelectedItem).Split(new char[]{'[', ']'}, StringSplitOptions.RemoveEmptyEntries)[0];
+            if (source.Matrix.ContainsKey(target) && messageTextBox.Text != "")
             {
-                source.Target = (string)connectionComboBox.SelectedItem;
+                source.Target = target;
                 source.Message = messageTextBox.Text;
                 Thread send = new Thread(source.Send);
                 send.Start();
@@ -53,6 +51,22 @@ namespace AtmSim
         private void connectButton_Click(object sender, EventArgs e)
         {
             caller.BeginCall(targetTextBox.Text);
+        }
+
+        private void SourceForm_FormClosing(object sender, EventArgs e)
+        {
+            refloop = false;
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            connectionComboBox.Items.Clear();
+            foreach (int c in caller.Connections.Keys)
+            {
+                connectionComboBox.Items.Add(
+                    String.Format("[{0}]->{1}", c, caller.Connections[c]));
+            }
+
         }
     }
 }

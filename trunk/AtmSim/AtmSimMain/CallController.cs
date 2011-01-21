@@ -35,6 +35,7 @@ namespace AtmSim
         public CallController(Manager manager)
         {
             this.manager = manager;
+            this.rc = new RoutingController(manager);
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ip = new IPEndPoint(IPAddress.Any, 0);
             this.socket.Bind(ip);
@@ -98,7 +99,7 @@ namespace AtmSim
         {
             string[] query = recv.Split(' ');
             if (query[0] == "call_request")
-                // format wiadomości: call_request {calling_name} {called_name}
+                // format wiadomości: call_request {calling_name} {called_name} {capacity}
             {
                 if (query[1] == client.Name)
                 {
@@ -107,12 +108,16 @@ namespace AtmSim
                         var called = Directory[query[2]];
                         int callingId = client.Id;
                         int calledId = called.Id;
-                        //NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId());
-                        ////called.Socket.BeginSend("call_pending");
-                        //manager.AddConnection(connection);
-                        int id = manager.GetConnectionId();
-                        called.Socket.Send(Encoding.ASCII.GetBytes(
-                            String.Format("call_pending {0} {1}", id, client.Name)));
+                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), 10);
+                        if (connection == null)
+                            client.Socket.Send(Encoding.ASCII.GetBytes(
+                                String.Format("call_rejected no_resources {0}", query[2])));
+                        else
+                        {
+                            manager.AddConnection(connection);
+                            called.Socket.Send(Encoding.ASCII.GetBytes(
+                                String.Format("call_pending {0} {1}", connection.Id, client.Name)));
+                        }
                     }
                     else
                     {
@@ -125,7 +130,7 @@ namespace AtmSim
                 // format wiadomości: call_accepted {call_id} {calling_name}
             {
                 int id = Int32.Parse(query[1]);
-                //manager.Connect(Id);
+                manager.Connect(id);
                 var caller = Directory[query[2]];
                 caller.Socket.Send(Encoding.ASCII.GetBytes(
                     String.Format("call_finished {0} {1}", id, client.Name)));
