@@ -54,7 +54,5 @@ namespace AtmSim
         {
             caller.BeginCall(targetTextBox.Text);
         }
-
-
     }
 }

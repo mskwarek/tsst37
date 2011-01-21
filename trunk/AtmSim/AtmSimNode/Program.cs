@@ -29,7 +29,7 @@ namespace AtmSim
             else if (cNode.Type == "Source")
                 Application.Run(new SourceForm(cNode, mPort, cPort));
             else if (cNode.Type == "Sink")
-                Application.Run(new SinkForm(cNode, mPort));
+                Application.Run(new SinkForm(cNode, mPort, cPort));
         }
     }
 }
