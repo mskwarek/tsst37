@@ -74,5 +74,6 @@ namespace AtmSim.Config
          public int EndNode { get; set; }
          //[XmlElementAttribute("EndPort")]
          public int EndPort { get; set; }
+         public int Capacity { get; set; }
      }
 }

@@ -280,7 +280,7 @@ namespace AtmSim
                 Set(link.StartNode, "PortsOut." + link.StartPort + ".Connected", "True");
                 topology.AddEdge(new Topology.Link(
                    nodes[link.StartNode].tnode, nodes[link.EndNode].tnode,
-                   link.StartPort, link.EndPort, 10));
+                   link.StartPort, link.EndPort, link.Capacity));
             }
         }
 
