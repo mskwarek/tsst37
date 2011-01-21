@@ -56,16 +56,12 @@ namespace AtmSim
             RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, requieredCapacity); //TODO make clone method
              SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
              if(ss.ownTopology.EdgeCount!=0){
-                 if (this.findBestPath(ss))  //if true w
+                 if (this.findBestPath(ss) && this.askLRMs(ss))  //if true -> creating list vcivpi
                  {
-                     this.askLRMs(ss); //creating list vcivpi
+                     return this.parseToNetworConnection(ss); 
                  }
                  else
                      return null;
-                 return this.parseToNetworConnection(ss);
-             
-                 //networkConnection.
-                
              }
 
             
@@ -157,13 +153,16 @@ namespace AtmSim
            
         }
 
-        public void askLRMs(SetupStore ss){
+        public bool askLRMs(SetupStore ss){
 
 
             string VpiVci = "";
+            if (!manager.Ping(ss.source))
+                return false;
             foreach (var e in ss.path)
             {
-
+                if (!manager.Ping(e.Target.Id))
+                    return false;
                 do
                 {
                     VpiVci = rand() + "." + rand();
@@ -174,7 +173,7 @@ namespace AtmSim
                 ss.vcivpiList.Add(VpiVci);
 
             }
-            //no problems
+            return true;
         }
 
     

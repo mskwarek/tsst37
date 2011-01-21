@@ -108,7 +108,7 @@ namespace AtmSim
                         var called = Directory[query[2]];
                         int callingId = client.Id;
                         int calledId = called.Id;
-                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), 10);
+                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), 5);
                         if (connection == null)
                             client.Socket.Send(Encoding.ASCII.GetBytes(
                                 String.Format("call_rejected no_resources {0}", query[2])));

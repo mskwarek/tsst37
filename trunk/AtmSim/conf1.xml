@@ -62,26 +62,32 @@
 		<Link>
 			<StartNode>2</StartNode><StartPort>0</StartPort>
 			<EndNode>1</EndNode><EndPort>0</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 		<Link>
 			<StartNode>1</StartNode><StartPort>0</StartPort>
 			<EndNode>2</EndNode><EndPort>0</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 		<Link>
 			<StartNode>3</StartNode><StartPort>0</StartPort>
 			<EndNode>2</EndNode><EndPort>1</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 		<Link>
 			<StartNode>1</StartNode><StartPort>1</StartPort>
 			<EndNode>3</EndNode><EndPort>0</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 		<Link>
 			<StartNode>4</StartNode><StartPort>0</StartPort>
 			<EndNode>2</EndNode><EndPort>2</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 		<Link>
 			<StartNode>3</StartNode><StartPort>1</StartPort>
 			<EndNode>5</EndNode><EndPort>0</EndPort>
+			<Capacity>20</Capacity>
 		</Link>
 	</Links>
 </Network>
