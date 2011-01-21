@@ -44,7 +44,11 @@ namespace AtmSim
             RoutingGraph graph = new RoutingGraph();
             Dictionary<Topology.Node, Node> vertices = new Dictionary<Topology.Node,Node>();
             foreach (Topology.Node node in topology.Vertices)
-                graph.AddVertex(new Node(node));
+            {
+                Node n = new Node(node);
+                graph.AddVertex(n);
+                vertices.Add(node, n);
+            }
             foreach (Topology.Link link in topology.Edges)
                 if (link.Capacity >= minCapacity)
                     graph.AddEdge(new Link(vertices[link.Source], vertices[link.Target], link));
