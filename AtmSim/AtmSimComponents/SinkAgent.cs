@@ -154,6 +154,25 @@ namespace AtmSim.Components
                     catch (FormatException) { response += " fail"; }
                     catch (ArgumentException) { response += " fail"; }
                 }
+                else if (command.Length == 4)
+                {
+                    response += command[1] + " " + command[2] + " " + command[3];
+                    try
+                    {
+                        RoutingEntry incoming = new RoutingEntry(command[1]);
+                        if (1 > incoming.Port)
+                        {
+                            node.Receiver.Sources.Add(incoming, command[3]);
+                            response += " ok";
+                        }
+                        else
+                            response += " fail";
+                    }
+                    catch (ArgumentException)
+                    {
+                        response += " fail";
+                    }
+                }
             }
             else if (command[0] == "rtdel")
             {

@@ -37,6 +37,7 @@
             this.targetTextBox = new System.Windows.Forms.TextBox();
             this.connectButton = new System.Windows.Forms.Button();
             this.callerMessageTextBox = new System.Windows.Forms.Label();
+            this.refreshButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -126,11 +127,22 @@
             this.callerMessageTextBox.TabIndex = 10;
             this.callerMessageTextBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // refreshButton
+            // 
+            this.refreshButton.Location = new System.Drawing.Point(12, 108);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(75, 23);
+            this.refreshButton.TabIndex = 11;
+            this.refreshButton.Text = "Odśwież";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
             // SourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 142);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.callerMessageTextBox);
             this.Controls.Add(this.connectButton);
             this.Controls.Add(this.targetTextBox);
@@ -142,6 +154,7 @@
             this.Controls.Add(this.nameLabel);
             this.Name = "SourceForm";
             this.Text = "Source";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SourceForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,5 +171,6 @@
         private System.Windows.Forms.TextBox targetTextBox;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Label callerMessageTextBox;
+        private System.Windows.Forms.Button refreshButton;
     }
 }

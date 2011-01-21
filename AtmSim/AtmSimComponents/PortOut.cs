@@ -38,7 +38,10 @@ namespace AtmSim.Components
             string str = Serial.SerializeObject(pu);
             byte[] data = System.Text.Encoding.ASCII.GetBytes(str);
             if (clientSocket != null && connected)
-                clientSocket.Send(data);
+            {
+                try { clientSocket.Send(data); }
+                catch (SocketException) { connected = false; }
+            }
         }
 
         public void Connect()

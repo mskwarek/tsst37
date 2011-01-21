@@ -60,7 +60,8 @@ namespace AtmSim
                  {
                      this.askLRMs(ss); //creating list vcivpi
                  }
-
+                 else
+                     return null;
                  return this.parseToNetworConnection(ss);
              
                  //networkConnection.
@@ -75,8 +76,9 @@ namespace AtmSim
         private NetworkConnection parseToNetworConnection(SetupStore ss)
         { NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
           //  List<LinkConnection> links = new List<LinkConnection>();
-            LinkConnection link; 
-      
+            LinkConnection link;
+
+            networkConnection.Capacity = ss.requieredCapacity;
              for(int i = 0 ; i < ss.path.Count; i++)
              {
                link = new LinkConnection();
@@ -84,6 +86,7 @@ namespace AtmSim
                link.TargetId = ss.path[i].Target.Id;
                link.SourceRouting = ss.path[i].tLink.SourcePort + ":" + ss.vcivpiList[i];
                link.TargetRouting = ss.path[i].tLink.TargetPort + ":" + ss.vcivpiList[i];
+               link.Link = ss.path[i].tLink;
                networkConnection.Path.Add(link);
              
              }
@@ -147,8 +150,8 @@ namespace AtmSim
         private Boolean doIHaveAmptyPorts(String response){
 
             switch (response) {
-                case "true": return true;
-                case "false": return false;
+                case "True": return true;
+                case "False": return false;
                 default: return false;
             }
            
@@ -165,8 +168,8 @@ namespace AtmSim
                 {
                     VpiVci = rand() + "." + rand();
                 } while (
-                    !doIHaveAmptyPorts(this.Get(e.Source.Id, "PortsOut." + e.tLink.SourcePort + ".Available." + VpiVci)) ||
-                    !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.tLink.TargetPort + ".Available." + VpiVci))
+                    !doIHaveAmptyPorts(manager.Get(e.Source.Id, "PortsOut." + e.tLink.SourcePort + ".Available." + VpiVci)) ||
+                    !doIHaveAmptyPorts(manager.Get(e.Target.Id, "PortsIn." + e.tLink.TargetPort + ".Available." + VpiVci))
                     );
                 ss.vcivpiList.Add(VpiVci);
 

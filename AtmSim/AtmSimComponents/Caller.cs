@@ -80,7 +80,10 @@ namespace AtmSim.Components
 
             else if (query[0] == "call_rejected")
             {
-                this.Message = "Nie ma takiego numeru!";
+                if (query[1] == "no_target")
+                    this.Message = "Nie ma takiego numeru!";
+                else if (query[1] == "no_resources")
+                    this.Message = "Nie można zrealizować połączenia.";
             }
 
             else if (query[0] == "call_pending")

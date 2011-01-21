@@ -14,7 +14,8 @@ namespace AtmSim
     {
         private Components.Sink sink;
         private Components.Caller caller;
-        Thread refresher;
+        private Thread refresher;
+        private bool refloop = true;
         public SinkForm(Config.Node cNode, int mPort, int cPort)
         {
             sink = new Components.Sink(cNode, mPort);
@@ -27,12 +28,17 @@ namespace AtmSim
 
         private void RefreshTextBox()
         {
-            while (true)
+            while (refloop)
             {
                 Thread.Sleep(50);
                 messageTextBox.Text = sink.Receiver.Buffer;
                 callerMessageTextBox.Text = caller.Message;
             }
+        }
+
+        private void SinkForm_FormClosing(object sender, EventArgs e)
+        {
+            refloop = false;
         }
     }
 }
