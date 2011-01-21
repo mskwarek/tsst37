@@ -142,6 +142,11 @@ namespace AtmSim
                 {
                     Topology.RemoveVertex(nodes[id].tnode);
                     nodes.Remove(id);
+                    foreach(var con in connections.Keys)
+                    {
+                        if (connections[con].Nodes.Contains(id))
+                            Disconnect(con);
+                    }
                 }
             }
             return "";
@@ -177,7 +182,7 @@ namespace AtmSim
         // pobranie listy dostepnych elementow
         public List<string> GetElements()
         {
-            List<string> elements = new List<string>();
+            List<string> ret = new List<string>();
             int[] keys = new int[nodes.Count];
             nodes.Keys.CopyTo(keys, 0);
             Array.Sort(keys);
@@ -185,11 +190,25 @@ namespace AtmSim
             {
                 if (Ping(key))
                 {
-                    string element = "[" + key + "] " + nodes[key].Name;
-                    elements.Add(element);
+                    string item = "[" + key + "] " + nodes[key].Name;
+                    ret.Add(item);
                 }
             }
-            return elements;
+            return ret;
+        }
+
+        public List<string> GetConnections()
+        {
+            List<string> ret = new List<string>();
+            int[] keys = new int[connections.Count];
+            connections.Keys.CopyTo(keys, 0);
+            Array.Sort(keys);
+            foreach (int key in keys)
+            {
+                string item = "[" + key + "] " + nodes[connections[key].Source].Name + " -> " + nodes[connections[key].Target].Name;
+                ret.Add(item);
+            }
+            return ret;
         }
 
         public bool Ping(int id)

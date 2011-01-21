@@ -169,6 +169,5 @@ namespace AtmSim
             }
             routingPropertyGrid.Refresh();
         }
-
     }
 }

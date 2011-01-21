@@ -57,10 +57,10 @@ namespace AtmSim
             topologyView.Show();
         }
 
-        private void elementListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void elementsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.elementListBox.SelectedIndex >= 0)
-                this.selectedName = (string)this.elementListBox.Items[this.elementListBox.SelectedIndex];
+            if (this.elementsListBox.SelectedIndex >= 0)
+                this.selectedName = (string)this.elementsListBox.Items[this.elementsListBox.SelectedIndex];
             if (manager.Ping(this.SelectedId) == false)
                 RefreshList();
             string type = manager.Get(this.SelectedId, "type") ;
@@ -90,10 +90,24 @@ namespace AtmSim
 
         private void RefreshList()
         {
-            elementListBox.Items.Clear();
-            foreach (string element in manager.GetElements())
-                elementListBox.Items.Add(element);
-
+            if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
+            {
+                elementsListBox.Items.Clear();
+                foreach (string item in manager.GetElements())
+                    elementsListBox.Items.Add(item);
+            }
+            if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
+            {
+                connectionsListBox.Items.Clear();
+                foreach (string item in manager.GetConnections())
+                    connectionsListBox.Items.Add(item);
+            }
+            if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
+            {
+                pathsListBox.Items.Clear();
+                /*foreach (string item in manager.GetPaths())
+                    pathsListBox.Items.Add(item);*/
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -117,9 +131,14 @@ namespace AtmSim
             consoleGUI.Show();
         }
 
-        private void elementListBox_MouseDoubleClick(object sender, EventArgs e)
+        private void elementsListBox_MouseDoubleClick(object sender, EventArgs e)
         {
             cmdButton_Click(sender, e);
+        }
+
+        private void tabControl_TabIndexChanged(object sender, EventArgs e)
+        {
+            RefreshList();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace AtmSim.Components
         public void BeginCall(string name, int size)
         {
             socket.Send(Encoding.ASCII.GetBytes(
-                String.Format("call_request {0} {1}", this.name, name)));
+                String.Format("call_request {0} {1} {2}", this.name, name, size)));
             this.Message = "Łączenie z " + name + "...";
         }
 
