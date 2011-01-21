@@ -20,7 +20,7 @@ namespace AtmSim
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-          this.setupConnection(4, 5, 1);  
+        //  this.setupConnection(4, 5, 1);  
         }
 
 
@@ -66,8 +66,8 @@ namespace AtmSim
                   ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));   //delete edge that is full
              }
 
-             if(index < 0)    //index =-1 oznacza ze udalo sie zestawic polaczenie
-             this.setupNodes(ss);
+           //  if(index < 0)    //index =-1 oznacza ze udalo sie zestawic polaczenie
+            // this.setupNodes(ss);
           //recreating graf for new connection
              //TODO:
              //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenia
@@ -86,11 +86,18 @@ namespace AtmSim
 
          private Boolean findBestPath(SetupStore ss)
         {
-            Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
+          //  Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
+            Dictionary<Topology.Link, double> edgeCost = new Dictionary<Topology.Link, double>(ss.ownTopology.EdgeCount);
+
+            foreach (var e in ss.ownTopology.Edges)
+            {
+                edgeCost.Add(e, e.Capacity);
+            }
+
 
             // We want to use Dijkstra on this graph
-            var dijkstra = new DijkstraShortestPathAlgorithm<Topology.Node, Topology.Link>(ss.ownTopology, edgeCost);
-
+            var dijkstra = new DijkstraShortestPathAlgorithm<Topology.Node, Topology.Link>(ss.ownTopology, e => edgeCost[e]);
+         
             // Attach a Vertex Predecessor Recorder Observer to give us the paths
             var predecessorObserver = new VertexPredecessorRecorderObserver<Topology.Node, Topology.Link>();
             predecessorObserver.Attach(dijkstra);
@@ -121,6 +128,7 @@ namespace AtmSim
             string VpiVci = "";
             foreach (var e in ss.path)
             {
+
                 do
                 {
                     VpiVci = rand() + "." + rand();
@@ -129,6 +137,7 @@ namespace AtmSim
                     !doIHaveAmptyPorts(this.Get(e.Target.Id, "PortsIn." + e.TargetPort + ".Available." + VpiVci))
                     );
                 ss.vcivpiList.Add(VpiVci);
+
             }
             return -1; //no problems
         }
