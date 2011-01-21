@@ -16,7 +16,9 @@ namespace AtmSim
     class NetworkConnection
     {
         public int Id { get; private set; }
-        public List<LinkConnection> Path;
+        public List<LinkConnection> Path { get; private set; }
+        public bool Active;
+
         public List<int> Nodes
         {
             get
@@ -29,6 +31,21 @@ namespace AtmSim
                 return nodes;
             }
         }
-        public bool Active;
+
+        public int Source
+        {
+            get { return Path.First().SourceId; }
+        }
+
+        public int Target
+        {
+            get { return Path.Last().TargetId; }
+        }
+
+        public NetworkConnection(int id)
+        { 
+            Id = id; 
+            Path = new List<LinkConnection>();
+        }
     }
 }
