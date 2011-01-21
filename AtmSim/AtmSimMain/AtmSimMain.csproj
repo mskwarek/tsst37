@@ -76,7 +76,6 @@
       <DependentUpon>AddEntryPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="CallController.cs" />
-    <Compile Include="Caller.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConsoleGUI.cs">
       <SubType>Form</SubType>

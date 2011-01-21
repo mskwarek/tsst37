@@ -37,7 +37,9 @@ namespace AtmSim.Components
 
         private void OnDataReceived(IAsyncResult asyn)
         {
-            int recv = managerSocket.EndReceive(asyn);
+            int recv;
+            try { recv = managerSocket.EndReceive(asyn); }
+            catch (SocketException) { managerSocket.Close(); return; }
             if (recv == 0)
             {
                 managerSocket.Close();

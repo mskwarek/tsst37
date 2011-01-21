@@ -60,7 +60,9 @@ namespace AtmSim.Components
 
         private void OnDataReceived(IAsyncResult asyn)
         {
-            int r = socket.EndReceive(asyn);
+            int r;
+            try { r = socket.EndReceive(asyn); }
+            catch (SocketException) { socket.Close(); this.Message = "Utracono połączenie."; return; }
             string recv = Encoding.ASCII.GetString(buffer, 0, r);
             Process(recv);
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, OnDataReceived, socket);
