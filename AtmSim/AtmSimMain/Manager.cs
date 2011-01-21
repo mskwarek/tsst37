@@ -71,6 +71,7 @@ namespace AtmSim
                     return 0;
             }
         }
+        public int CCPort;
 
         public void Reset()
         {

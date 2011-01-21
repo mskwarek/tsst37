@@ -27,10 +27,13 @@ namespace AtmSim
             }
         }
         private Manager manager = new Manager();
+        private CallController callController;
 
         public AtmSimGUI()
         {
             manager.Init();
+            callController = new CallController(manager);
+            manager.CCPort = callController.Port;
             InitializeComponent();
             mToolStripMenuItem.Text = "M: " + manager.Port;
         }

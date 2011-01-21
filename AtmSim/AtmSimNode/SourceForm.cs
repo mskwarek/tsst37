@@ -13,18 +13,29 @@ namespace AtmSim
     public partial class SourceForm : Form
     {
         private Components.Source source;
-        public SourceForm(Config.Node cNode, int mPort)
+        private Components.Caller caller;
+        private Thread refresher;
+        public SourceForm(Config.Node cNode, int mPort, int cPort)
         {
             source = new Components.Source(cNode, mPort);
+            caller = new Components.Caller(cNode.Name, cPort);
             InitializeComponent();
+            refresher = new Thread(RefreshContent);
+            refresher.Start();
+            caller.Init(cNode.Id);
         }
 
-        private void refreshButton_Click(object sender, EventArgs e)
+        private void RefreshContent()
         {
-            connectionComboBox.Items.Clear();
-            foreach (string c in source.Matrix.Keys)
+            while (true)
             {
-                connectionComboBox.Items.Add(c);
+                Thread.Sleep(50);
+                foreach (int c in caller.Connections.Keys)
+                {
+                    connectionComboBox.Items.Add(
+                        String.Format("[{0}]->{1}", c, caller.Connections[c]));
+                }
+                callerMessageTextBox.Text = caller.Message;
             }
         }
 
@@ -38,5 +49,12 @@ namespace AtmSim
                 send.Start();
             }
         }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            caller.BeginCall(targetTextBox.Text);
+        }
+
+
     }
 }
