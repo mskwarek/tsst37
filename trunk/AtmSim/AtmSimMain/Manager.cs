@@ -56,6 +56,8 @@ namespace AtmSim
         public Topology Topology
         { get { return topology; } }
         private Dictionary<int, NetworkConnection> connections = new Dictionary<int, NetworkConnection>();
+        public Dictionary<int, NetworkConnection> Connections
+        { get { return connections; } }
 
         private Socket socket;
 
@@ -279,6 +281,14 @@ namespace AtmSim
                    nodes[link.StartNode].tnode, nodes[link.EndNode].tnode,
                    link.StartPort, link.EndPort, 0));
             }
+        }
+
+        public int GetConnectionId()
+        {
+            int i = 1;
+            while (connections.ContainsKey(i))
+                i++;
+            return i;
         }
 
         public void AddConnection(NetworkConnection connection)
