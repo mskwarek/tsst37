@@ -48,7 +48,7 @@ namespace AtmSim
 
        
 
-         public void setupConnection(int src, int trg,int connectN){
+         public NetworkConnection setupConnection(int src, int trg,int connectN){
              Topology ownTopology = manager.Topology;//recreating graf for new connection
              SetupStore ss = new SetupStore(src, trg, ownTopology, connectN);
            //  IEnumerable<Topology.Link> path;
@@ -70,7 +70,8 @@ namespace AtmSim
             // this.setupNodes(ss);
           //recreating graf for new connection
              //TODO:
-             //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenia
+             //wyslanie wiadomosci do loga ze nie udalo sie zesatwic polaczenial;
+             return null;
          }
 
 
