@@ -20,7 +20,7 @@ namespace AtmSim
             //musi byc kopiowany, bo jak porty beda zajete to trzeba bedzie usunac dana krawedz
             
             //MyOwnLog.save( this.findBestPath(4, 5).ToString() );
-            this.setupConnection(4, 5, 2, 2);
+            //this.setupConnection(4, 5, 2, 2);
         }
 
 
@@ -53,7 +53,7 @@ namespace AtmSim
 
         public NetworkConnection setupConnection(int src, int trg, int connectN, int requieredCapacity)
         {
-            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, requieredCapacity); //TODO make clone method
+            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, manager.VirtualPaths, requieredCapacity); //TODO make clone method
              SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
              if(ss.ownTopology.EdgeCount!=0){
                  if (this.findBestPath(ss) && this.askLRMs(ss))  //if true -> creating list vcivpi
@@ -70,11 +70,24 @@ namespace AtmSim
 
 
         private NetworkConnection parseToNetworConnection(SetupStore ss)
-        { NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
-          //  List<LinkConnection> links = new List<LinkConnection>();
+        {
+            NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
+            //  List<LinkConnection> links = new List<LinkConnection>();
             LinkConnection link;
 
             networkConnection.Capacity = ss.requieredCapacity;
+
+            foreach (var e in ss.path)
+            {
+                link = new LinkConnection();
+                link.SourceId = e.Source.Id;
+                link.TargetId = e.Target.Id;
+                link.SourceRouting = e.SourceRouting;
+                link.TargetRouting = e.TargetRouting;
+                link.Link = e.tLink;
+                networkConnection.Path.Add(link);
+            }
+            /*
              for(int i = 0 ; i < ss.path.Count; i++)
              {
                link = new LinkConnection();
@@ -86,6 +99,7 @@ namespace AtmSim
                networkConnection.Path.Add(link);
              
              }
+             */
              return networkConnection;
             
             }
@@ -163,13 +177,21 @@ namespace AtmSim
             {
                 if (!manager.Ping(e.Target.Id))
                     return false;
+                string[] srcrt;
+                string[] trgrt;
                 do
                 {
-                    VpiVci = rand() + "." + rand();
+                    srcrt = e.SourceRouting.Split(':'); // [0] -> Port, [1] -> Vpi, [2] -> Vci
+                    trgrt = e.TargetRouting.Split(':');
+                    if (srcrt[1] == "" && trgrt[1] == "")
+                        srcrt[1] = trgrt[1] = rand();
+                    srcrt[2] = trgrt[2] = rand();
                 } while (
-                    !doIHaveAmptyPorts(manager.Get(e.Source.Id, "PortsOut." + e.tLink.SourcePort + ".Available." + VpiVci)) ||
-                    !doIHaveAmptyPorts(manager.Get(e.Target.Id, "PortsIn." + e.tLink.TargetPort + ".Available." + VpiVci))
+                    !doIHaveAmptyPorts(manager.Get(e.Source.Id, "PortsOut." + srcrt[0] + ".Available." + srcrt[1] + "." + srcrt[2])) ||
+                    !doIHaveAmptyPorts(manager.Get(e.Target.Id, "PortsIn." + trgrt[0] + ".Available." + trgrt[1] + "." + trgrt[2]))
                     );
+                e.SourceRouting = srcrt[0] + ":" + srcrt[1] + ":" + srcrt[2];
+                e.TargetRouting = trgrt[0] + ":" + trgrt[1] + ":" + trgrt[2];
                 ss.vcivpiList.Add(VpiVci);
 
             }

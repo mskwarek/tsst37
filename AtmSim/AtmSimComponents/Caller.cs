@@ -92,6 +92,12 @@ namespace AtmSim.Components
                 socket.Send(Encoding.ASCII.GetBytes(
                     String.Format("call_accepted {0} {1}", query[1], query[2])));
             }
+
+            else if (query[0] == "call_teardown")
+            {
+                this.Message = "Połączenie " + query[1] + " zakończone przez " + query[2];
+                Connections.Remove(Int32.Parse(query[1]));
+            }
         }
     }
 }

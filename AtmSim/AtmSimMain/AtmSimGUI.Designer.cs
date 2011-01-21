@@ -41,7 +41,6 @@
             this.refreshButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
             this.cmdButton = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.elementsTabPage = new System.Windows.Forms.TabPage();
@@ -159,17 +158,6 @@
             this.openFileDialog.Filter = "\"pliki XML|*.xml|Wszystkie pliki|*.*\"";
             this.openFileDialog.Title = "Otwórz konfigurację";
             // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(175, 323);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(31, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "R";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // cmdButton
             // 
             this.cmdButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -194,7 +182,7 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(260, 290);
             this.tabControl.TabIndex = 9;
-            this.tabControl.TabIndexChanged +=new System.EventHandler(tabControl_TabIndexChanged);
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(tabControl_SelectedIndexChanged);
             // 
             // elementsTabPage
             // 
@@ -217,7 +205,7 @@
             this.elementsListBox.Name = "elementsListBox";
             this.elementsListBox.Size = new System.Drawing.Size(252, 264);
             this.elementsListBox.TabIndex = 1;
-            this.elementsListBox.SelectedIndexChanged += new System.EventHandler(elementsListBox_SelectedIndexChanged);
+            this.elementsListBox.SelectedIndexChanged += new System.EventHandler(this.elementsListBox_SelectedIndexChanged);
             // 
             // connectionsTabPage
             // 
@@ -270,7 +258,6 @@
             this.ClientSize = new System.Drawing.Size(284, 358);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cmdButton);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.logButton);
             this.Controls.Add(this.configButton);
@@ -278,6 +265,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "AtmSimGUI";
             this.Text = "ATMsim";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(AtmSimGUI_FormClosing);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.tabControl.ResumeLayout(false);
@@ -304,7 +292,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem mToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button cmdButton;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage elementsTabPage;

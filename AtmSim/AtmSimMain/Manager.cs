@@ -55,9 +55,13 @@ namespace AtmSim
         private Topology topology = new Topology(); // topologia sieci
         public Topology Topology
         { get { return topology; } }
+        private List<VirtualPath> virtualPaths = new List<VirtualPath>();
+        public List<VirtualPath> VirtualPaths
+        { get { return virtualPaths; } }
         private Dictionary<int, NetworkConnection> connections = new Dictionary<int, NetworkConnection>();
         public Dictionary<int, NetworkConnection> Connections
         { get { return connections; } }
+        public CallController CallController { get; set; }
 
         private Socket socket;
 
@@ -71,7 +75,7 @@ namespace AtmSim
                     return 0;
             }
         }
-        public int CCPort;
+        public int CCPort { get { return CallController.Port; } }
 
         public void Reset()
         {
@@ -90,6 +94,7 @@ namespace AtmSim
             this.socket.Bind(ip);
             this.socket.Listen(10);
             this.socket.BeginAccept(OnClientConnect, socket);
+            this.CallController = new CallController(this);
         }
 
         private void OnClientConnect(IAsyncResult asyn)
@@ -142,11 +147,14 @@ namespace AtmSim
                 {
                     Topology.RemoveVertex(nodes[id].tnode);
                     nodes.Remove(id);
-                    foreach(var con in connections.Keys)
+                    List<int> disconnected = new List<int>();
+                    foreach(int con in connections.Keys)
                     {
                         if (connections[con].Nodes.Contains(id))
-                            Disconnect(con);
+                            disconnected.Add(con);
                     }
+                    foreach (int con in disconnected)
+                        CallController.CallTeardown(connections[con], "system");
                 }
             }
             return "";
@@ -356,6 +364,7 @@ namespace AtmSim
                     link.Link.Capacity += connection.Capacity;
             }
             RemoveRouting(connection.Target, connection.Id);
+            connections.Remove(connectionId);
         }
     }
 }
