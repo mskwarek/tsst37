@@ -43,7 +43,7 @@ namespace AtmSim
                 node.save(tempfile);
                 Process process = new Process();
                 process.StartInfo.FileName = "AtmSimNode.exe";
-                process.StartInfo.Arguments = tempfile + " " + manager.Port;
+                process.StartInfo.Arguments = tempfile + " " + manager.Port + " " + manager.CCPort;
                 process.Start();
                 progressBar.Value += (40 / network.Nodes.Count);
                 Refresh();

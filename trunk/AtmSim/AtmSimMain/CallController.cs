@@ -52,9 +52,17 @@ namespace AtmSim
             {
                 client.Name = login[1];
                 client.Id = Int32.Parse(login[2]);
-                Directory.Add(login[1], client);
-                client.Socket.Send(Encoding.ASCII.GetBytes("ok"));
-                client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
+                if (Directory.ContainsKey(client.Name))
+                {
+                    client.Socket.Send(Encoding.ASCII.GetBytes("rejected"));
+                    client.Socket.Close();
+                }
+                else
+                {
+                    Directory.Add(login[1], client);
+                    client.Socket.Send(Encoding.ASCII.GetBytes("ok"));
+                    client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
+                }
             }
             else
             {
@@ -66,8 +74,21 @@ namespace AtmSim
 
         private void OnDataReceived(IAsyncResult asyn)
         {
-            DirectoryEntry client = (DirectoryEntry)asyn;
-            int r = client.Socket.EndReceive(asyn);
+            DirectoryEntry client = (DirectoryEntry)asyn.AsyncState;
+            int r = 0;
+            try { r = client.Socket.EndReceive(asyn); }
+            catch (SocketException)
+            {
+                client.Socket.Close();
+                Directory.Remove(client.Name);
+                return;
+            }
+            if (r == 0)
+            {
+                client.Socket.Close();
+                Directory.Remove(client.Name);
+                return;
+            }
             string recv = Encoding.ASCII.GetString(client.Buffer, 0, r);
             ProcessQuery(recv, client);
             client.Socket.BeginReceive(client.Buffer, 0, client.Buffer.Length, SocketFlags.None, OnDataReceived, client);
@@ -81,15 +102,23 @@ namespace AtmSim
             {
                 if (query[1] == client.Name)
                 {
-                    var called = Directory[query[2]];
-                    int callingId = client.Id;
-                    int calledId = called.Id;
-                    NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId());
-                    // called.Socket.BeginSend("call_pending");
-                    manager.AddConnection(connection);
-                    manager.Connect(connection.Id);
-                    client.Socket.Send(Encoding.ASCII.GetBytes(
-                        String.Format("call_accepted {0} {1}", connection.Id, called.Name)));
+                    if (Directory.ContainsKey(query[2]))
+                    {
+                        var called = Directory[query[2]];
+                        int callingId = client.Id;
+                        int calledId = called.Id;
+                        //NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId());
+                        ////called.Socket.BeginSend("call_pending");
+                        //manager.AddConnection(connection);
+                        //manager.Connect(connection.Id);
+                        client.Socket.Send(Encoding.ASCII.GetBytes(
+                            String.Format("call_accepted {0} {1}", manager.GetConnectionId(), called.Name)));
+                    }
+                    else
+                    {
+                        client.Socket.Send(Encoding.ASCII.GetBytes(
+                            String.Format("call_rejected no_target {0}", query[2])));
+                    }
                 }
             }
             else if (query[0] == "call_accepted")

@@ -34,15 +34,16 @@
             this.connectionComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.refreshButton = new System.Windows.Forms.Button();
+            this.targetTextBox = new System.Windows.Forms.TextBox();
+            this.connectButton = new System.Windows.Forms.Button();
+            this.callerMessageTextBox = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // nameLabel
             // 
-            this.nameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.nameLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.nameLabel.Location = new System.Drawing.Point(12, 9);
+            this.nameLabel.Location = new System.Drawing.Point(12, 86);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(246, 29);
             this.nameLabel.TabIndex = 1;
@@ -50,14 +51,17 @@
             // 
             // messageTextBox
             // 
-            this.messageTextBox.Location = new System.Drawing.Point(106, 37);
+            this.messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.messageTextBox.Location = new System.Drawing.Point(103, 81);
             this.messageTextBox.Name = "messageTextBox";
-            this.messageTextBox.Size = new System.Drawing.Size(152, 20);
+            this.messageTextBox.Size = new System.Drawing.Size(155, 20);
             this.messageTextBox.TabIndex = 2;
             // 
             // sendButton
             // 
-            this.sendButton.Location = new System.Drawing.Point(183, 66);
+            this.sendButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.sendButton.Location = new System.Drawing.Point(183, 107);
             this.sendButton.Name = "sendButton";
             this.sendButton.Size = new System.Drawing.Size(75, 23);
             this.sendButton.TabIndex = 3;
@@ -67,16 +71,18 @@
             // 
             // connectionComboBox
             // 
+            this.connectionComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.connectionComboBox.FormattingEnabled = true;
-            this.connectionComboBox.Location = new System.Drawing.Point(15, 37);
+            this.connectionComboBox.Location = new System.Drawing.Point(12, 81);
             this.connectionComboBox.Name = "connectionComboBox";
             this.connectionComboBox.Size = new System.Drawing.Size(85, 21);
             this.connectionComboBox.TabIndex = 4;
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 21);
+            this.label1.Location = new System.Drawing.Point(9, 65);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 5;
@@ -84,29 +90,50 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(103, 21);
+            this.label2.Location = new System.Drawing.Point(100, 65);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Wiadomość";
             // 
-            // refreshButton
+            // targetTextBox
             // 
-            this.refreshButton.Location = new System.Drawing.Point(17, 66);
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(75, 23);
-            this.refreshButton.TabIndex = 7;
-            this.refreshButton.Text = "Odśwież";
-            this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            this.targetTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.targetTextBox.Location = new System.Drawing.Point(12, 12);
+            this.targetTextBox.Name = "targetTextBox";
+            this.targetTextBox.Size = new System.Drawing.Size(151, 20);
+            this.targetTextBox.TabIndex = 8;
+            // 
+            // connectButton
+            // 
+            this.connectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.connectButton.Location = new System.Drawing.Point(183, 10);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(75, 23);
+            this.connectButton.TabIndex = 9;
+            this.connectButton.Text = "Połącz";
+            this.connectButton.UseVisualStyleBackColor = true;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
+            // callerMessageTextBox
+            // 
+            this.callerMessageTextBox.Location = new System.Drawing.Point(12, 35);
+            this.callerMessageTextBox.Name = "callerMessageTextBox";
+            this.callerMessageTextBox.Size = new System.Drawing.Size(246, 22);
+            this.callerMessageTextBox.TabIndex = 10;
+            this.callerMessageTextBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(270, 101);
-            this.Controls.Add(this.refreshButton);
+            this.ClientSize = new System.Drawing.Size(270, 142);
+            this.Controls.Add(this.callerMessageTextBox);
+            this.Controls.Add(this.connectButton);
+            this.Controls.Add(this.targetTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.connectionComboBox);
@@ -128,6 +155,8 @@
         private System.Windows.Forms.ComboBox connectionComboBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.TextBox targetTextBox;
+        private System.Windows.Forms.Button connectButton;
+        private System.Windows.Forms.Label callerMessageTextBox;
     }
 }
