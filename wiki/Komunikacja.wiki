@@ -1,3 +1,8 @@
 Schemat komunikacji w naszym programie - możemy zaprezentować, trzeba tylko dodać legendę :)
 
+Dilbert -> Routing Control
+Pointy-haired boss -> Zarządzanie (+ Connection Control)
+Carol -> Ca(ll Cont)rol
+
+
 http://img828.imageshack.us/img828/2981/atmsimworkflow.png
