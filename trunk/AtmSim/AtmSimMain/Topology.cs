@@ -39,6 +39,7 @@ namespace AtmSim
             public int MaxCapacity { get; private set; }
             public string SourceRouting { get { return SourcePort + "::"; } }
             public string TargetRouting { get { return TargetPort + "::"; } }
+
             public Link(Node source, Node target, int sourcePort, int targetPort, int capacity)
                 : base(source, target)
             {
@@ -85,6 +86,13 @@ namespace AtmSim
                         cap = link.Capacity;
                 return cap;
             }
+            set
+            {
+                int diff = value - Capacity;
+                foreach (var link in path)
+                    link.Capacity += diff;
+            }
         }
+
     }
 }

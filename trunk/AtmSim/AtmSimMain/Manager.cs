@@ -205,6 +205,19 @@ namespace AtmSim
             return ret;
         }
 
+        public List<string> GetLinks()
+        {
+            List<string> ret = new List<string>();
+            foreach (var link in topology.Edges)
+            {
+                string item = "{[" + link.Source.Id + "]" + link.Source.Name + "/" + link.SourcePort +
+                    "} -> {[" + link.Target.Id + "]" + link.Target.Name + "/" + link.TargetPort + "} -- " + link.Capacity;
+                ret.Add(item);
+            }
+            return ret;
+        }
+
+
         public List<string> GetConnections()
         {
             List<string> ret = new List<string>();
@@ -213,7 +226,7 @@ namespace AtmSim
             Array.Sort(keys);
             foreach (int key in keys)
             {
-                string item = "[" + key + "] " + nodes[connections[key].Source].Name + " -> " + nodes[connections[key].Target].Name;
+                string item = "[" + key + "] " + nodes[connections[key].Source].Name +  " ---> " + nodes[connections[key].Target].Name;
                 ret.Add(item);
             }
             return ret;

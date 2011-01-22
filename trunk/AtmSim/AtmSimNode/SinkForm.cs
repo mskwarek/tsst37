@@ -18,13 +18,13 @@ namespace AtmSim
         private bool refloop = true;
         public SinkForm(Config.Node cNode, int mPort, int cPort)
         {
-            this.Text = cNode.Name;
             sink = new Components.Sink(cNode, mPort);
             caller = new Components.Caller(cNode.Name, cPort);
             InitializeComponent();
             refresher = new Thread(RefreshTextBox);
             refresher.Start();
             caller.Init(cNode.Id);
+            this.Text = cNode.Name;
         }
 
         private void RefreshTextBox()

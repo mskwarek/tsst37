@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 using QuickGraph;
 using GraphSharp;
 using GraphSharp.Controls;
@@ -22,12 +23,17 @@ namespace AtmSim
     /// <summary>
     /// Interaction logic for TopologyView.xaml
     /// </summary>
-    public partial class TopologyView : Window
+    public partial class TopologyView : Window, INotifyPropertyChanged
     {
-        private Topology _Graph = new Topology();
+        private Topology graph = new Topology();
         public Topology Graph
         {
-            get { return _Graph; }
+            get { return graph; }
+            set
+            {
+                graph = value;
+                NotifyPropertyChanged("Graph");
+            }
         }
 
         public TopologyView(Manager manager)
@@ -41,9 +47,26 @@ namespace AtmSim
             //{
             //    g.AddEdge(new Edge<object>(connection.Source, connection.Target));
             //}
-            this._Graph = manager.Topology;
+            this.graph = manager.Topology;
             this.DataContext = this;
             InitializeComponent();
+        }
+
+        new public void Show()
+        {
+            if (this.graph.Vertices.Count() == 0)
+                this.Close();
+            else
+                base.Show();
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
         }
     }
 }
