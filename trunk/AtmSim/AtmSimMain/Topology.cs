@@ -60,39 +60,4 @@ namespace AtmSim
         public Topology(bool allowParallelEdges, int vertexCapacity)
             : base(allowParallelEdges, vertexCapacity) { }
     }
-
-    public class VirtualPath : Topology.Link
-    {
-        public int SourceVpi { get; private set; }
-        public int TargetVpi { get; private set; }
-        new public string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
-        new public string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
-        public List<Topology.Link> path;
-
-        public VirtualPath(Topology.Node source, Topology.Node target, int sourcePort, int targetPort, int sourceVpi, int targetVpi, int capacity)
-            : base(source, target, sourcePort, targetPort, capacity)
-        {
-            this.SourceVpi = sourceVpi;
-            this.TargetVpi = targetVpi;
-        }
-
-        new public int Capacity
-        {
-            get
-            {
-                int cap = Int32.MaxValue;
-                foreach (var link in path)
-                    if (link.Capacity < cap)
-                        cap = link.Capacity;
-                return cap;
-            }
-            set
-            {
-                int diff = value - Capacity;
-                foreach (var link in path)
-                    link.Capacity += diff;
-            }
-        }
-
-    }
 }

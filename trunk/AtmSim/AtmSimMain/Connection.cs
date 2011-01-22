@@ -50,4 +50,43 @@ namespace AtmSim
             Path = new List<LinkConnection>();
         }
     }
+
+    public class VirtualPath : Topology.Link
+    {
+        public int Id { get; private set; }
+        public int SourceVpi { get; private set; }
+        public int TargetVpi { get; private set; }
+        new public string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
+        new public string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
+        public List<LinkConnection> Path;
+
+        public VirtualPath(int id, Topology.Node source, Topology.Node target, int sourcePort, int targetPort, int sourceVpi, int targetVpi, int capacity)
+            : base(source, target, sourcePort, targetPort, capacity)
+        {
+            this.Id = id;
+            this.SourceVpi = sourceVpi;
+            this.TargetVpi = targetVpi;
+            this.Path = new List<LinkConnection>();
+        }
+
+        new public int Capacity
+        {
+            get
+            {
+                int cap = Int32.MaxValue;
+                foreach (var link in Path)
+                    if (link.Link.Capacity < cap)
+                        cap = link.Link.Capacity;
+                return cap;
+            }
+            set
+            {
+                int diff = value - Capacity;
+                foreach (var link in Path)
+                    link.Link.Capacity += diff;
+            }
+        }
+
+    }
+
 }

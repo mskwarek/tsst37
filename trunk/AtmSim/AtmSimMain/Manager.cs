@@ -55,8 +55,8 @@ namespace AtmSim
         private Topology topology = new Topology(); // topologia sieci
         public Topology Topology
         { get { return topology; } }
-        private List<VirtualPath> virtualPaths = new List<VirtualPath>();
-        public List<VirtualPath> VirtualPaths
+        private Dictionary<int, VirtualPath> virtualPaths = new Dictionary<int, VirtualPath>();
+        public Dictionary<int, VirtualPath> VirtualPaths
         { get { return virtualPaths; } }
         private Dictionary<int, NetworkConnection> connections = new Dictionary<int, NetworkConnection>();
         public Dictionary<int, NetworkConnection> Connections
@@ -232,6 +232,20 @@ namespace AtmSim
             return ret;
         }
 
+        public List<string> GetVPaths()
+        {
+            List<string> ret = new List<string>();
+            int[] keys = new int[virtualPaths.Count];
+            virtualPaths.Keys.CopyTo(keys, 0);
+            Array.Sort(keys);
+            foreach (int key in keys)
+            {
+                string item = "[" + key + "] " + virtualPaths[key].Source.Name + " --> " + virtualPaths[key].Target.Name;
+                ret.Add(item);
+            }
+            return ret;
+        }
+
         public bool Ping(int id)
         {
             string pong = Query(id, "ping");
@@ -324,12 +338,29 @@ namespace AtmSim
             }
         }
 
-        public int GetConnectionId()
+        public int GetFreeId()
         {
             int i = 1;
             while (connections.ContainsKey(i))
                 i++;
             return i;
+        }
+
+        public bool AddPath(VirtualPath vpath)
+        {
+            string label = "";
+            string value = "";
+            foreach (var link in vpath.Path)
+            {
+                if (label != "")
+                {
+                    value = link.SourceRouting;
+                    AddRouting(link.SourceId, label, value, vpath.Id);
+                }
+                label = link.TargetRouting;
+            }
+            virtualPaths.Add(vpath.Id, vpath);
+            return true;
         }
 
         public void AddConnection(NetworkConnection connection)

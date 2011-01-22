@@ -32,6 +32,13 @@ namespace AtmSim
                 SourceRouting = link.SourceRouting;
                 TargetRouting = link.TargetRouting;
             }
+            public Link(Node source, Node target, Topology.Link link, bool path)
+                : base(source, target)
+            {
+                tLink = link;
+                SourceRouting = link.SourceRouting + "-";
+                TargetRouting = link.TargetRouting + "-";
+            }
         }
 
         public RoutingGraph()
@@ -43,7 +50,7 @@ namespace AtmSim
         public RoutingGraph(bool allowParallelEdges, int vertexCapacity)
             : base(allowParallelEdges, vertexCapacity) { }
 
-        public static RoutingGraph MapTopology(Topology topology, List<VirtualPath> vpaths, int minCapacity)
+        public static RoutingGraph MapTopology(Topology topology, Dictionary<int, VirtualPath> vpaths, int minCapacity)
         {
             RoutingGraph graph = new RoutingGraph();
             Dictionary<Topology.Node, Node> vertices = new Dictionary<Topology.Node,Node>();
@@ -56,9 +63,25 @@ namespace AtmSim
             foreach (Topology.Link link in topology.Edges)
                 if (link.Capacity >= minCapacity)
                     graph.AddEdge(new Link(vertices[link.Source], vertices[link.Target], link));
-            foreach (VirtualPath vpath in vpaths)
+            foreach (VirtualPath vpath in vpaths.Values)
                 if (vpath.Capacity >= minCapacity)
                     graph.AddEdge(new Link(vertices[vpath.Source], vertices[vpath.Target], vpath));
+            return graph;
+        }
+
+        public static RoutingGraph MapTopology(Topology topology, int minCapacity)
+        {
+            RoutingGraph graph = new RoutingGraph();
+            Dictionary<Topology.Node, Node> vertices = new Dictionary<Topology.Node, Node>();
+            foreach (Topology.Node node in topology.Vertices)
+            {
+                Node n = new Node(node);
+                graph.AddVertex(n);
+                vertices.Add(node, n);
+            }
+            foreach (Topology.Link link in topology.Edges)
+                if (link.Capacity >= minCapacity)
+                    graph.AddEdge(new Link(vertices[link.Source], vertices[link.Target], link, true));
             return graph;
         }
     }

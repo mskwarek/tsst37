@@ -149,9 +149,14 @@ namespace AtmSim
                 }
                 if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
                 {
+                    string selected = "";
+                    if (pathsListBox.SelectedIndex >= 0)
+                        selected = (string)pathsListBox.Items[pathsListBox.SelectedIndex];
                     pathsListBox.Items.Clear();
-                    /*foreach (string item in manager.GetPaths())
-                        pathsListBox.Items.Add(item);*/
+                    foreach (string item in manager.GetVPaths())
+                        pathsListBox.Items.Add(item);
+                    if (pathsListBox.Items.Contains(selected))
+                        pathsListBox.SelectedIndex = pathsListBox.Items.IndexOf(selected);
                 }
             }
         }
@@ -174,27 +179,40 @@ namespace AtmSim
                 configButton.Enabled = true;
                 logButton.Enabled = true;
                 cmdButton.Enabled = true;
+                addButton.Enabled = false;
             }
             if (tabControl.SelectedIndex == linksTabPage.TabIndex)
             {
                 configButton.Enabled = false;
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
+                addButton.Enabled = false;
             }
             if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
             {
                 configButton.Enabled = true;
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
+                addButton.Enabled = false;
             }
             if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
             {
                 configButton.Enabled = true;
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
+                addButton.Enabled = true;
             }
             Refresh();
             RefreshList();
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
+            {
+                AddPathPrompt prompt = new AddPathPrompt(this.manager);
+                prompt.Show();
+            }
         }
     }
 }
