@@ -8,7 +8,7 @@ using QuickGraph.Algorithms;
 
 namespace AtmSim
 {
-    class RoutingController
+    public class RoutingController
     {
 
         private Manager manager;
@@ -49,32 +49,64 @@ namespace AtmSim
         }
 
 
-
+        public VirtualPath setupPath(int src, int trg, int pathN, int requiredCapacity)
+        {
+            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, requiredCapacity);
+            SetupStore ss = new SetupStore(src, trg, ownTopology, pathN, requiredCapacity);
+            if (ss.ownTopology.EdgeCount != 0)
+            {
+                if (this.findBestPath(ss) && this.askLRMs(ss))  //if true -> creating list vcivpi
+                {
+                    return this.parseToVirtualPath(ss);
+                }
+                else
+                    return null;
+            }
+            return null;
+        }
 
         public NetworkConnection setupConnection(int src, int trg, int connectN, int requieredCapacity)
         {
-            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, manager.VirtualPaths, requieredCapacity); //TODO make clone method
-             SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
-             if(ss.ownTopology.EdgeCount!=0){
-                 if (this.findBestPath(ss) && this.askLRMs(ss))  //if true -> creating list vcivpi
-                 {
-                     return this.parseToNetworConnection(ss); 
-                 }
-                 else
-                     return null;
-             }
+            RoutingGraph ownTopology = RoutingGraph.MapTopology(manager.Topology, manager.VirtualPaths, requieredCapacity);
+            SetupStore ss = new SetupStore(src, trg, ownTopology, connectN, requieredCapacity);
+            if (ss.ownTopology.EdgeCount != 0)
+            {
+                if (this.findBestPath(ss) && this.askLRMs(ss))  //if true -> creating list vcivpi
+                {
+                    return this.parseToNetworConnection(ss);
+                }
+                else
+                    return null;
+            }
+            return null;
+        }
 
-            
-             return null;
-         }
+        private VirtualPath parseToVirtualPath(SetupStore ss)
+        {
+            VirtualPath virtualPath = new VirtualPath(ss.connectN, ss.path.First().tLink.Source, ss.path.Last().tLink.Target,
+                ss.path.First().tLink.SourcePort, ss.path.Last().tLink.TargetPort,
+                Int32.Parse(ss.path.First().SourceRouting.Split(':')[1]), Int32.Parse(ss.path.Last().TargetRouting.Split(':')[1]),
+                ss.requieredCapacity);
 
+            LinkConnection link;
+            foreach (var e in ss.path)
+            {
+                link = new LinkConnection();
+                link.SourceId = e.Source.Id;
+                link.TargetId = e.Target.Id;
+                link.SourceRouting = e.SourceRouting;
+                link.TargetRouting = e.TargetRouting;
+                link.Link = e.tLink;
+                virtualPath.Path.Add(link);
+            }
+            return virtualPath;
+        }
 
         private NetworkConnection parseToNetworConnection(SetupStore ss)
         {
             NetworkConnection networkConnection = new NetworkConnection(ss.connectN);
             //  List<LinkConnection> links = new List<LinkConnection>();
             LinkConnection link;
-
             networkConnection.Capacity = ss.requieredCapacity;
 
             foreach (var e in ss.path)
@@ -87,22 +119,8 @@ namespace AtmSim
                 link.Link = e.tLink;
                 networkConnection.Path.Add(link);
             }
-            /*
-             for(int i = 0 ; i < ss.path.Count; i++)
-             {
-               link = new LinkConnection();
-               link.SourceId = ss.path[i].Source.Id;
-               link.TargetId = ss.path[i].Target.Id;
-               link.SourceRouting = ss.path[i].tLink.SourcePort + ":" + ss.vcivpiList[i];
-               link.TargetRouting = ss.path[i].tLink.TargetPort + ":" + ss.vcivpiList[i];
-               link.Link = ss.path[i].tLink;
-               networkConnection.Path.Add(link);
-             
-             }
-             */
-             return networkConnection;
-            
-            }
+            return networkConnection;
+        }
 
 
 
@@ -117,11 +135,11 @@ namespace AtmSim
 
         }
 
-         private Boolean findBestPath(SetupStore ss)
+        private Boolean findBestPath(SetupStore ss)
         {
-          //  Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
+            //  Func<Topology.Link, double> edgeCost = e => 1; //koszty lini takie same
             Dictionary<RoutingGraph.Link, double> edgeCost = new Dictionary<RoutingGraph.Link, double>(ss.ownTopology.EdgeCount);
-        
+
             int index = 0;
             int max = ss.ownTopology.EdgeCount;
             while (index < max)
@@ -130,19 +148,20 @@ namespace AtmSim
                 {
                     ss.ownTopology.RemoveEdge(ss.ownTopology.Edges.ElementAt(index));
                     max = ss.ownTopology.EdgeCount;
-                } else
-                index++;
+                }
+                else
+                    index++;
             }
-           foreach (var e in ss.ownTopology.Edges)
+            foreach (var e in ss.ownTopology.Edges)
             {
                 edgeCost.Add(e, e.Capacity);
-     
+
             }
 
 
             // We want to use Dijkstra on this graph
-           var dijkstra = new DijkstraShortestPathAlgorithm<RoutingGraph.Node, RoutingGraph.Link>(ss.ownTopology, e => edgeCost[e]);
-         
+            var dijkstra = new DijkstraShortestPathAlgorithm<RoutingGraph.Node, RoutingGraph.Link>(ss.ownTopology, e => edgeCost[e]);
+
             // Attach a Vertex Predecessor Recorder Observer to give us the paths
             var predecessorObserver = new VertexPredecessorRecorderObserver<RoutingGraph.Node, RoutingGraph.Link>();
             predecessorObserver.Attach(dijkstra);
@@ -150,21 +169,21 @@ namespace AtmSim
             IEnumerable<RoutingGraph.Link> path;
             //List<Topology.Link> ddd = new List<Topology.Link>();
             if (predecessorObserver.TryGetPath(this.IDtoNode(ss.target, ss.ownTopology), out path))
-            { 
+            {
                 ss.path.AddRange(path);
                 return true;
             }
-            else return false;  
+            else return false;
         }
 
-        private Boolean doIHaveAmptyPorts(String response){
-
-            switch (response) {
+        private Boolean doIHaveFreePorts(String response)
+        {
+            switch (response)
+            {
                 case "True": return true;
                 case "False": return false;
                 default: return false;
             }
-           
         }
 
         public bool askLRMs(SetupStore ss){
@@ -185,10 +204,11 @@ namespace AtmSim
                     trgrt = e.TargetRouting.Split(':');
                     if (srcrt[1] == "" && trgrt[1] == "")
                         srcrt[1] = trgrt[1] = rand();
-                    srcrt[2] = trgrt[2] = rand();
+                    if (srcrt[2] == "" && trgrt[2] == "")
+                        srcrt[2] = trgrt[2] = rand();
                 } while (
-                    !doIHaveAmptyPorts(manager.Get(e.Source.Id, "PortsOut." + srcrt[0] + ".Available." + srcrt[1] + "." + srcrt[2])) ||
-                    !doIHaveAmptyPorts(manager.Get(e.Target.Id, "PortsIn." + trgrt[0] + ".Available." + trgrt[1] + "." + trgrt[2]))
+                    !doIHaveFreePorts(manager.Get(e.Source.Id, "PortsOut." + srcrt[0] + ".Available." + srcrt[1] + "." + srcrt[2])) ||
+                    !doIHaveFreePorts(manager.Get(e.Target.Id, "PortsIn." + trgrt[0] + ".Available." + trgrt[1] + "." + trgrt[2]))
                     );
                 e.SourceRouting = srcrt[0] + ":" + srcrt[1] + ":" + srcrt[2];
                 e.TargetRouting = trgrt[0] + ":" + trgrt[1] + ":" + trgrt[2];

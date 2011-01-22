@@ -19,6 +19,7 @@ namespace AtmSim
         private Dictionary<string, DirectoryEntry> Directory = new Dictionary<string,DirectoryEntry>();
         private Manager manager;
         private RoutingController rc;
+        public RoutingController RC { get { return rc; } private set { } }
         private Socket socket;
 
         public int Port
@@ -123,7 +124,7 @@ namespace AtmSim
                             return;
                         }
 
-                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetConnectionId(), cap);
+                        NetworkConnection connection = rc.setupConnection(callingId, calledId, manager.GetFreeId(), cap);
                         if (connection == null)
                             client.Socket.Send(Encoding.ASCII.GetBytes(
                                 String.Format("call_rejected no_resources {0}", query[2])));
@@ -164,7 +165,7 @@ namespace AtmSim
 
         public NetworkConnection CallRequest(int sourceId, int targetId, int cap)
         {
-            NetworkConnection connection = rc.setupConnection(sourceId, targetId, manager.GetConnectionId(), cap);
+            NetworkConnection connection = rc.setupConnection(sourceId, targetId, manager.GetFreeId(), cap);
             if (connection != null)
             {
                 manager.AddConnection(connection);

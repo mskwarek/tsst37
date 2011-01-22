@@ -51,6 +51,7 @@
             this.connectionsListBox = new System.Windows.Forms.ListBox();
             this.pathsTabPage = new System.Windows.Forms.TabPage();
             this.pathsListBox = new System.Windows.Forms.ListBox();
+            this.addButton = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.elementsTabPage.SuspendLayout();
@@ -274,11 +275,22 @@
             this.pathsListBox.Size = new System.Drawing.Size(252, 264);
             this.pathsListBox.TabIndex = 0;
             // 
+            // addButton
+            // 
+            this.addButton.Location = new System.Drawing.Point(175, 323);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(31, 23);
+            this.addButton.TabIndex = 10;
+            this.addButton.Text = "+";
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
             // AtmSimGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 358);
+            this.Controls.Add(this.addButton);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.cmdButton);
             this.Controls.Add(this.refreshButton);
@@ -326,6 +338,7 @@
         private System.Windows.Forms.ListBox pathsListBox;
         private System.Windows.Forms.TabPage linksTabPage;
         private System.Windows.Forms.ListBox linksListBox;
+        private System.Windows.Forms.Button addButton;
     }
 }
 
