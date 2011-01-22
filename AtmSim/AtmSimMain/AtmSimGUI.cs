@@ -125,6 +125,17 @@ namespace AtmSim
                     if (elementsListBox.Items.Contains(selected))
                         elementsListBox.SelectedIndex = elementsListBox.Items.IndexOf(selected);
                 }
+                if (tabControl.SelectedIndex == linksTabPage.TabIndex)
+                {
+                    string selected = "";
+                    if (linksListBox.SelectedIndex >= 0)
+                        selected = (string)linksListBox.Items[linksListBox.SelectedIndex];
+                    linksListBox.Items.Clear();
+                    foreach (string item in manager.GetLinks())
+                        linksListBox.Items.Add(item);
+                    if (linksListBox.Items.Contains(selected))
+                        linksListBox.SelectedIndex = linksListBox.Items.IndexOf(selected);
+                }
                 if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
                 {
                     string selected = "";
@@ -163,6 +174,12 @@ namespace AtmSim
                 configButton.Enabled = true;
                 logButton.Enabled = true;
                 cmdButton.Enabled = true;
+            }
+            if (tabControl.SelectedIndex == linksTabPage.TabIndex)
+            {
+                configButton.Enabled = false;
+                logButton.Enabled = false;
+                cmdButton.Enabled = false;
             }
             if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
             {

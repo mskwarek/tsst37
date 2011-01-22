@@ -45,6 +45,8 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.elementsTabPage = new System.Windows.Forms.TabPage();
             this.elementsListBox = new System.Windows.Forms.ListBox();
+            this.linksTabPage = new System.Windows.Forms.TabPage();
+            this.linksListBox = new System.Windows.Forms.ListBox();
             this.connectionsTabPage = new System.Windows.Forms.TabPage();
             this.connectionsListBox = new System.Windows.Forms.ListBox();
             this.pathsTabPage = new System.Windows.Forms.TabPage();
@@ -52,6 +54,7 @@
             this.menuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.elementsTabPage.SuspendLayout();
+            this.linksTabPage.SuspendLayout();
             this.connectionsTabPage.SuspendLayout();
             this.pathsTabPage.SuspendLayout();
             this.SuspendLayout();
@@ -175,6 +178,7 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.elementsTabPage);
+            this.tabControl.Controls.Add(this.linksTabPage);
             this.tabControl.Controls.Add(this.connectionsTabPage);
             this.tabControl.Controls.Add(this.pathsTabPage);
             this.tabControl.Location = new System.Drawing.Point(12, 27);
@@ -182,7 +186,7 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(260, 290);
             this.tabControl.TabIndex = 9;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(tabControl_SelectedIndexChanged);
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // elementsTabPage
             // 
@@ -207,6 +211,25 @@
             this.elementsListBox.TabIndex = 1;
             this.elementsListBox.SelectedIndexChanged += new System.EventHandler(this.elementsListBox_SelectedIndexChanged);
             // 
+            // linksTabPage
+            // 
+            this.linksTabPage.Controls.Add(this.linksListBox);
+            this.linksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.linksTabPage.Name = "linksTabPage";
+            this.linksTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.linksTabPage.Size = new System.Drawing.Size(252, 264);
+            this.linksTabPage.TabIndex = 1;
+            this.linksTabPage.Text = "Łącza";
+            this.linksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // linksListBox
+            // 
+            this.linksListBox.FormattingEnabled = true;
+            this.linksListBox.Location = new System.Drawing.Point(0, 0);
+            this.linksListBox.Name = "linksListBox";
+            this.linksListBox.Size = new System.Drawing.Size(252, 264);
+            this.linksListBox.TabIndex = 0;
+            // 
             // connectionsTabPage
             // 
             this.connectionsTabPage.Controls.Add(this.connectionsListBox);
@@ -214,7 +237,7 @@
             this.connectionsTabPage.Name = "connectionsTabPage";
             this.connectionsTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.connectionsTabPage.Size = new System.Drawing.Size(252, 264);
-            this.connectionsTabPage.TabIndex = 1;
+            this.connectionsTabPage.TabIndex = 2;
             this.connectionsTabPage.Text = "Połączenia";
             this.connectionsTabPage.UseVisualStyleBackColor = true;
             // 
@@ -236,7 +259,7 @@
             this.pathsTabPage.Name = "pathsTabPage";
             this.pathsTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.pathsTabPage.Size = new System.Drawing.Size(252, 264);
-            this.pathsTabPage.TabIndex = 2;
+            this.pathsTabPage.TabIndex = 3;
             this.pathsTabPage.Text = "Ścieżki";
             this.pathsTabPage.UseVisualStyleBackColor = true;
             // 
@@ -265,11 +288,12 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "AtmSimGUI";
             this.Text = "ATMsim";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(AtmSimGUI_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AtmSimGUI_FormClosing);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.elementsTabPage.ResumeLayout(false);
+            this.linksTabPage.ResumeLayout(false);
             this.connectionsTabPage.ResumeLayout(false);
             this.pathsTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -300,6 +324,8 @@
         private System.Windows.Forms.ListBox connectionsListBox;
         private System.Windows.Forms.TabPage pathsTabPage;
         private System.Windows.Forms.ListBox pathsListBox;
+        private System.Windows.Forms.TabPage linksTabPage;
+        private System.Windows.Forms.ListBox linksListBox;
     }
 }
 
