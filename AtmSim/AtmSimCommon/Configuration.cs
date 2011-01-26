@@ -5,38 +5,38 @@ using System.Text;
 
 namespace AtmSim
 {
-    public class Configuration
+    public class C
     {
-        private List<Configuration> nodes;
-        public List<Configuration> Nodes { get { return nodes; } }
+        private List<C> nodes;
+        public List<C> S { get { return nodes; } }
 
         private string name;
-        public string Name
+        public string N
         {
             get { return name; }
             set { name = value; }
         }
 
-        public Configuration()
+        public C()
         {
-            nodes = new List<Configuration>();
+            nodes = new List<C>();
         }
 
-        public Configuration(string n)
+        public C(string n)
             : this()
         {
             name = n;
         }
 
-        public void Add(Configuration c)
+        public void Add(C c)
         {
             if (c != this)
-                this.Nodes.Add(c);
+                this.S.Add(c);
         }
 
         public void Add(string n)
         {
-            this.Nodes.Add(new Configuration(n));
+            this.S.Add(new C(n));
         }
     }
 }

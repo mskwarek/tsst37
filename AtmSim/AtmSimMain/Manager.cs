@@ -269,11 +269,11 @@ namespace AtmSim
                 return null;
         }
 
-        public Configuration GetConfig(int id)
+        public C GetConfig(int id)
         {
             string response = Query(id, "get config");
             if (response != "")
-                return (Configuration)Serial.DeserializeObject(response, typeof(Configuration));
+                return (C)Serial.DeserializeObject(response, typeof(C));
             else
                 return null;
         }
