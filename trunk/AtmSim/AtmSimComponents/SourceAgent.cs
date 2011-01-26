@@ -11,19 +11,19 @@ namespace AtmSim.Components
     public class SourceAgent
     {
         Source node;
-        Configuration config;
+        C config;
         Socket managerSocket;
         byte[] buffer = new byte[4086];
 
         public SourceAgent(Source n, int port)
         {
             node = n;
-            config = new Configuration(n.Name);
-            Configuration pOut = new Configuration("0");
+            config = new C(n.Name);
+            C pOut = new C("0");
             pOut.Add("Open");
             pOut.Add("Connected");
             pOut.Add("_port");
-            Configuration psOut = new Configuration("PortsOut");
+            C psOut = new C("PortsOut");
             psOut.Add(pOut);
             config.Add("ID");
             config.Add("Name");

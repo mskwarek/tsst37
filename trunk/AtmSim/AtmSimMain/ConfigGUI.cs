@@ -46,11 +46,11 @@ namespace AtmSim
             this.routingPropertyGrid.SelectedObject = new DictionaryPropertyGridAdapter(this.localRouting);
         }
 
-        private TreeNode getTree(Configuration configuration)
+        private TreeNode getTree(C configuration)
         {
-            TreeNode treeNode = new TreeNode(configuration.Name);
-            treeNode.Name = configuration.Name;
-            foreach (Configuration node in configuration.Nodes)
+            TreeNode treeNode = new TreeNode(configuration.N);
+            treeNode.Name = configuration.N;
+            foreach (C node in configuration.S)
             {
                 treeNode.Nodes.Add(getTree(node));
             }

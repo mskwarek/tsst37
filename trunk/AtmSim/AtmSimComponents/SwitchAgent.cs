@@ -13,27 +13,27 @@ namespace AtmSim.Components
         // Referencja switcha zarzadzanego przez agenta
         Switch node;
         // Zawartosc konfiguracji wezla
-        Configuration config;
+        C config;
         Socket managerSocket;
         byte[] buffer = new byte[4086];
 
         public SwitchAgent(Switch n, int port)
         {
             node = n;
-            config = new Configuration(n.Name);
-            Configuration psIn = new Configuration("PortsIn");
+            config = new C(n.Name);
+            C psIn = new C("PortsIn");
             for (int i = 0; i < node.PortsIn.Length; i++)
             {
-                Configuration pIn = new Configuration(i.ToString());
+                C pIn = new C(i.ToString());
                 pIn.Add("Open");
                 pIn.Add("Connected");
                 pIn.Add("_port");
                 psIn.Add(pIn);
             }
-            Configuration psOut = new Configuration("PortsOut");
+            C psOut = new C("PortsOut");
             for (int i = 0; i < node.PortsOut.Length; i++)
             {
-                Configuration pOut = new Configuration(i.ToString());
+                C pOut = new C(i.ToString());
                 pOut.Add("Open");
                 pOut.Add("Connected");
                 pOut.Add("_port");
