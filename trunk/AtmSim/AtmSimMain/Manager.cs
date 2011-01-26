@@ -341,7 +341,7 @@ namespace AtmSim
         public int GetFreeId()
         {
             int i = 1;
-            while (connections.ContainsKey(i))
+            while (connections.ContainsKey(i) || virtualPaths.ContainsKey(i))
                 i++;
             return i;
         }

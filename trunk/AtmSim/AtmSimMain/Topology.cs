@@ -37,8 +37,8 @@ namespace AtmSim
             public int TargetPort { get; private set; }
             public int Capacity;
             public int MaxCapacity { get; private set; }
-            public string SourceRouting { get { return SourcePort + "::"; } }
-            public string TargetRouting { get { return TargetPort + "::"; } }
+            public virtual string SourceRouting { get { return SourcePort + "::"; } }
+            public virtual string TargetRouting { get { return TargetPort + "::"; } }
 
             public Link(Node source, Node target, int sourcePort, int targetPort, int capacity)
                 : base(source, target)
