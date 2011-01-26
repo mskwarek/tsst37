@@ -56,8 +56,8 @@ namespace AtmSim
         public int Id { get; private set; }
         public int SourceVpi { get; private set; }
         public int TargetVpi { get; private set; }
-        new public string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
-        new public string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
+        public override string SourceRouting { get { return SourcePort + ":" + SourceVpi + ":"; } }
+        public override string TargetRouting { get { return TargetPort + ":" + TargetVpi + ":"; } }
         public List<LinkConnection> Path;
 
         public VirtualPath(int id, Topology.Node source, Topology.Node target, int sourcePort, int targetPort, int sourceVpi, int targetVpi, int capacity)
