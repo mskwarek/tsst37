@@ -44,14 +44,9 @@ namespace AtmSim
         {
             while (refloop)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
                 RefreshList();
             }
-        }
-
-        private void AtmSimGUI_FormClosing(object sender, EventArgs e)
-        {
-            refloop = false;
         }
 
         private void netNewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -125,9 +120,10 @@ namespace AtmSim
         private delegate void RefreshDelegate();
         private void RefreshList()
         {
-            if (tabControl.InvokeRequired && refloop)
+            if (tabControl.InvokeRequired)
             {
-                this.Invoke(new RefreshDelegate(RefreshList));
+                if (refloop)
+                    this.Invoke(new RefreshDelegate(RefreshList));
             }
             else
             {
@@ -245,6 +241,12 @@ namespace AtmSim
                 AddPathPrompt prompt = new AddPathPrompt(this.manager);
                 prompt.Show();
             }
+        }
+
+        private void AtmSimGUI_FormClosing(object sender, EventArgs e)
+        {
+            refloop = false;
+            refresher.Join();
         }
     }
 }
