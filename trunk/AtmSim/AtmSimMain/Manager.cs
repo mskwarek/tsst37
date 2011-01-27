@@ -125,7 +125,7 @@ namespace AtmSim
             try
             {
                 sock.Send(Encoding.ASCII.GetBytes(query));
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[16*1024];
                 int received = sock.Receive(buffer);
                 return Encoding.ASCII.GetString(buffer, 0, received);
             }
@@ -139,7 +139,7 @@ namespace AtmSim
                 try
                 {
                     nodes[id].Socket.Send(Encoding.ASCII.GetBytes(query));
-                    byte[] buffer = new byte[4096];
+                    byte[] buffer = new byte[16*1024];
                     int received = nodes[id].Socket.Receive(buffer);
                     return Encoding.ASCII.GetString(buffer, 0, received);
                 }
@@ -226,7 +226,7 @@ namespace AtmSim
             Array.Sort(keys);
             foreach (int key in keys)
             {
-                string item = "[" + key + "] " + nodes[connections[key].Source].Name +  " ---> " + nodes[connections[key].Target].Name;
+                string item = "[" + key + "] " + nodes[connections[key].Source].Name +  " --{" + connections[key].Path.Count + "}--> " + nodes[connections[key].Target].Name;
                 ret.Add(item);
             }
             return ret;
@@ -240,8 +240,30 @@ namespace AtmSim
             Array.Sort(keys);
             foreach (int key in keys)
             {
-                string item = "[" + key + "] " + virtualPaths[key].Source.Name + " --> " + virtualPaths[key].Target.Name;
+                string item = "[" + key + "] " + virtualPaths[key].Source.Name + " -{" + virtualPaths[key].Path.Count + "}-> " + virtualPaths[key].Target.Name;
                 ret.Add(item);
+            }
+            return ret;
+        }
+
+        public string GetDetails(int id)
+        {
+            string ret = "";
+            if (virtualPaths.ContainsKey(id))
+            {
+                foreach (var link in virtualPaths[id].Path)
+                {
+                    string item = "[" + link.SourceId + "]:" + link.SourceRouting + " -> [" + link.TargetId + "]:" + link.TargetRouting;
+                    ret += item + Environment.NewLine;
+                }
+            }
+            else if (connections.ContainsKey(id))
+            {
+                foreach (var link in connections[id].Path)
+                {
+                    string item = "[" + link.SourceId + "]:" + link.SourceRouting + " -> [" + link.TargetId + "]:" + link.TargetRouting;
+                    ret += item + Environment.NewLine;
+                }
             }
             return ret;
         }

@@ -39,6 +39,7 @@
             this.callerMessageTextBox = new System.Windows.Forms.Label();
             this.refreshButton = new System.Windows.Forms.Button();
             this.capNumeric = new System.Windows.Forms.NumericUpDown();
+            this.teardownButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.capNumeric)).BeginInit();
             this.SuspendLayout();
             // 
@@ -64,7 +65,7 @@
             // sendButton
             // 
             this.sendButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.sendButton.Location = new System.Drawing.Point(183, 107);
+            this.sendButton.Location = new System.Drawing.Point(183, 108);
             this.sendButton.Name = "sendButton";
             this.sendButton.Size = new System.Drawing.Size(75, 23);
             this.sendButton.TabIndex = 3;
@@ -151,11 +152,22 @@
             0,
             0});
             // 
+            // teardownButton
+            // 
+            this.teardownButton.Location = new System.Drawing.Point(103, 108);
+            this.teardownButton.Name = "teardownButton";
+            this.teardownButton.Size = new System.Drawing.Size(75, 23);
+            this.teardownButton.TabIndex = 13;
+            this.teardownButton.Text = "Rozłącz";
+            this.teardownButton.UseVisualStyleBackColor = true;
+            this.teardownButton.Click += new System.EventHandler(this.teardownButton_Click);
+            // 
             // SourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(270, 142);
+            this.Controls.Add(this.teardownButton);
             this.Controls.Add(this.capNumeric);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.callerMessageTextBox);
@@ -189,5 +201,6 @@
         private System.Windows.Forms.Label callerMessageTextBox;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.NumericUpDown capNumeric;
+        private System.Windows.Forms.Button teardownButton;
     }
 }
