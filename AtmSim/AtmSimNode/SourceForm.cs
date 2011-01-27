@@ -21,13 +21,13 @@ namespace AtmSim
             source = new Components.Source(cNode, mPort);
             caller = new Components.Caller(cNode.Name, cPort);
             InitializeComponent();
-            refresher = new Thread(RefreshContent);
+            refresher = new Thread(RefreshThread);
             refresher.Start();
             caller.Init(cNode.Id);
             this.Text = cNode.Name;
         }
 
-        private void RefreshContent()
+        private void RefreshThread()
         {
             while (refloop)
             {
@@ -68,6 +68,12 @@ namespace AtmSim
                     String.Format("[{0}]->{1}", c, caller.Connections[c]));
             }
 
+        }
+
+        private void teardownButton_Click(object sender, EventArgs e)
+        {
+            string target = ((string)connectionComboBox.SelectedItem).Split(new char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries)[0];
+            caller.EndCall(Convert.ToInt32(target));
         }
     }
 }

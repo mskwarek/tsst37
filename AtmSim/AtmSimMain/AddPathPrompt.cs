@@ -50,6 +50,7 @@ namespace AtmSim
         private void connectButton_Click(object sender, EventArgs e)
         {
             this.manager.AddPath(path);
+            this.Close();
         }
 
         private void srcComboBox_SelectedIndexChanged(object sender, EventArgs e)

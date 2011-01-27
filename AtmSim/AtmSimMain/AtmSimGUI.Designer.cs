@@ -32,10 +32,6 @@
             this.netToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.netNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.netTopologyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.logSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configButton = new System.Windows.Forms.Button();
             this.logButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
@@ -63,10 +59,7 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.netToolStripMenuItem,
-            this.configToolStripMenuItem,
-            this.logToolStripMenuItem,
-            this.mToolStripMenuItem});
+            this.netToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(284, 24);
@@ -97,32 +90,6 @@
             this.netTopologyToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
             this.netTopologyToolStripMenuItem.Text = "&Topologia";
             this.netTopologyToolStripMenuItem.Click += new System.EventHandler(this.netTopologyToolStripMenuItem_Click);
-            // 
-            // configToolStripMenuItem
-            // 
-            this.configToolStripMenuItem.Name = "configToolStripMenuItem";
-            this.configToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
-            this.configToolStripMenuItem.Text = "&Konfiguracja";
-            // 
-            // logToolStripMenuItem
-            // 
-            this.logToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.logSaveToolStripMenuItem});
-            this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
-            this.logToolStripMenuItem.Text = "&Logi";
-            // 
-            // logSaveToolStripMenuItem
-            // 
-            this.logSaveToolStripMenuItem.Name = "logSaveToolStripMenuItem";
-            this.logSaveToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.logSaveToolStripMenuItem.Text = "&Zapisz";
-            // 
-            // mToolStripMenuItem
-            // 
-            this.mToolStripMenuItem.Name = "mToolStripMenuItem";
-            this.mToolStripMenuItem.Size = new System.Drawing.Size(33, 20);
-            this.mToolStripMenuItem.Text = "&M:";
             // 
             // configButton
             // 
@@ -211,6 +178,7 @@
             this.elementsListBox.Size = new System.Drawing.Size(252, 264);
             this.elementsListBox.TabIndex = 1;
             this.elementsListBox.SelectedIndexChanged += new System.EventHandler(this.elementsListBox_SelectedIndexChanged);
+            this.elementsListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(elementsListBox_MouseDoubleClick);
             // 
             // linksTabPage
             // 
@@ -252,6 +220,8 @@
             this.connectionsListBox.Name = "connectionsListBox";
             this.connectionsListBox.Size = new System.Drawing.Size(252, 264);
             this.connectionsListBox.TabIndex = 0;
+            this.connectionsListBox.SelectedIndexChanged += new System.EventHandler(this.connectionsListBox_SelectedIndexChanged);
+            this.connectionsListBox.MouseDoubleClick +=new System.Windows.Forms.MouseEventHandler(connectionsListBox_MouseDoubleClick);
             // 
             // pathsTabPage
             // 
@@ -274,9 +244,13 @@
             this.pathsListBox.Name = "pathsListBox";
             this.pathsListBox.Size = new System.Drawing.Size(252, 264);
             this.pathsListBox.TabIndex = 0;
+            this.pathsListBox.SelectedIndexChanged += new System.EventHandler(this.pathsListBox_SelectedIndexChanged);
+            this.pathsListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(pathsListBox_MouseDoubleClick);
             // 
             // addButton
             // 
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addButton.Enabled = false;
             this.addButton.Location = new System.Drawing.Point(175, 323);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(31, 23);
@@ -319,15 +293,11 @@
         private System.Windows.Forms.ToolStripMenuItem netToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem netNewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem netTopologyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem configToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem logToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem logSaveToolStripMenuItem;
         private System.Windows.Forms.Button configButton;
         private System.Windows.Forms.Button logButton;
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.ToolStripMenuItem mToolStripMenuItem;
         private System.Windows.Forms.Button cmdButton;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage elementsTabPage;

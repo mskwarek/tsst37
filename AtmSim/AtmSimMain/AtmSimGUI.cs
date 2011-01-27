@@ -36,7 +36,6 @@ namespace AtmSim
         {
             manager.Init();
             InitializeComponent();
-            mToolStripMenuItem.Text = "M: " + manager.Port;
             refresher = new Thread(RefreshThread);
             refresher.Start();
         }
@@ -81,17 +80,35 @@ namespace AtmSim
             if (manager.Ping(this.SelectedId) == false)
                 RefreshList();
             string type = manager.Get(this.SelectedId, "type") ;
-            /*if (type != "Switch")
-                configButton.Enabled = false;
-            else
-                configButton.Enabled = true;
-            Refresh();*/
+        }
+
+        private void connectionsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.connectionsListBox.SelectedIndex >= 0)
+                this.selectedName = (string)this.connectionsListBox.Items[this.connectionsListBox.SelectedIndex];
+        }
+
+        private void pathsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.pathsListBox.SelectedIndex >= 0)
+                this.selectedName = (string)this.pathsListBox.Items[this.pathsListBox.SelectedIndex];
         }
 
         private void configButton_Click(object sender, EventArgs e)
         {
-            ConfigGUI configGUI = new ConfigGUI(this.manager, this.SelectedId);
-            configGUI.Show();
+            if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
+            {
+                ConfigGUI configGUI = new ConfigGUI(this.manager, this.SelectedId);
+                configGUI.Show();
+            }
+            if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
+            {
+                MessageBox.Show(manager.GetDetails(this.SelectedId));
+            }
+            if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
+            {
+                MessageBox.Show(manager.GetDetails(this.SelectedId));
+            }
         }
 
         private void logButton_Click(object sender, EventArgs e)
@@ -108,7 +125,7 @@ namespace AtmSim
         private delegate void RefreshDelegate();
         private void RefreshList()
         {
-            if (tabControl.InvokeRequired)
+            if (tabControl.InvokeRequired && refloop)
             {
                 this.Invoke(new RefreshDelegate(RefreshList));
             }
@@ -169,7 +186,18 @@ namespace AtmSim
 
         private void elementsListBox_MouseDoubleClick(object sender, EventArgs e)
         {
-            cmdButton_Click(sender, e);
+            ConfigGUI configGUI = new ConfigGUI(this.manager, this.SelectedId);
+            configGUI.Show();
+        }
+
+        private void connectionsListBox_MouseDoubleClick(object sender, EventArgs e)
+        {
+            MessageBox.Show(manager.GetDetails(this.SelectedId));
+        }
+
+        private void pathsListBox_MouseDoubleClick(object sender, EventArgs e)
+        {
+            MessageBox.Show(manager.GetDetails(this.SelectedId));
         }
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,6 +205,7 @@ namespace AtmSim
             if (tabControl.SelectedIndex == elementsTabPage.TabIndex)
             {
                 configButton.Enabled = true;
+                configButton.Text = "Konfiguracja";
                 logButton.Enabled = true;
                 cmdButton.Enabled = true;
                 addButton.Enabled = false;
@@ -184,6 +213,7 @@ namespace AtmSim
             if (tabControl.SelectedIndex == linksTabPage.TabIndex)
             {
                 configButton.Enabled = false;
+                configButton.Text = "Szczegóły";
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
                 addButton.Enabled = false;
@@ -191,6 +221,7 @@ namespace AtmSim
             if (tabControl.SelectedIndex == connectionsTabPage.TabIndex)
             {
                 configButton.Enabled = true;
+                configButton.Text = "Szczegóły";
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
                 addButton.Enabled = false;
@@ -198,6 +229,7 @@ namespace AtmSim
             if (tabControl.SelectedIndex == pathsTabPage.TabIndex)
             {
                 configButton.Enabled = true;
+                configButton.Text = "Szczegóły";
                 logButton.Enabled = false;
                 cmdButton.Enabled = false;
                 addButton.Enabled = true;
