@@ -40,6 +40,7 @@ namespace AtmSim
         private void SinkForm_FormClosing(object sender, EventArgs e)
         {
             refloop = false;
+            refresher.Join();
         }
     }
 }

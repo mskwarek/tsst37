@@ -57,6 +57,7 @@ namespace AtmSim
         private void SourceForm_FormClosing(object sender, EventArgs e)
         {
             refloop = false;
+            refresher.Join();
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
